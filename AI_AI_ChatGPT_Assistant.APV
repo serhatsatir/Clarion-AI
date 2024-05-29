@@ -1,0 +1,2230 @@
+[MODULE]
+NAME 'AI_AI_ChatGPT_Assistant.clw'
+[COMMON]
+FROM ABC GENERATED
+[PROCEDURE]
+NAME AI_ChatGPT_Assistant
+[COMMON]
+DESCRIPTION 'If you have defined a ChatGPT Assistant, you can talk to that assistant.'
+FROM ABC Window
+MODIFIED '2024/05/29' '10:19:14'
+[DATA]
+[SCREENCONTROLS]
+! PROMPT('API Key:'),USE(?API_Key:Prompt)
+! ENTRY(@s80),USE(API_Key)
+[REPORTCONTROLS]
+! STRING(@s80),USE(API_Key)
+API_Key                  CSTRING(81)
+!!> GUID('991a4561-90b1-492b-93c9-340809bba10d'),PROMPT('API Key:'),HEADER('API Key'),PICTURE(@s80),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('API temp:'),USE(?API_temp:Prompt)
+! SPIN(@n3.1),USE(API_temp),RANGE(0,1),STEP(0.1)
+[REPORTCONTROLS]
+! STRING(@n3.1),USE(API_temp),DECIMAL(14)
+API_temp                 REAL
+!!> GUID('c9c12eb9-e9ba-43e0-9808-a4d175cf754b'),VALID(INRANGE(0,1)),INITIAL('0.7'),PROMPT('API temp:'),HEADER('API temp'),PICTURE(@n3.1),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('JSON:'),USE(?JSON:Prompt)
+! ENTRY(@s20),USE(JSON)
+[REPORTCONTROLS]
+! STRING(@s20),USE(JSON)
+JSON                     JSONDataClass
+!!> GUID('956ae670-347b-4e18-b3b2-5a5b676d3ada'),PROMPT('JSON:'),HEADER('JSON'),PICTURE(@s20),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('My Question:'),USE(?MyQuestion:Prompt)
+! ENTRY(@s255),USE(MyQuestion)
+[REPORTCONTROLS]
+! STRING(@s255),USE(MyQuestion)
+MyQuestion               CSTRING(5001)
+!!> GUID('ef8e4e85-1a6d-4f2b-b594-111783826696'),PROMPT('My Question:'),HEADER('My Question'),PICTURE(@s255),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Chat GPTR esponse:'),USE(?ChatGPTResponse:Prompt)
+! TEXT,USE(ChatGPTResponse)
+[REPORTCONTROLS]
+! TEXT,USE(ChatGPTResponse)
+ChatGPTResponse          CSTRING(300001)
+!!> GUID('3b67b29c-4e57-425c-9a0b-0f2406d5b94d'),PROMPT('Chat GPTR esponse:'),HEADER('Chat GPTR esponse'),PICTURE(@s255)
+[SCREENCONTROLS]
+! PROMPT('Loc : Create Run Response:'),USE(?Loc:CreateRunResponse:Prompt)
+! ENTRY(@s20),USE(Loc:CreateRunResponse)
+[REPORTCONTROLS]
+! STRING(@s20),USE(Loc:CreateRunResponse)
+Loc:CreateRunResponse    GROUP,PRE()
+!!> GUID('6d342489-9d7b-4675-afe3-0830f2dd139d'),PROMPT('Loc : Create Run Response:'),HEADER('Loc : Create Run Response'),PICTURE(@s20),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('id:'),USE(?id:Prompt)
+! ENTRY(@s50),USE(id)
+[REPORTCONTROLS]
+! STRING(@s50),USE(id)
+id                         CSTRING(51),NAME('id')
+!!> GUID('348f2d71-3d7f-4b6e-9f2b-6903c5e892a5'),PROMPT('id:'),HEADER('id'),PICTURE(@s50),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('thread id:'),USE(?thread_id:Prompt)
+! ENTRY(@s50),USE(thread_id)
+[REPORTCONTROLS]
+! STRING(@s50),USE(thread_id)
+thread_id                  CSTRING(51),NAME('thread_id')
+!!> GUID('8470446e-8215-4544-9438-0fe4abefcb01'),PROMPT('thread id:'),HEADER('thread id'),PICTURE(@s50),TYPEMODE(INS)
+                         END
+!!> GUID('dee691ba-2a11-4a00-8fea-c51a99eff394')
+[SCREENCONTROLS]
+! PROMPT('Loc : Status:'),USE(?Loc:Status:Prompt)
+! ENTRY(@s255),USE(Loc:Status)
+[REPORTCONTROLS]
+! STRING(@s255),USE(Loc:Status)
+Loc:Status               CSTRING(501)
+!!> GUID('09ff0c89-11f5-4f0e-b927-33225a69f360'),PROMPT('Loc : Status:'),HEADER('Loc : Status'),PICTURE(@s255),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Loc : Run Status:'),USE(?Loc:RunStatus:Prompt)
+! ENTRY(@s20),USE(Loc:RunStatus)
+[REPORTCONTROLS]
+! STRING(@s20),USE(Loc:RunStatus)
+Loc:RunStatus            GROUP,PRE()
+!!> GUID('79055c4b-a296-4c46-b75a-8cd7ee478862'),PROMPT('Loc : Run Status:'),HEADER('Loc : Run Status'),PICTURE(@s20),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('status:'),USE(?status:Prompt)
+! ENTRY(@s50),USE(status)
+[REPORTCONTROLS]
+! STRING(@s50),USE(status)
+status                     CSTRING(51),NAME('status')
+!!> GUID('a6172af9-02c4-45a1-be1e-bd15f2c89fe6'),PROMPT('status:'),HEADER('status'),PICTURE(@s50),TYPEMODE(INS)
+                         END
+!!> GUID('b5cdb773-f740-4597-aada-1ac81ee8d979')
+[SCREENCONTROLS]
+! PROMPT('Loc : Post String:'),USE(?Loc:PostString:Prompt)
+! ENTRY(@s255),USE(Loc:PostString)
+[REPORTCONTROLS]
+! STRING(@s255),USE(Loc:PostString)
+Loc:PostString           STRING(10000)
+!!> GUID('8b6d96c3-a45b-4922-84ae-f638e3976ba5'),PROMPT('Loc : Post String:'),HEADER('Loc : Post String'),PICTURE(@s255),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('My Response:'),USE(?Loc:GetString:Prompt)
+! TEXT,USE(Loc:GetString)
+[REPORTCONTROLS]
+! TEXT,USE(Loc:GetString)
+Loc:GetString            STRING(500000)
+!!> GUID('91017012-193d-4deb-9260-256638d72064'),PROMPT('My Response:'),HEADER('My Response'),PICTURE(@s255)
+[PROMPTS]
+%ClassItem UNIQUE DEFAULT  ('Default', 'WindowToolbar')
+%DefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 2
+WHEN  ('Default') ('WindowManager')
+WHEN  ('WindowToolbar') ('ToolbarClass')
+
+%ActualDefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 2
+WHEN  ('Default') ('')
+WHEN  ('WindowToolbar') ('')
+
+%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 0
+
+%ReturnValue FIELD  ()
+%WindowOperationMode DEFAULT  ('Use WINDOW setting')
+%INISaveWindow LONG  (1)
+%ThisObjectName DEPEND %ClassItem DEFAULT TIMES 2
+WHEN  ('Default') ('ThisWindow')
+WHEN  ('WindowToolbar') ('Toolbar')
+
+%UseDefaultABCBaseClass DEPEND %ClassItem LONG TIMES 2
+WHEN  ('Default') (1)
+WHEN  ('WindowToolbar') (1)
+
+%UseABCBaseClass DEPEND %ClassItem LONG TIMES 2
+WHEN  ('Default') (1)
+WHEN  ('WindowToolbar') (1)
+
+%ABCBaseClass DEPEND %ClassItem DEFAULT TIMES 2
+WHEN  ('Default') ('AsciiFileClass')
+WHEN  ('WindowToolbar') ('AsciiFileClass')
+
+%ExtBaseClass DEPEND %ClassItem DEFAULT TIMES 0
+
+%BaseClassIncludeFile DEPEND %ClassItem DEFAULT TIMES 0
+
+%DeriveFromBaseClass DEPEND %ClassItem LONG TIMES 2
+WHEN  ('Default') (0)
+WHEN  ('WindowToolbar') (0)
+
+%NewMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewMethodName DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewMethodPrototype DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewClassProperty DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataType DEPEND %NewClassPropertyItems DEFAULT TIMES 1
+WHEN  ('WindowToolbar')TIMES 0
+
+%NewClassOtherType DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataIsRef DEPEND %NewClassPropertyItems LONG TIMES 0
+
+%NewClassDataSize DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim1 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim2 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim3 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim4 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%ClassMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassMethodName DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassMethodPrototype DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassProperty DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataType DEPEND %ClassPropertyItems DEFAULT TIMES 1
+WHEN  ('WindowToolbar')TIMES 0
+
+%ClassOtherType DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataIsRef DEPEND %ClassPropertyItems LONG TIMES 0
+
+%ClassDataSize DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim1 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim2 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim3 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ButtonAction DEPEND %Control DEFAULT TIMES 5
+WHEN  ('?BUTTON:Copy') ('No Special Action')
+WHEN  ('?Box1') ('No Special Action')
+WHEN  ('?ChatGPTResponse') ('No Special Action')
+WHEN  ('?GetPage') ('No Special Action')
+WHEN  ('?STRING1') ('No Special Action')
+
+%ButtonRunName DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?GetPage') ('')
+
+%ButtonRunParameters DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?GetPage') ('')
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 1
+WHEN  ('?GetPage') ()
+
+%ButtonThread DEPEND %Control LONG TIMES 1
+WHEN  ('?GetPage') (0)
+
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 5
+WHEN  ('?BUTTON:Copy') ('25000')
+WHEN  ('?Box1') ('25000')
+WHEN  ('?ChatGPTResponse') ('25000')
+WHEN  ('?GetPage') ('25000')
+WHEN  ('?STRING1') ('25000')
+
+%ButtonParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRequest DEPEND %Control DEFAULT TIMES 5
+WHEN  ('?BUTTON:Copy') ('None')
+WHEN  ('?Box1') ('None')
+WHEN  ('?ChatGPTResponse') ('None')
+WHEN  ('?GetPage') ('None')
+WHEN  ('?STRING1') ('None')
+
+%PreLookupKey DEPEND %Control KEY TIMES 0
+
+%PreLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PreLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupKey DEPEND %Control KEY TIMES 0
+
+%PostLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 7
+WHEN  ('?API_Key') (1)
+WHEN  ('?API_temp') (1)
+WHEN  ('?BUTTON:Copy') (1)
+WHEN  ('?Box1') (1)
+WHEN  ('?ChatGPTResponse') (1)
+WHEN  ('?GetPage') (1)
+WHEN  ('?STRING1') (1)
+
+%ForceWindowRefresh DEPEND %Control LONG TIMES 0
+
+%CheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedAssignVariable DEPEND %CheckedAssigns FIELD TIMES 0
+
+%CheckedAssignValue DEPEND %CheckedAssigns DEFAULT TIMES 0
+
+%CheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
+
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 5
+WHEN  ('?BUTTON:Copy')TIMES 0
+WHEN  ('?Box1')TIMES 0
+WHEN  ('?ChatGPTResponse')TIMES 0
+WHEN  ('?GetPage')TIMES 0
+WHEN  ('?STRING1')TIMES 0
+
+%CheckedEnables DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedControl1 DEPEND %CheckedEnables DEFAULT TIMES 0
+
+%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 5
+WHEN  ('?BUTTON:Copy')TIMES 0
+WHEN  ('?Box1')TIMES 0
+WHEN  ('?ChatGPTResponse')TIMES 0
+WHEN  ('?GetPage')TIMES 0
+WHEN  ('?STRING1')TIMES 0
+
+%UncheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%UncheckedAssignVariable DEPEND %UncheckedAssigns FIELD TIMES 0
+
+%UncheckedAssignValue DEPEND %UncheckedAssigns DEFAULT TIMES 0
+
+%UnCheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
+
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 5
+WHEN  ('?BUTTON:Copy')TIMES 0
+WHEN  ('?Box1')TIMES 0
+WHEN  ('?ChatGPTResponse')TIMES 0
+WHEN  ('?GetPage')TIMES 0
+WHEN  ('?STRING1')TIMES 0
+
+%UnCheckedEnables DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedControl1 DEPEND %UnCheckedEnables DEFAULT TIMES 0
+
+%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 5
+WHEN  ('?BUTTON:Copy')TIMES 0
+WHEN  ('?Box1')TIMES 0
+WHEN  ('?ChatGPTResponse')TIMES 0
+WHEN  ('?GetPage')TIMES 0
+WHEN  ('?STRING1')TIMES 0
+
+%ButtonReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%ButtonReturnValueReferenceAssign DEPEND %Control LONG TIMES 0
+
+%ButtonThreadParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonThreadReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%LookupAssign DEPEND %Control MULTI LONG TIMES 0
+
+%MoreField DEPEND %LookupAssign DEFAULT TIMES 0
+
+%MoreTarget DEPEND %LookupAssign FIELD TIMES 0
+
+%GlobalObject DEPEND %ClassItem DEFAULT TIMES 2
+WHEN  ('Default') ('NO')
+WHEN  ('WindowToolbar') ('NO')
+
+%ProcedureDisableEnhanceFocus LONG  (0)
+%ProcedureUseEnterInsteadTabOverride LONG  (0)
+%WindowUseEnterInsteadTab LONG  (1)
+%ProcedureUseEnterInsteadTabExcludeListCombo LONG  (0)
+%ProcedureUseEnterInsteadTabEnableNextTabStop LONG  (0)
+%ProcedureUseEnterInsteadTabExcludeG LONG  (1)
+%WindowUseEnterInsteadTabExclude MULTI DEFAULT  ()
+%WindowStyles MULTI LONG  ()
+%WindowStyleFontName DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontSize DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontStyle DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontColor DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontCharSet DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStylePicture DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleOtherListboxes MULTI DEFAULT  ()
+%ProcedureAutoBindFields MULTI LONG  ()
+%ProcedureAutoBindField DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldTPL DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedures MULTI LONG  ()
+%ProcedureAutoBindProcedure DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedureTPL DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldsIgnored MULTI LONG  ()
+%ProcedureAutoBindFieldIgnored DEPEND %ProcedureAutoBindFieldsIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindProceduresIgnored MULTI LONG  ()
+%ProcedureAutoBindProcedureIgnored DEPEND %ProcedureAutoBindProceduresIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindValidToAddField LONG  (0)
+%ProcedureUserBindFields MULTI LONG  ()
+%ProcedureUserBindField DEPEND %ProcedureUserBindFields FIELD TIMES 0
+
+%ProcedureAutoBindFieldIgnore DEPEND %ProcedureAutoBindFields LONG TIMES 0
+
+%ProcedureUserBindProcedures MULTI LONG  ()
+%ProcedureUserBindProcedure DEPEND %ProcedureUserBindProcedures PROCEDURE TIMES 0
+
+%ProcedureAutoBindProcedureIgnore DEPEND %ProcedureAutoBindProcedures LONG TIMES 0
+
+%ProcedureUserBindExpressions MULTI LONG  ()
+%ProcedureUserBindExpressionName DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ProcedureUserBindExpression DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ExtUITabIcon DEPEND %Control DEFAULT TIMES 0
+
+%ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
+
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 2
+WHEN  ('?BUTTON:Copy') ('Default')
+WHEN  ('?STRING1') ('Default')
+
+%PreLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%CheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
+
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 2
+WHEN  ('?BUTTON:Copy')TIMES 0
+WHEN  ('?STRING1')TIMES 0
+
+%UnCheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
+
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 2
+WHEN  ('?BUTTON:Copy')TIMES 0
+WHEN  ('?STRING1')TIMES 0
+
+%ProcedureOneInstance LONG  (0)
+%PreserveVarsLoc MULTI LONG  (2, 1, 3)
+%PreserveVarLoc DEPEND %PreserveVarsLoc DEFAULT TIMES 3
+WHEN  (1) ('API_Key')
+WHEN  (2) ('MyQuestion')
+WHEN  (3) ('API_temp')
+
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 3
+WHEN  ('?BUTTON:Copy') ('Off')
+WHEN  ('?Box1') ('Off')
+WHEN  ('?STRING1') ('Off')
+
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 3
+WHEN  ('?BUTTON:Copy') ('')
+WHEN  ('?Box1') ('')
+WHEN  ('?STRING1') ('')
+
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 3
+WHEN  ('?BUTTON:Copy') (0)
+WHEN  ('?Box1') (0)
+WHEN  ('?STRING1') (0)
+
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 3
+WHEN  ('?BUTTON:Copy') (-1)
+WHEN  ('?Box1') (-1)
+WHEN  ('?STRING1') (-1)
+
+%FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 3
+WHEN  ('?BUTTON:Copy') (0)
+WHEN  ('?Box1') (0)
+WHEN  ('?STRING1') (0)
+
+%FieldGradientColorTo DEPEND %Control LONG TIMES 3
+WHEN  ('?BUTTON:Copy') (-1)
+WHEN  ('?Box1') (-1)
+WHEN  ('?STRING1') (-1)
+
+%FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 3
+WHEN  ('?BUTTON:Copy') (0)
+WHEN  ('?Box1') (0)
+WHEN  ('?STRING1') (0)
+
+%ActiveImageEnable DEPEND %Control LONG TIMES 0
+
+%AIObjectName DEPEND %Control DEFAULT TIMES 2
+WHEN  ('?BUTTON:Copy') ('AIBtn8')
+WHEN  ('?STRING1') ('AIBtn11')
+
+%AIEnableMimicControl DEPEND %Control LONG TIMES 2
+WHEN  ('?BUTTON:Copy') (1)
+WHEN  ('?STRING1') (1)
+
+%AIMimicControl DEPEND %Control DEFAULT TIMES 2
+WHEN  ('?BUTTON:Copy') ('?Box1')
+WHEN  ('?STRING1') ('?Box1')
+
+%AIImgRound DEPEND %Control LONG TIMES 0
+
+%AIOverrideImg DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('?BUTTON:Copy') (0)
+WHEN  ('?STRING1') (0)
+
+%AIDisableImg DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('?BUTTON:Copy') (0)
+WHEN  ('?STRING1') (0)
+
+%AIHotImg DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('?BUTTON:Copy') (0)
+WHEN  ('?STRING1') (0)
+
+%AIPressedImg DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('?BUTTON:Copy') (0)
+WHEN  ('?STRING1') (0)
+
+%ITHasDllTemplate DEFAULT  ('')
+[EMBED]
+EMBED %ControlEventHandling
+[INSTANCES]
+WHEN '?GetPage'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+IF API_Key='' THEN
+    MESSAGE('Create your own API key using following web page: https://platform.openai.com/account/api-keys','ChatGPT API Key',ICON:Exclamation)
+    CYCLE
+END
+
+SETCURSOR(CURSOR:Wait)
+Loc:GetString=''
+ChatGPTResponse=''
+Loc:Status = 'Waiting response'
+DISPLAY()
+
+!DO ReformatTextCompletion
+DO CreateAndRun
+LOOP 50 TIMES
+    SLEEP(1000)
+    DO CheckRunCompleted
+    IF status='completed' THEN BREAK.
+END
+
+DO GetResponse
+[END]
+[END]
+[END]
+EMBED %NetTalkMethodCodeSection
+[INSTANCES]
+WHEN '1'
+[INSTANCES]
+WHEN 'PageReceived'
+[INSTANCES]
+WHEN '()'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 2500
+PROPERTY:END
+! This is the code that is called when the page has been downloaded.
+! In this case we display it on the screen by putting it in the ChatGPTResponse
+! variable.
+ThisWebClient.TextOnly()
+IF SELF.ThisPage.Length() <= 0
+    Loc:GetString = ''
+ELSIF SELF.ThisPage.Length() < size (Loc:GetString)
+    Loc:GetString = SELF.ThisPage.GetValue()
+    Loc:Status='Your request has been completed.'
+ELSE
+    Loc:Status = '* Incoming response ' & SELF.ThisPage.Length() & |
+             ' byte, the part you can see on the screen ' & size (Loc:GetString) & ' byte.'
+    Loc:GetString=SELF.ThisPage.GetValue()
+END
+ThisWebClient.Close()
+SETCURSOR()
+DISPLAY()
+[END]
+[END]
+WHEN 'ErrorTrap'
+[INSTANCES]
+WHEN '(string errorStr,string functionName)'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 7500
+PROPERTY:END
+Message ('No response received. Error ' & ThisWebClient.Error & |
+         ' = ' & ThisWebClient.InterpretError())
+SETCURSOR  ! Return mouse back to normal.
+           ! If an error occurs, the NetWebClient will display a message,
+           ! unless you suppress error messages in the procedure extension template,
+           ! in which case you would need to handle your own error messages.
+
+[END]
+[END]
+WHEN 'Process'
+[INSTANCES]
+WHEN '()'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 2500
+PROPERTY:END
+! Must be above parent call for this to work. As the parent.process calls .PageReceived()
+IF SELF.packet.packetType = NET:SimplePartialDataPacket
+    IF SELF.PageContentLen > 0
+        Loc:Status = 'Waiting response ' & SELF.ThisPage.Length() & ' / ' & (SELF.PageContentLen + SELF.HeaderLen)
+        DISPLAY(?Loc:Status)
+    END
+END
+[END]
+[END]
+[END]
+[END]
+EMBED %ProcedureRoutines
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+CreateAndRun        ROUTINE
+    st.SetValue(CLIP(MyQuestion))
+    st.JsonEncode()
+
+    Loc:PostString='{"assistant_id": "asst_08efSGTMy4Jra8GVh7JfS5RZ",'&|
+    '"thread": {"messages": [{"role": "user", "content": "'&st.GetValue()&'"}]}}'
+    st.Trace('CreateAndRun: '&Loc:PostString)
+
+    ! Generate UTF8 from Turkish characters
+    Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
+    Loc:GetString=GetResponse(2,API_Key,'https://api.openai.com/v1/threads/runs',Loc:PostString)
+    JSON.FromJSON(Loc:GetString,Loc:CreateRunResponse)
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+CheckRunCompleted         ROUTINE
+    Loc:GetString=GetResponse(1,API_Key,'https://api.openai.com/v1/threads/'&thread_id&'/runs/'&id)
+    st.Trace('CheckRunCompleted: https://api.openai.com/v1/threads/'&thread_id&'/runs/'&id&' - '&CLIP(Loc:GetString))
+    JSON.FromJSON(Loc:GetString,Loc:RunStatus)
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+GetResponse     ROUTINE
+    Loc:GetString=GetResponse(1,API_Key,'https://api.openai.com/v1/threads/'&thread_id&'/messages')
+
+    ! Generate Turkish ANSI characters from UTF8
+    Loc:GetString=st.Utf8ToAnsi(Loc:GetString,uz#,st:CP_ISO_8859_9)
+
+    st.Trace('GetResponse: https://api.openai.com/v1/threads/'&thread_id&'/messages - '&CLIP(Loc:GetString))
+    st.SetValue(CLIP(Loc:GetString)); st.Replace('\n','<13,10>'); st.Replace('<13>','<13,10>'); st.JsonDecode()
+    ChatGPTResponse=st.Between('"value": "','",')
+    DISPLAY(?ChatGPTResponse)
+
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+ReformatTextCompletion      ROUTINE
+    st.SetValue(CLIP(MyQuestion))
+    st.JsonEncode()
+
+    !!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
+    !!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
+    !!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
+    !Loc:PostString='{"model": "gpt-3.5-turbo","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
+    Loc:PostString='{"model": "gpt-4o","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
+    st.Trace('Request: '&Loc:PostString)
+
+    ! Generate UTF8 from Turkish characters
+    Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
+
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+ReformatAnswer       ROUTINE
+    ! Generate UTF8 to Turkish ANSI characters
+    ChatGPTResponse=st.Utf8ToAnsi(Loc:GetString,uz#,st:CP_ISO_8859_9)
+
+    baslangic#=INSTRING('"content": "',ChatGPTResponse,1,1)
+    bitis#=INSTRING('"finish_reason": "',ChatGPTResponse,1,1)
+    IF baslangic#=0 OR bitis#=0 THEN
+        !ChatGPTResponse=''
+        Loc:Status='Couldn''t get legal response from ChatGPT'
+        EXIT
+    END
+    st.Trace('Response: '&ChatGPTResponse)
+
+    st.SetValue(SUB(ChatGPTResponse,baslangic#+12,bitis#-baslangic#-29))
+    st.Replace('\n','<13,10>'); st.JsonDecode()
+    ChatGPTResponse=st.GetValue()
+[END]
+EMBED %WindowManagerMethodCodeSection
+[INSTANCES]
+WHEN 'Init'
+[INSTANCES]
+WHEN '(),BYTE'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 6000
+PROPERTY:END
+IF MyQuestion='' THEN MyQuestion='Could you write a lyrical poem about Clarion programming language?'.
+[END]
+[END]
+[END]
+[END]
+[ADDITION]
+NAME StringTheory StringTheoryLocal
+[INSTANCE]
+INSTANCE 2
+[PROMPTS]
+%NoStringTheory LONG  (0)
+%StringTheoryObject DEFAULT  ('st')
+%StringTheoryClassName DEFAULT  ('StringTheory')
+[ADDITION]
+NAME NetTalk IncludeNetTalkObject
+[INSTANCE]
+INSTANCE 1
+[PROMPTS]
+%ClassItem UNIQUE DEFAULT  ('Default')
+%DefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('NetClient')
+
+%ActualDefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%UseDefaultABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%UseABCBaseClass DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%NoThisObj DEPEND %ClassItem LONG TIMES 0
+
+%ThisObjectName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('ThisWebClient')
+
+%ABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('NetWebClient')
+
+%SimpleMode DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('Client')
+
+%NetSuppressErrorMsg DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%RoomName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('web')
+
+%NetAppSite DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''dip.capesoft.co.za''')
+
+%NetAppPort DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('6873')
+
+%NetDIPAutoAddMe DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%NetDIPAutoConnect DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%NetDIPAutoDeleteMe DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%NetDIPSuppressErrorMsg DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%NetFtpData DEPEND %ClassItem DEFAULT TIMES 0
+
+%NetFtpControl DEPEND %ClassItem DEFAULT TIMES 0
+
+%NetChatAppName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('web')
+
+%RemoteMachineAppName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('web')
+
+%AutoCloseWarningMessage DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('For maintainence reasons this program needs to be closed down. Please immediately save what you are doing and exit the program.')
+
+%AutoCloseCloseDownMessage DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('This application is being closed down by an administrator.')
+
+%AutoCloseWarningTimer DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('4500')
+
+%AutoCloseCloseDownTimer DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('1000')
+
+%CloseAppsConfirmation DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%FileTransferAppName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('web')
+
+%FileTransferSilent DEPEND %ClassItem LONG TIMES 0
+
+%TimeAppName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('web')
+
+%ServiceName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('MyService')
+
+%PrivateServiceClient DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%PrivateServiceServer DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%DeriveFromBaseClass DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%ClassMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassMethodName DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassMethodPrototype DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassProperty DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataType DEPEND %ClassPropertyItems DEFAULT TIMES 1
+WHEN  ('Default')TIMES 0
+
+%ClassOtherType DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%NewMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewMethodName DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewMethodPrototype DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewClassProperty DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataType DEPEND %NewClassPropertyItems DEFAULT TIMES 1
+WHEN  ('Default')TIMES 0
+
+%NewClassOtherType DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataIsRef DEPEND %NewClassPropertyItems LONG TIMES 0
+
+%NewClassDataSize DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim1 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim2 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim3 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim4 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NetPassiveFTP DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%NetAutoCloseServerUseMessageBox DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%ListenOnPort DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('80')
+
+%WebSecure DEPEND %ClassItem DEFAULT TIMES 0
+
+%Certificate DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''certificates\settings''')
+
+%WebHandlerProc DEPEND %ClassItem PROCEDURE TIMES 1
+WHEN  ('Default') ()
+
+%WebDirectory DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''web''')
+
+%WebDefaultPage DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''index.htm''')
+
+%WebLoginPage DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''login.htm''')
+
+%WebLoginPageControl DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%WebDatePicture DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('@D2')
+
+%GenericPageHeaderTag DEPEND %ClassItem DEFAULT TIMES 0
+
+%GenericPageFooterTag DEPEND %ClassItem DEFAULT TIMES 0
+
+%ScriptsDir DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''scripts''')
+
+%scripts DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ScriptName DEPEND %scripts DEFAULT TIMES 0
+
+%WebFormStyle DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('Net:Web:Tab')
+
+%DefaultBrowseClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('BrowseTable')
+
+%StylesDir DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''styles''')
+
+%styles DEPEND %ClassItem MULTI LONG TIMES 0
+
+%StyleName DEPEND %styles DEFAULT TIMES 0
+
+%StyleBrowser DEPEND %styles DEFAULT TIMES 1
+WHEN  ('Default')TIMES 0
+
+%AlwaysRedirect DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%ServerIP DEPEND %ClassItem DEFAULT TIMES 0
+
+%WebNoAccessPage DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''NoAccess.htm''')
+
+%GenericPagetitle DEPEND %ClassItem DEFAULT TIMES 0
+
+%IncludeHTMLEditor DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%ScriptBrowser DEPEND %scripts DEFAULT TIMES 1
+WHEN  ('Default')TIMES 0
+
+%ScriptInAll DEPEND %scripts LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%DefaultHtmlClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-html''')
+
+%DefaultBodyClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-body''')
+
+%DefaultBodyDivClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-body-div''')
+
+%DefaultBusyDivClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-busy''')
+
+%DefaultBusyImage DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''/images/_busy.gif''')
+
+%DefaultValidationMessage DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-width-99 nt-alert ui-state-error ui-corner-all''')
+
+%resetBrowseDefaults DEPEND %ClassItem LONG TIMES 0
+
+%DefaultBrowseDiv DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-left''')
+
+%DefaultBrowseHeading DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-header nt-browse-header''')
+
+%DefaultBrowseHeadingSub DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-header nt-browse-header-sub''')
+
+%DefaultBrowseTableDiv DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''ui-widget''')
+
+%DefaultBrowseTable DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-table ui-widget-content ui-corner-all''')
+
+%DefaultBrowseHeader DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''ui-widget-header''')
+
+%DefaultBrowseBody DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-table-body''')
+
+%DefaultBrowseRow DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-table-row''')
+
+%DefaultBrowseFooter DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-table-footer''')
+
+%DefaultBrowseLocator DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-locator''')
+
+%DefaultBrowseLocatorButtonSet DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%DefaultBrowseNavButtonSet DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%DefaultBrowseUpdateButtonSet DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%DefaultBrowseHyperlinks DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%DefaultBrowseEmpty DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%DefaultBrowseEditEntry DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-entry''')
+
+%DefaultBrowseEditText DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-entry''')
+
+%DefaultBrowseEditDate DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-entry''')
+
+%DefaultBrowseEditDrop DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-entry''')
+
+%DefaultBrowseEditDropOption DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-entry''')
+
+%DefaultBrowseEditCheck DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-entry''')
+
+%DefaultBrowseOtherButtonWithText DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%DefaultBrowseOtherButtonWithOutText DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%netBrowseHighlightColor DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (-1)
+
+%netBrowseOverColor DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (-1)
+
+%netBrowseOneColor DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (-1)
+
+%netBrowseTwoColor DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (-1)
+
+%resetFormDefaults DEPEND %ClassItem LONG TIMES 0
+
+%DefaultFormDiv DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%DefaultFormHeading DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-header nt-form-header''')
+
+%DefaultFormHeadingSub DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-header nt-form-header-sub''')
+
+%DefaultFormTable DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-form-table''')
+
+%DefaultPromptClassA DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-form-div nt-prompt nt-formcell''')
+
+%DefaultButtonDivClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-form-div''')
+
+%DefaultEntryDivClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-form-div nt-formcell''')
+
+%DefaultEntryClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-entry''')
+
+%DefaultEntryRequiredClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-entry-required''')
+
+%DefaultEntryReadonlyClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-entry-readonly''')
+
+%DefaultEntryErrorClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-entry-error''')
+
+%DefaultSelectClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') (''' nt-select''')
+
+%DefaultCommentClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-form-div nt-comment nt-formcell''')
+
+%DefaultCommentErrorClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-comment-error ui-state-error ui-corner-all''')
+
+%defaultTabOuterDiv DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-tab-outer''')
+
+%defaultTabTitle DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-tab-title''')
+
+%defaultTabInnerDiv DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-tab-inner''')
+
+%defaultFormSaveButtonSet DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%StyleInAll DEPEND %styles LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%UseLocatorSets DEPEND %ClassItem LONG TIMES 0
+
+%UseNavigationSets DEPEND %ClassItem LONG TIMES 0
+
+%UseUpdateSets DEPEND %ClassItem LONG TIMES 0
+
+%UseFormSaveSets DEPEND %ClassItem LONG TIMES 0
+
+%Buttons DEPEND %ClassItem MULTI LONG TIMES 1
+WHEN  ('Default') (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, |
+  19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, |
+  39, 40)
+
+%ButtonText DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('''Upload''')
+WHEN  (2) ('''''')
+WHEN  (3) ('''Save''')
+WHEN  (4) ('''Cancel''')
+WHEN  (5) ('''Delete''')
+WHEN  (6) ('''Close''')
+WHEN  (7) ('''Insert''')
+WHEN  (8) ('''Change''')
+WHEN  (9) ('''View''')
+WHEN  (10) ('''Delete''')
+WHEN  (11) ('''Select''')
+WHEN  (12) ('''Cancel''')
+WHEN  (13) ('''Close''')
+WHEN  (14) ('''''')
+WHEN  (15) ('''''')
+WHEN  (16) ('''''')
+WHEN  (17) ('''''')
+WHEN  (18) ('''''')
+WHEN  (19) ('''Search''')
+WHEN  (20) ('''First''')
+WHEN  (21) ('''Previous''')
+WHEN  (22) ('''Next''')
+WHEN  (23) ('''Last''')
+WHEN  (24) ('''Print''')
+WHEN  (25) ('''Start''')
+WHEN  (26) ('''...''')
+WHEN  (27) ('''Previous''')
+WHEN  (28) ('''Next''')
+WHEN  (29) ('''''')
+WHEN  (30) ('''''')
+WHEN  (31) ('''Copy''')
+WHEN  (32) ('''''')
+WHEN  (33) ('''Clear''')
+WHEN  (34) ('''Logout''')
+WHEN  (35) ('''Add File''')
+WHEN  (36) ('''Clear''')
+WHEN  (37) ('''Start''')
+WHEN  (38) ('''Cancel''')
+WHEN  (39) ('''Remove''')
+WHEN  (40) ('''Export''')
+
+%ButtonImage DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('')
+WHEN  (2) ('')
+WHEN  (3) ('')
+WHEN  (4) ('')
+WHEN  (5) ('')
+WHEN  (6) ('')
+WHEN  (7) ('')
+WHEN  (8) ('')
+WHEN  (9) ('')
+WHEN  (10) ('')
+WHEN  (11) ('')
+WHEN  (12) ('')
+WHEN  (13) ('')
+WHEN  (14) ('')
+WHEN  (15) ('')
+WHEN  (16) ('')
+WHEN  (17) ('')
+WHEN  (18) ('')
+WHEN  (19) ('')
+WHEN  (20) ('')
+WHEN  (21) ('')
+WHEN  (22) ('')
+WHEN  (23) ('')
+WHEN  (24) ('')
+WHEN  (25) ('')
+WHEN  (26) ('')
+WHEN  (27) ('')
+WHEN  (28) ('')
+WHEN  (29) ('')
+WHEN  (30) ('')
+WHEN  (31) ('')
+WHEN  (32) ('')
+WHEN  (33) ('')
+WHEN  (34) ('')
+WHEN  (35) ('')
+WHEN  (36) ('')
+WHEN  (37) ('')
+WHEN  (38) ('')
+WHEN  (39) ('')
+WHEN  (40) ('')
+
+%ButtonImageWidth DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('')
+WHEN  (2) ('')
+WHEN  (3) ('')
+WHEN  (4) ('')
+WHEN  (5) ('')
+WHEN  (6) ('')
+WHEN  (7) ('')
+WHEN  (8) ('')
+WHEN  (9) ('')
+WHEN  (10) ('')
+WHEN  (11) ('')
+WHEN  (12) ('')
+WHEN  (13) ('')
+WHEN  (14) ('')
+WHEN  (15) ('')
+WHEN  (16) ('')
+WHEN  (17) ('')
+WHEN  (18) ('')
+WHEN  (19) ('')
+WHEN  (20) ('')
+WHEN  (21) ('')
+WHEN  (22) ('')
+WHEN  (23) ('')
+WHEN  (24) ('')
+WHEN  (25) ('')
+WHEN  (26) ('')
+WHEN  (27) ('')
+WHEN  (28) ('')
+WHEN  (29) ('')
+WHEN  (30) ('')
+WHEN  (31) ('')
+WHEN  (32) ('')
+WHEN  (33) ('')
+WHEN  (34) ('')
+WHEN  (35) ('')
+WHEN  (36) ('')
+WHEN  (37) ('')
+WHEN  (38) ('')
+WHEN  (39) ('')
+WHEN  (40) ('')
+
+%ButtonImageHeight DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('')
+WHEN  (2) ('')
+WHEN  (3) ('')
+WHEN  (4) ('')
+WHEN  (5) ('')
+WHEN  (6) ('')
+WHEN  (7) ('')
+WHEN  (8) ('')
+WHEN  (9) ('')
+WHEN  (10) ('')
+WHEN  (11) ('')
+WHEN  (12) ('')
+WHEN  (13) ('')
+WHEN  (14) ('')
+WHEN  (15) ('')
+WHEN  (16) ('')
+WHEN  (17) ('')
+WHEN  (18) ('')
+WHEN  (19) ('')
+WHEN  (20) ('')
+WHEN  (21) ('')
+WHEN  (22) ('')
+WHEN  (23) ('')
+WHEN  (24) ('')
+WHEN  (25) ('')
+WHEN  (26) ('')
+WHEN  (27) ('')
+WHEN  (28) ('')
+WHEN  (29) ('')
+WHEN  (30) ('')
+WHEN  (31) ('')
+WHEN  (32) ('')
+WHEN  (33) ('')
+WHEN  (34) ('')
+WHEN  (35) ('')
+WHEN  (36) ('')
+WHEN  (37) ('')
+WHEN  (38) ('')
+WHEN  (39) ('')
+WHEN  (40) ('')
+
+%ButtonImageAlt DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('')
+WHEN  (2) ('')
+WHEN  (3) ('')
+WHEN  (4) ('')
+WHEN  (5) ('')
+WHEN  (6) ('')
+WHEN  (7) ('')
+WHEN  (8) ('')
+WHEN  (9) ('')
+WHEN  (10) ('')
+WHEN  (11) ('')
+WHEN  (12) ('')
+WHEN  (13) ('')
+WHEN  (14) ('')
+WHEN  (15) ('')
+WHEN  (16) ('')
+WHEN  (17) ('')
+WHEN  (18) ('')
+WHEN  (19) ('')
+WHEN  (20) ('')
+WHEN  (21) ('')
+WHEN  (22) ('')
+WHEN  (23) ('')
+WHEN  (24) ('')
+WHEN  (25) ('')
+WHEN  (26) ('')
+WHEN  (27) ('')
+WHEN  (28) ('')
+WHEN  (29) ('')
+WHEN  (30) ('')
+WHEN  (31) ('')
+WHEN  (32) ('')
+WHEN  (33) ('')
+WHEN  (34) ('')
+WHEN  (35) ('')
+WHEN  (36) ('')
+WHEN  (37) ('')
+WHEN  (38) ('')
+WHEN  (39) ('')
+WHEN  (40) ('')
+
+%ButtonClass DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('''''')
+WHEN  (2) ('''nt-small-button''')
+WHEN  (3) ('''''')
+WHEN  (4) ('''''')
+WHEN  (5) ('''''')
+WHEN  (6) ('''''')
+WHEN  (7) ('''''')
+WHEN  (8) ('''''')
+WHEN  (9) ('''''')
+WHEN  (10) ('''''')
+WHEN  (11) ('''''')
+WHEN  (12) ('''''')
+WHEN  (13) ('''''')
+WHEN  (14) ('''nt-small-button''')
+WHEN  (15) ('''nt-small-button''')
+WHEN  (16) ('''nt-small-button''')
+WHEN  (17) ('''nt-small-button''')
+WHEN  (18) ('''nt-small-button''')
+WHEN  (19) ('''''')
+WHEN  (20) ('''''')
+WHEN  (21) ('''''')
+WHEN  (22) ('''''')
+WHEN  (23) ('''''')
+WHEN  (24) ('''''')
+WHEN  (25) ('''''')
+WHEN  (26) ('''''')
+WHEN  (27) ('''''')
+WHEN  (28) ('''''')
+WHEN  (29) ('''nt-small-button''')
+WHEN  (30) ('''nt-small-button''')
+WHEN  (31) ('''''')
+WHEN  (32) ('''nt-small-button''')
+WHEN  (33) ('''''')
+WHEN  (34) ('''''')
+WHEN  (35) ('''nt-insert-button''')
+WHEN  (36) ('''nt-deletef-button''')
+WHEN  (37) ('''nt-save-button''')
+WHEN  (38) ('''nt-cancel-button''')
+WHEN  (39) ('''nt-deletef-button''')
+WHEN  (40) ('''nt-export-button''')
+
+%ButtonToolTip DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('''Click here to Upload the file''')
+WHEN  (2) ('''Click here to Search for a value''')
+WHEN  (3) ('''Click on this to Save the form''')
+WHEN  (4) ('''Click on this to Cancel the form''')
+WHEN  (5) ('''Click here to Delete this record''')
+WHEN  (6) ('''Click here to Close this form''')
+WHEN  (7) ('''Click here to Insert a new record''')
+WHEN  (8) ('''Click here to Change the highlighted record''')
+WHEN  (9) ('''Click here to view details of the highlighted record''')
+WHEN  (10) ('''Click here to Delete the highlighted record''')
+WHEN  (11) ('''Click here to Select the highlighted record''')
+WHEN  (12) ('''Click here to return without selecting anything''')
+WHEN  (13) ('''Click here to Close this browse''')
+WHEN  (14) ('''Click here to Insert a new record''')
+WHEN  (15) ('''Click here to Change this record''')
+WHEN  (16) ('''Click here to View details of this record''')
+WHEN  (17) ('''Click here to Delete this record''')
+WHEN  (18) ('''Click here to Select this record''')
+WHEN  (19) ('''Click here to start the Search''')
+WHEN  (20) ('''Click here to go to the First page in the list''')
+WHEN  (21) ('''Click here to go to the Previous page in the list''')
+WHEN  (22) ('''Click here to go to the Next page in the list''')
+WHEN  (23) ('''Click here to go to the Last page in the list''')
+WHEN  (24) ('''Click here to Print this page''')
+WHEN  (25) ('''Click here to Start the report''')
+WHEN  (26) ('''Click here to select a date''')
+WHEN  (27) ('''Click here to go back to the Previous step''')
+WHEN  (28) ('''Click here to go to the Next step''')
+WHEN  (29) ('''''')
+WHEN  (30) ('''Click here to print this record''')
+WHEN  (31) ('''Click here to copy the highlighted record''')
+WHEN  (32) ('''Click here to copy this record''')
+WHEN  (33) ('''Click here to clear the locator''')
+WHEN  (34) ('''Click here to logout''')
+WHEN  (35) ('''Click here to add files''')
+WHEN  (36) ('''Click here to clear the file list''')
+WHEN  (37) ('''Click here to start the upload''')
+WHEN  (38) ('''Click here to cancel the upload''')
+WHEN  (39) ('''Click here to remove this file from the list''')
+WHEN  (40) ('''Click here to export the data in this browse''')
+
+%ButtonUseJs DEPEND %Buttons LONG TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) (0)
+WHEN  (2) (1)
+WHEN  (3) (1)
+WHEN  (4) (1)
+WHEN  (5) (1)
+WHEN  (6) (1)
+WHEN  (7) (1)
+WHEN  (8) (1)
+WHEN  (9) (1)
+WHEN  (10) (1)
+WHEN  (11) (1)
+WHEN  (12) (1)
+WHEN  (13) (1)
+WHEN  (14) (1)
+WHEN  (15) (1)
+WHEN  (16) (1)
+WHEN  (17) (1)
+WHEN  (18) (1)
+WHEN  (19) (1)
+WHEN  (20) (1)
+WHEN  (21) (1)
+WHEN  (22) (1)
+WHEN  (23) (1)
+WHEN  (24) (1)
+WHEN  (25) (1)
+WHEN  (26) (1)
+WHEN  (27) (1)
+WHEN  (28) (1)
+WHEN  (29) (1)
+WHEN  (30) (1)
+WHEN  (31) (1)
+WHEN  (32) (1)
+WHEN  (33) (1)
+WHEN  (34) (1)
+WHEN  (35) (1)
+WHEN  (36) (1)
+WHEN  (37) (1)
+WHEN  (38) (1)
+WHEN  (39) (1)
+WHEN  (40) (1)
+
+%ButtonJsIcon DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('''''')
+WHEN  (2) ('''help''')
+WHEN  (3) ('''check''')
+WHEN  (4) ('''cancel''')
+WHEN  (5) ('''trash''')
+WHEN  (6) ('''check''')
+WHEN  (7) ('''plus''')
+WHEN  (8) ('''pencil''')
+WHEN  (9) ('''minus''')
+WHEN  (10) ('''trash''')
+WHEN  (11) ('''check''')
+WHEN  (12) ('''cancel''')
+WHEN  (13) ('''check''')
+WHEN  (14) ('''plus''')
+WHEN  (15) ('''pencil''')
+WHEN  (16) ('''zoomin''')
+WHEN  (17) ('''trash''')
+WHEN  (18) ('''check''')
+WHEN  (19) ('''lightbulb''')
+WHEN  (20) ('''arrowthickstop-1-w''')
+WHEN  (21) ('''arrowthick-1-w''')
+WHEN  (22) ('''arrowthick-1-e''')
+WHEN  (23) ('''arrowthickstop-1-e''')
+WHEN  (24) ('''print''')
+WHEN  (25) ('''check''')
+WHEN  (26) ('''help''')
+WHEN  (27) ('''arrowthick-1-w''')
+WHEN  (28) ('''arrowthick-1-e''')
+WHEN  (29) ('''''')
+WHEN  (30) ('''print''')
+WHEN  (31) ('''copy''')
+WHEN  (32) ('''copy''')
+WHEN  (33) ('''arrowrefresh-1-w''')
+WHEN  (34) ('''locked''')
+WHEN  (35) ('''plus''')
+WHEN  (36) ('''trash''')
+WHEN  (37) ('''play''')
+WHEN  (38) ('''cancel''')
+WHEN  (39) ('''trash''')
+WHEN  (40) ('''arrowreturnthick-1-e''')
+
+%ButtonPopupHeader DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('')
+WHEN  (2) ('''Lookup''')
+WHEN  (3) ('')
+WHEN  (4) ('')
+WHEN  (5) ('')
+WHEN  (6) ('')
+WHEN  (7) ('''Insert''')
+WHEN  (8) ('''Change''')
+WHEN  (9) ('''View''')
+WHEN  (10) ('''Delete''')
+WHEN  (11) ('')
+WHEN  (12) ('')
+WHEN  (13) ('')
+WHEN  (14) ('''Insert''')
+WHEN  (15) ('''Change''')
+WHEN  (16) ('''View''')
+WHEN  (17) ('''Delete''')
+WHEN  (18) ('')
+WHEN  (19) ('')
+WHEN  (20) ('')
+WHEN  (21) ('')
+WHEN  (22) ('')
+WHEN  (23) ('')
+WHEN  (24) ('')
+WHEN  (25) ('')
+WHEN  (26) ('')
+WHEN  (27) ('')
+WHEN  (28) ('')
+WHEN  (29) ('')
+WHEN  (30) ('')
+WHEN  (31) ('''Copy''')
+WHEN  (32) ('''Copy''')
+WHEN  (33) ('')
+WHEN  (34) ('')
+WHEN  (35) ('')
+WHEN  (36) ('')
+WHEN  (37) ('')
+WHEN  (38) ('')
+WHEN  (39) ('')
+WHEN  (40) ('')
+
+%AlwaysPort DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%ServerCombine DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('1')
+
+%ServerPreCompressed DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('1')
+
+%ServerTimeout DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('90001')
+
+%ServerCharset DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''ISO-8859-1''')
+
+%netStoreAs DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('net:StoreAsUTF8')
+
+%TranslateLocate DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''Locate''')
+
+%TranslateLocatePosition DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''Locate (Position)''')
+
+%TranslateLocateBegins DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''Locate (Begins With)''')
+
+%TranslateLocateContains DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''Locate (Contains)''')
+
+%GenerateAsAbc DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%ButtonName DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('UploadButton')
+WHEN  (2) ('LookupButton')
+WHEN  (3) ('SaveButton')
+WHEN  (4) ('CancelButton')
+WHEN  (5) ('DeletefButton')
+WHEN  (6) ('CloseButton')
+WHEN  (7) ('InsertButton')
+WHEN  (8) ('ChangeButton')
+WHEN  (9) ('ViewButton')
+WHEN  (10) ('DeletebButton')
+WHEN  (11) ('SelectButton')
+WHEN  (12) ('BrowseCancelButton')
+WHEN  (13) ('BrowseCloseButton')
+WHEN  (14) ('SmallInsertButton')
+WHEN  (15) ('SmallChangeButton')
+WHEN  (16) ('SmallViewButton')
+WHEN  (17) ('SmallDeleteButton')
+WHEN  (18) ('SmallSelectButton')
+WHEN  (19) ('LocateButton')
+WHEN  (20) ('FirstButton')
+WHEN  (21) ('PreviousButton')
+WHEN  (22) ('NextButton')
+WHEN  (23) ('LastButton')
+WHEN  (24) ('PrintButton')
+WHEN  (25) ('StartButton')
+WHEN  (26) ('DateLookupButton')
+WHEN  (27) ('WizPreviousButton')
+WHEN  (28) ('WizNextButton')
+WHEN  (29) ('SmallOtherButton')
+WHEN  (30) ('SmallPrintButton')
+WHEN  (31) ('CopyButton')
+WHEN  (32) ('SmallCopyButton')
+WHEN  (33) ('ClearButton')
+WHEN  (34) ('LogoutButton')
+WHEN  (35) ('AddFileButton')
+WHEN  (36) ('ClearFileButton')
+WHEN  (37) ('StartFileButton')
+WHEN  (38) ('CancelFileButton')
+WHEN  (39) ('RemoveFileButton')
+WHEN  (40) ('ExportButton')
+
+%ButtonWebName DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('upload_btn')
+WHEN  (2) ('lookup_btn')
+WHEN  (3) ('save_btn')
+WHEN  (4) ('cancel_btn')
+WHEN  (5) ('deletef_btn')
+WHEN  (6) ('close_btn')
+WHEN  (7) ('insert_btn')
+WHEN  (8) ('change_btn')
+WHEN  (9) ('view_btn')
+WHEN  (10) ('deleteb_btn')
+WHEN  (11) ('select_btn')
+WHEN  (12) ('browsecancel_btn')
+WHEN  (13) ('browseclose_btn')
+WHEN  (14) ('insert_btn')
+WHEN  (15) ('change_btn')
+WHEN  (16) ('view_btn')
+WHEN  (17) ('deleteb_btn')
+WHEN  (18) ('select_btn')
+WHEN  (19) ('locate_btn')
+WHEN  (20) ('first_btn')
+WHEN  (21) ('previous_btn')
+WHEN  (22) ('next_btn')
+WHEN  (23) ('last_btn')
+WHEN  (24) ('print_btn')
+WHEN  (25) ('start_btn')
+WHEN  (26) ('lookup_btn')
+WHEN  (27) ('wizprevious_btn')
+WHEN  (28) ('wiznext_btn')
+WHEN  (29) ('other_btn')
+WHEN  (30) ('print_btn')
+WHEN  (31) ('copy_btn')
+WHEN  (32) ('copy_btn')
+WHEN  (33) ('clear_btn')
+WHEN  (34) ('logout_btn')
+WHEN  (35) ('addfile_btn')
+WHEN  (36) ('clearfile_btn')
+WHEN  (37) ('startfile_btn')
+WHEN  (38) ('cancelfile_btn')
+WHEN  (39) ('removefile_btn')
+WHEN  (40) ('export_btn')
+
+%ButtonEquate DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 40
+WHEN  (1) ('NET:WEB:UploadButton')
+WHEN  (2) ('NET:WEB:LookupButton')
+WHEN  (3) ('NET:WEB:SaveButton')
+WHEN  (4) ('NET:WEB:CancelButton')
+WHEN  (5) ('NET:WEB:DeletefButton')
+WHEN  (6) ('NET:WEB:CloseButton')
+WHEN  (7) ('NET:WEB:InsertButton')
+WHEN  (8) ('NET:WEB:ChangeButton')
+WHEN  (9) ('NET:WEB:ViewButton')
+WHEN  (10) ('NET:WEB:DeletebButton')
+WHEN  (11) ('NET:WEB:SelectButton')
+WHEN  (12) ('NET:WEB:BrowseCancelButton')
+WHEN  (13) ('NET:WEB:BrowseCloseButton')
+WHEN  (14) ('NET:WEB:SmallInsertButton')
+WHEN  (15) ('NET:WEB:SmallChangeButton')
+WHEN  (16) ('NET:WEB:SmallViewButton')
+WHEN  (17) ('NET:WEB:SmallDeleteButton')
+WHEN  (18) ('NET:WEB:SmallSelectButton')
+WHEN  (19) ('NET:WEB:LocateButton')
+WHEN  (20) ('NET:WEB:FirstButton')
+WHEN  (21) ('NET:WEB:PreviousButton')
+WHEN  (22) ('NET:WEB:NextButton')
+WHEN  (23) ('NET:WEB:LastButton')
+WHEN  (24) ('NET:WEB:PrintButton')
+WHEN  (25) ('NET:WEB:StartButton')
+WHEN  (26) ('NET:WEB:DateLookupButton')
+WHEN  (27) ('NET:WEB:WizPreviousButton')
+WHEN  (28) ('NET:WEB:WizNextButton')
+WHEN  (29) ('NET:WEB:SmallOtherButton')
+WHEN  (30) ('NET:WEB:SmallPrintButton')
+WHEN  (31) ('NET:WEB:CopyButton')
+WHEN  (32) ('NET:WEB:SmallCopyButton')
+WHEN  (33) ('NET:WEB:ClearButton')
+WHEN  (34) ('NET:WEB:LogoutButton')
+WHEN  (35) ('NET:WEB:AddFileButton')
+WHEN  (36) ('NET:WEB:ClearFileButton')
+WHEN  (37) ('NET:WEB:StartFileButton')
+WHEN  (38) ('NET:WEB:CancelFileButton')
+WHEN  (39) ('NET:WEB:RemoveFileButton')
+WHEN  (40) ('NET:WEB:ExportButton')
+
+%UseContentBody DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%DefaultDoubleClick DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('1')
+
+%DefaultExport DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%DefaultDeletePrompt DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%DefaultCancelPrompt DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%DefaultMapProvider DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('MapQuest')
+
+%DefaultMapType DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('Net:MapQuestOpen:OSM')
+
+%MapIdCloudMade DEPEND %ClassItem DEFAULT TIMES 0
+
+%MapIdMapBox DEPEND %ClassItem DEFAULT TIMES 0
+
+%MapIdNokiaAppId DEPEND %ClassItem DEFAULT TIMES 0
+
+%MapIdNokiaAppCode DEPEND %ClassItem DEFAULT TIMES 0
+
+%DefaultMapMarkerName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('default')
+
+%DefaultMapMarkerCustomName DEPEND %ClassItem DEFAULT TIMES 0
+
+%mSupport DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%mHeaderFixedB DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%mFooterFixedB DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%mHeaderFixedF DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%mFooterFixedF DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%mPhoneMax DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('600')
+
+%DefaultHTMLEditor DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('Redactor')
+
+%IncludeRedactorEditor DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%RedactorLanguage DEPEND %ClassItem DEFAULT TIMES 0
+
+%IncludeHotdatesScript DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%IncludeGalleryScript DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%IncludeMediaScript DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%IncludeFileUploadScript DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%IncludeMapsScript DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%IncludeSignatureScripts DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%ScriptDesktop DEPEND %scripts LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%ScriptMobile DEPEND %scripts LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%NoAutoCheck DEPEND %scripts LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%IncludeChromejs DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%IncludeXPTPjs DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%resetsiteDefaults DEPEND %ClassItem LONG TIMES 0
+
+%ContentBodyCss DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-contentpanel''')
+
+%GoogleFonts DEPEND %ClassItem MULTI LONG TIMES 0
+
+%GoogleFont DEPEND %GoogleFonts DEFAULT TIMES 0
+
+%GoogleFontRegular DEPEND %GoogleFonts LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%GoogleFontBold DEPEND %GoogleFonts LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%GoogleFontItalic DEPEND %GoogleFonts LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%GoogleFontBoldItalic DEPEND %GoogleFonts LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%GoogleFontDesktop DEPEND %GoogleFonts LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%GoogleFontMobile DEPEND %GoogleFonts LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%GoogleFontCharset DEPEND %GoogleFonts DEFAULT TIMES 1
+WHEN  ('Default')TIMES 0
+
+%GoogleFontAlphabet DEPEND %GoogleFonts DEFAULT TIMES 1
+WHEN  ('Default')TIMES 0
+
+%GoogleFontEffect DEPEND %GoogleFonts DEFAULT TIMES 1
+WHEN  ('Default')TIMES 0
+
+%DefaultBrowseFooterEmpty DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-table-footer-empty''')
+
+%DefaultBrowseSelectButtonSet DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%netBrowseOverColorA DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%netBrowseHighlightColorA DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%netBrowseOneColorA DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%netBrowseTwoColorA DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%DefaultFormOtherButtonWithText DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%DefaultFormOtherButtonWithOutText DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%resetHotDefaults DEPEND %ClassItem LONG TIMES 0
+
+%DefaultCalDiv DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''''')
+
+%defaultMonthSet DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-month-set''')
+
+%defaultMonthHeader DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''ui-widget-header ui-corner-top nt-month-header''')
+
+%defaultMonthHeaderCell DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-month-header-cell nt-wide''')
+
+%defaultMonthDayCell DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-monthday-cell ui-corner-all''')
+
+%defaultMonthEmptyDayCell DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-monthday-empty-cell''')
+
+%defaultMonth DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-month-big ui-widget-content ui-corner-all''')
+
+%DefaultMonthContentClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-content''')
+
+%defaultMonthLabelClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-label''')
+
+%defaultMonthEmptyLabelClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-label-empty''')
+
+%defaultMonthSmall DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-month-small ui-widget-content ui-corner-all''')
+
+%DefaultMonthContentClassSmall DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-hidden''')
+
+%defaultMonthLabelClassSmall DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-label-small''')
+
+%defaultMonthEmptyLabelClassSmall DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-label-empty-small''')
+
+%ThemesDir DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''themes''')
+
+%Theme DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''ui-lightness''')
+
+%ThemeFiles DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ThemeName DEPEND %ThemeFiles DEFAULT TIMES 0
+
+%ThemeDesktop DEPEND %ThemeFiles LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%ThemeMobile DEPEND %ThemeFiles LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%StyleDesktop DEPEND %styles LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%StyleMobile DEPEND %styles LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%IncludeCss4 DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%IncludeChrome DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%IncludeXPTP DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%UseSelectionSets DEPEND %ClassItem LONG TIMES 0
+
+%ButtonCompact DEPEND %Buttons LONG TIMES 1
+WHEN  ('Default')TIMES 6
+WHEN  (35) (1)
+WHEN  (36) (1)
+WHEN  (37) (1)
+WHEN  (38) (1)
+WHEN  (39) (1)
+WHEN  (40) (1)
+
+%ButtonMobileIcon DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 6
+WHEN  (35) ('''plus''')
+WHEN  (36) ('''trash''')
+WHEN  (37) ('''play''')
+WHEN  (38) ('''cancel''')
+WHEN  (39) ('''trash''')
+WHEN  (40) ('''forward''')
+
+%ButtonMobileText DEPEND %Buttons DEFAULT TIMES 1
+WHEN  ('Default')TIMES 6
+WHEN  (35) ('''''')
+WHEN  (36) ('''''')
+WHEN  (37) ('''''')
+WHEN  (38) ('''''')
+WHEN  (39) ('''''')
+WHEN  (40) ('''Export''')
+
+%SessionLength DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('30')
+
+%ChangeSessionOnLogInOut DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%DeleteSessionOnLogout DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%NoIPSpoofing DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%MaxPostSize DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('0')
+
+%xframeoptions DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''sameorigin''')
+
+%SessionIsNumber DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%ServerCompressStatic DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('true')
+
+%ServerCompressDynamic DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('true')
+
+%ServerCheck DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('true')
+
+%FrontLoaded DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('false')
+
+%AllowKeepAlive DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('true')
+
+%CacheSmallerThan DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('1000000')
+
+%MaxCacheSize DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('50000000')
+
+%NoJavaScriptCheck DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('false')
+
+%NoScreenSizeCheck DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('false')
+
+%MaxThreads DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('100')
+
+%xFilesIsHere DEFAULT  ('0')
+%DefaultBrowseOpenAnimation DEPEND %ClassItem DEFAULT TIMES 0
+
+%DefaultBrowseCloseAnimation DEPEND %ClassItem DEFAULT TIMES 0
+
+%DefaultFormOpenAnimation DEPEND %ClassItem DEFAULT TIMES 0
+
+%DefaultFormCloseAnimation DEPEND %ClassItem DEFAULT TIMES 0
+
+%MapQuestAppKey DEPEND %ClassItem DEFAULT TIMES 0
+
+%MapTokenMapBox DEPEND %ClassItem DEFAULT TIMES 0
+
+%IncludeCarouselScripts DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%IncludeChatScripts DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%IncludeOtherServerScripts DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%IncludeOSKScript DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%IncludeTreeScripts DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%IncludeWebCamScripts DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%IncludeWebSocketsScripts DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%DefaultBrowseFoot DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-table-foot''')
+
+%defaultMonthHeading DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-heading''')
+
+%ThemeInAll DEPEND %ThemeFiles LONG TIMES 1
+WHEN  ('Default')TIMES 0
+
+%Keys DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%HostName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%StrictTransportSecurity DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%SuggestBasic DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%SuggestDigest DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%ExternalHttps DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%EnableFileCache DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%MultiTab DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('false')
+
+%WebPoolProc DEPEND %ClassItem PROCEDURE TIMES 0
+
+%WebPoolMax DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('0')
+
+%WebServerState DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%NetAutoCloseServerUseMessage DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%DefaultFormTableRow DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-form-table-row''')
+
+%DefaultFormTableCell DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-form-table-cell''')
+
+%DefaultFormGrid DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-form-grid''')
+
+%DefaultFormGridRow DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-form-grid-row''')
+
+%DefaultFormGridCell DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-form-grid-cell''')
+
+%xAllowOrigin DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%MapsAppId DEPEND %ClassItem DEFAULT TIMES 0
+
+%MapsAppCode DEPEND %ClassItem DEFAULT TIMES 0
+
+%ListenOnSecurePort DEPEND %ClassItem DEFAULT TIMES 0
+
+%ListenOnInSecurePort DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('80')
+
+%BrowseEntryDefaultWidth DEPEND %ClassItem DEFAULT TIMES 0
+
+%DefaultBrowseLayoutMethod DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('Net:Table')
+
+%DefaultChildrenLayoutMethod DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('Net:Table')
+
+%FormEntryDefaultWidth DEPEND %ClassItem DEFAULT TIMES 0
+
+%DefaultFormTopOffset DEPEND %ClassItem DEFAULT TIMES 0
+
+%DefaultFormWidth DEPEND %ClassItem DEFAULT TIMES 0
+
+%DefaultFormLayoutMethod DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('Net:Table')
+
+%DefaultBrowseDeletedRow DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-table-row-deleted''')
+
+%DefaultBrowseGrid DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-grid''')
+
+%DefaultbrowseGridRow DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-grid-row''')
+
+%DefaultBrowseGridDeletedRow DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-grid-row-deleted''')
+
+%DefaultbrowseGridCell DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-browse-grid-cell''')
+
+%DefaultChildGrid DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-child-grid''')
+
+%DefaultChildGridRow DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-child-grid-row''')
+
+%DefaultChildGridCell DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''nt-child-grid-cell''')
+
+%ServeWebSockets DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%ContentSecurityPolicy DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%ContentSecurityPolicyReportOnly DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('')
+
+%ReferrerPolicy DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''strict-origin-when-cross-origin''')
+
+[WINDOW]
+Window  WINDOW('Delta-YZ Asistaný (ChatGPT)'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular), |
+          DOUBLE,CENTER,ICON('chatgpt.ico'),GRAY,IMM,SYSTEM
+          BOX,AT(3,4,380,216),USE(?Box1),COLOR(COLOR:Gray),LINEWIDTH(1),ROUND,#ORIG(?Box1), |
+            #ORDINAL(1)
+          STRING(@s255),AT(8,205,345),USE(Loc:Status),CENTER,TRN,#ORDINAL(2)
+          TEXT,AT(9,9,369,37),USE(MyQuestion),VSCROLL,#ORDINAL(3)
+          TEXT,AT(9,85,369,117),USE(ChatGPTResponse),VSCROLL,COLOR(00DCDCDCh),READONLY,#ORIG(MyText), |
+            #ORDINAL(4)
+          BUTTON('Post'),AT(328,49,50,12),USE(?GetPage),LEFT,ICON('chatgpt.ico'),TIP('Send your ' & |
+            'request to ChatGPT'),#ORIG(?Button1),#ORDINAL(5)
+          PROMPT('Key:'),AT(23,50),USE(?API_Key:Prompt),TRN,#ORDINAL(6)
+          ENTRY(@s80),AT(73,50,201,10),USE(API_Key),TIP('Create your own API key using ' & |
+            'following web page: https://platform.openai.com/account/api-keys'),#ORDINAL(7)
+          BUTTON,AT(363,205,15,10),USE(?BUTTON:Copy),ICON(ICON:Copy),FLAT,TIP('Copy respo' & |
+            'nse to clipboard'),TRN,#ORDINAL(8)
+          PROMPT('Temperature:'),AT(24,64),USE(?API_temp:Prompt),TRN,#ORDINAL(9)
+          SPIN(@n3.1),AT(73,64,,10),USE(API_temp),RIGHT(1),RANGE(0,1),STEP(0.1),TIP('* Low temp' & |
+            'erature (0 to 0.3): More focused, coherent, and conservative outputs.<0DH,0AH>' & |
+            '* Medium temperature (0.3 to 0.7): Balanced creativity and coherence.<0DH,0AH>' & |
+            '* High temperature (0.7 to 1): Highly creative and diverse, but potentiall' & |
+            'y less coherent.'),#ORDINAL(10)
+          STRING('API'),AT(7,49,,24),USE(?STRING1),FONT(,,,FONT:bold,CHARSET:DEFAULT),CENTER, |
+            ANGLE(900),COLOR(00D3D3D3h),#ORDINAL(11)
+        END
+
+[END]
