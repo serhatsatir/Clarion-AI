@@ -2,12 +2,13 @@
 NAME 'AI_AI_Gemini.clw'
 [COMMON]
 FROM ABC GENERATED
+MODIFIED '2024/05/29' '11:22:06'
 [PROCEDURE]
 NAME AI_Gemini
 [COMMON]
 DESCRIPTION 'Under construction'
 FROM ABC Window
-MODIFIED '2024/05/29' '10:27:31'
+MODIFIED '2024/05/29' '11:22:06'
 [DATA]
 [SCREENCONTROLS]
 ! PROMPT('API Key:'),USE(?API_Key:Prompt)
@@ -513,7 +514,7 @@ PROPERTY:BEGIN
 PRIORITY 5000
 PROPERTY:END
 IF API_Key='' THEN
-    MESSAGE('Create your own API key using following web page: https://platform.openai.com/account/api-keys','ChatGPT API Key',ICON:Exclamation)
+    MESSAGE('Create your own API key using following web page: https://ai.google.dev/gemini-api/docs/api-key','Gemini API Key',ICON:Exclamation,,,MSGMODE:CANCOPY)
     CYCLE
 END
 
@@ -527,7 +528,7 @@ ThisWebClient.SetAllHeadersDefault()
 ThisWebClient.CanUseProxy = True
 ThisWebClient.HeaderOnly = False
 ThisWebClient.HTTPVersion = 'HTTP/1.1'
-! ChatGPT API key
+! Gemini API key
 ThisWebClient.CustomHeader = 'Authorization: Bearer '&API_Key
 ThisWebClient.ContentType = 'application/json'
 ThisWebClient.AsyncOpenUse = True
@@ -625,15 +626,13 @@ ReformatQuestion       ROUTINE
     st.SetValue(CLIP(MyQuestion))
     st.JsonEncode()
 
-!!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
-!!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
-!!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
+    !!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
+    !!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
+    !!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
     Loc:PostString='{{"contents": [{"parts":[{"text": "'&st.GetValue()&'Write a story about a magic backpack."}]}]}'
     !!!Loc:PostString='{{"prompt": [{"parts":[{"text": "'&st.GetValue()&'Write a story about a magic backpack."}]}]}'
-    !Loc:PostString='{"model": "gpt-4-1106-preview","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
     Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
-    SETCLIPBOARD(Loc:PostString)
-    MESSAGE(Loc:PostString,'Debug')
+    st.Trace(Loc:PostString)
 [SOURCE]
 PROPERTY:BEGIN
 PRIORITY 4000
@@ -2142,7 +2141,7 @@ Window  WINDOW('Gemini Example'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular)
             'request to ChatGPT'),#ORIG(?Button1),#ORDINAL(5)
           PROMPT('Key:'),AT(23,50),USE(?API_Key:Prompt),TRN,#ORDINAL(6)
           ENTRY(@s80),AT(73,50,201,10),USE(API_Key),TIP('Create your own API key using ' & |
-            'following web page: https://platform.openai.com/account/api-keys'),#ORDINAL(7)
+            'following web page: https://ai.google.dev/gemini-api/docs/api-key'),#ORDINAL(7)
           BUTTON,AT(363,205,15,10),USE(?BUTTON:Copy),ICON(ICON:Copy),FLAT,TIP('Copy respo' & |
             'nse to clipboard'),TRN,#ORDINAL(8)
           PROMPT('Temperature:'),AT(24,64),USE(?API_temp:Prompt),TRN,#ORDINAL(9)

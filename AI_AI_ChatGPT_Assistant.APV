@@ -2,12 +2,13 @@
 NAME 'AI_AI_ChatGPT_Assistant.clw'
 [COMMON]
 FROM ABC GENERATED
+MODIFIED '2024/05/29' '11:20:45'
 [PROCEDURE]
 NAME AI_ChatGPT_Assistant
 [COMMON]
 DESCRIPTION 'If you have defined a ChatGPT Assistant, you can talk to that assistant.'
 FROM ABC Window
-MODIFIED '2024/05/29' '10:19:14'
+MODIFIED '2024/05/29' '12:05:37'
 [DATA]
 [SCREENCONTROLS]
 ! PROMPT('API Key:'),USE(?API_Key:Prompt)
@@ -16,6 +17,13 @@ MODIFIED '2024/05/29' '10:19:14'
 ! STRING(@s80),USE(API_Key)
 API_Key                  CSTRING(81)
 !!> GUID('991a4561-90b1-492b-93c9-340809bba10d'),PROMPT('API Key:'),HEADER('API Key'),PICTURE(@s80),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Assistant:'),USE(?Assistant:Prompt)
+! ENTRY(@s50),USE(Assistant)
+[REPORTCONTROLS]
+! STRING(@s50),USE(Assistant)
+Assistant                CSTRING(51)
+!!> GUID('5c2c4afb-e5c7-48cc-96b4-b4c4ddae2da9'),PROMPT('Assistant:'),HEADER('Assistant'),PICTURE(@s50),TYPEMODE(INS)
 [SCREENCONTROLS]
 ! PROMPT('API temp:'),USE(?API_temp:Prompt)
 ! SPIN(@n3.1),USE(API_temp),RANGE(0,1),STEP(0.1)
@@ -114,7 +122,13 @@ WHEN  ('WindowToolbar') ('ToolbarClass')
 WHEN  ('Default') ('')
 WHEN  ('WindowToolbar') ('')
 
-%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 0
+%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
+WHEN  ('Default') ('Ask {20}PROCEDURE(),DERIVED', 'ChangeAction {11}PROCEDURE(),BYTE,DERIVED', |
+  'OnCloseEventCancelled  PROCEDURE(),DERIVED', 'PrimeUpdate {12}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'Reset {18}PROCEDURE(BYTE Force=0),DERIVED', 'Run {20}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'SetAlerts {14}PROCEDURE(),DERIVED', 'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'TakeDisableButton      PROCEDURE(SIGNED Control,BYTE MakeDisable),DERIVED', 'TakeEvent {14}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'Update {17}PROCEDURE(),DERIVED')
 
 %ReturnValue FIELD  ()
 %WindowOperationMode DEFAULT  ('Use WINDOW setting')
@@ -197,7 +211,8 @@ WHEN  ('WindowToolbar')TIMES 0
 
 %ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
 
-%ButtonAction DEPEND %Control DEFAULT TIMES 5
+%ButtonAction DEPEND %Control DEFAULT TIMES 6
+WHEN  ('?Assistant') ('No Special Action')
 WHEN  ('?BUTTON:Copy') ('No Special Action')
 WHEN  ('?Box1') ('No Special Action')
 WHEN  ('?ChatGPTResponse') ('No Special Action')
@@ -216,7 +231,8 @@ WHEN  ('?GetPage') ()
 %ButtonThread DEPEND %Control LONG TIMES 1
 WHEN  ('?GetPage') (0)
 
-%ButtonThreadStack DEPEND %Control DEFAULT TIMES 5
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 6
+WHEN  ('?Assistant') ('25000')
 WHEN  ('?BUTTON:Copy') ('25000')
 WHEN  ('?Box1') ('25000')
 WHEN  ('?ChatGPTResponse') ('25000')
@@ -225,7 +241,8 @@ WHEN  ('?STRING1') ('25000')
 
 %ButtonParameters DEPEND %Control DEFAULT TIMES 0
 
-%ButtonRequest DEPEND %Control DEFAULT TIMES 5
+%ButtonRequest DEPEND %Control DEFAULT TIMES 6
+WHEN  ('?Assistant') ('None')
 WHEN  ('?BUTTON:Copy') ('None')
 WHEN  ('?Box1') ('None')
 WHEN  ('?ChatGPTResponse') ('None')
@@ -244,9 +261,10 @@ WHEN  ('?STRING1') ('None')
 
 %PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
 
-%PostLookupDuringValidate DEPEND %Control LONG TIMES 7
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 8
 WHEN  ('?API_Key') (1)
 WHEN  ('?API_temp') (1)
+WHEN  ('?Assistant') (1)
 WHEN  ('?BUTTON:Copy') (1)
 WHEN  ('?Box1') (1)
 WHEN  ('?ChatGPTResponse') (1)
@@ -265,7 +283,8 @@ WHEN  ('?STRING1') (1)
 
 %CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
 
-%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 5
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 6
+WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
@@ -276,7 +295,8 @@ WHEN  ('?STRING1')TIMES 0
 
 %CheckedControl1 DEPEND %CheckedEnables DEFAULT TIMES 0
 
-%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 5
+%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 6
+WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
@@ -293,7 +313,8 @@ WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
 
-%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 5
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 6
+WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
@@ -304,7 +325,8 @@ WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedControl1 DEPEND %UnCheckedEnables DEFAULT TIMES 0
 
-%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 5
+%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 6
+WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
@@ -426,7 +448,8 @@ WHEN  ('WindowToolbar') ('NO')
 
 %ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
 
-%ExtUITabStyle DEPEND %Control DEFAULT TIMES 2
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 3
+WHEN  ('?Assistant') ('Default')
 WHEN  ('?BUTTON:Copy') ('Default')
 WHEN  ('?STRING1') ('Default')
 
@@ -438,7 +461,8 @@ WHEN  ('?STRING1') ('Default')
 
 %CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
 
-%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 2
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 3
+WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
@@ -446,67 +470,79 @@ WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
 
-%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 2
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 3
+WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
 %ProcedureOneInstance LONG  (0)
-%PreserveVarsLoc MULTI LONG  (2, 1, 3)
-%PreserveVarLoc DEPEND %PreserveVarsLoc DEFAULT TIMES 3
+%PreserveVarsLoc MULTI LONG  (2, 1, 3, 4)
+%PreserveVarLoc DEPEND %PreserveVarsLoc DEFAULT TIMES 4
 WHEN  (1) ('API_Key')
 WHEN  (2) ('MyQuestion')
 WHEN  (3) ('API_temp')
+WHEN  (4) ('Assistant')
 
-%FieldGradientColorType DEPEND %Control DEFAULT TIMES 3
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 4
+WHEN  ('?Assistant') ('Off')
 WHEN  ('?BUTTON:Copy') ('Off')
 WHEN  ('?Box1') ('Off')
 WHEN  ('?STRING1') ('Off')
 
-%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 3
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 4
+WHEN  ('?Assistant') ('')
 WHEN  ('?BUTTON:Copy') ('')
 WHEN  ('?Box1') ('')
 WHEN  ('?STRING1') ('')
 
-%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 3
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 4
+WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
 WHEN  ('?STRING1') (0)
 
-%FieldGradientColorFrom DEPEND %Control LONG TIMES 3
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 4
+WHEN  ('?Assistant') (-1)
 WHEN  ('?BUTTON:Copy') (-1)
 WHEN  ('?Box1') (-1)
 WHEN  ('?STRING1') (-1)
 
 %FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
 
-%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 3
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 4
+WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
 WHEN  ('?STRING1') (0)
 
-%FieldGradientColorTo DEPEND %Control LONG TIMES 3
+%FieldGradientColorTo DEPEND %Control LONG TIMES 4
+WHEN  ('?Assistant') (-1)
 WHEN  ('?BUTTON:Copy') (-1)
 WHEN  ('?Box1') (-1)
 WHEN  ('?STRING1') (-1)
 
 %FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
 
-%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 3
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 4
+WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
 WHEN  ('?STRING1') (0)
 
 %ActiveImageEnable DEPEND %Control LONG TIMES 0
 
-%AIObjectName DEPEND %Control DEFAULT TIMES 2
+%AIObjectName DEPEND %Control DEFAULT TIMES 3
+WHEN  ('?Assistant') ('AIBtn13')
 WHEN  ('?BUTTON:Copy') ('AIBtn8')
 WHEN  ('?STRING1') ('AIBtn11')
 
-%AIEnableMimicControl DEPEND %Control LONG TIMES 2
+%AIEnableMimicControl DEPEND %Control LONG TIMES 3
+WHEN  ('?Assistant') (1)
 WHEN  ('?BUTTON:Copy') (1)
 WHEN  ('?STRING1') (1)
 
-%AIMimicControl DEPEND %Control DEFAULT TIMES 2
+%AIMimicControl DEPEND %Control DEFAULT TIMES 3
+WHEN  ('?Assistant') ('?Box1')
 WHEN  ('?BUTTON:Copy') ('?Box1')
 WHEN  ('?STRING1') ('?Box1')
 
@@ -516,7 +552,8 @@ WHEN  ('?STRING1') ('?Box1')
 
 %AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 2
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 3
+WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?STRING1') (0)
 
@@ -524,7 +561,8 @@ WHEN  ('?STRING1') (0)
 
 %AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIDisableImgIsVariable DEPEND %Control LONG TIMES 2
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 3
+WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?STRING1') (0)
 
@@ -532,7 +570,8 @@ WHEN  ('?STRING1') (0)
 
 %AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIHotImgIsVariable DEPEND %Control LONG TIMES 2
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 3
+WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?STRING1') (0)
 
@@ -540,7 +579,8 @@ WHEN  ('?STRING1') (0)
 
 %AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIPressedImgIsVariable DEPEND %Control LONG TIMES 2
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 3
+WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?STRING1') (0)
 
@@ -557,7 +597,7 @@ PROPERTY:BEGIN
 PRIORITY 5000
 PROPERTY:END
 IF API_Key='' THEN
-    MESSAGE('Create your own API key using following web page: https://platform.openai.com/account/api-keys','ChatGPT API Key',ICON:Exclamation)
+    MESSAGE('Create your own API key using following web page: https://platform.openai.com/account/api-keys','ChatGPT API Key',ICON:Exclamation,,,MSGMODE:CANCOPY)
     CYCLE
 END
 
@@ -652,16 +692,35 @@ EMBED %ProcedureRoutines
 PROPERTY:BEGIN
 PRIORITY 4000
 PROPERTY:END
+ReformatTextCompletion      ROUTINE
+    st.SetValue(CLIP(MyQuestion))
+    st.JsonEncode()
+
+    !!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
+    !!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
+    !!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
+    !Loc:PostString='{"model": "gpt-3.5-turbo","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
+    Loc:PostString='{"model": "gpt-4o","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
+    st.Trace('Request: '&Loc:PostString)
+
+    ! Generate UTF8 from Turkish characters
+    Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
+
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
 CreateAndRun        ROUTINE
     st.SetValue(CLIP(MyQuestion))
     st.JsonEncode()
 
-    Loc:PostString='{"assistant_id": "asst_08efSGTMy4Jra8GVh7JfS5RZ",'&|
+    Loc:PostString='{"assistant_id": "'&Assistant&",'&|
     '"thread": {"messages": [{"role": "user", "content": "'&st.GetValue()&'"}]}}'
     st.Trace('CreateAndRun: '&Loc:PostString)
 
     ! Generate UTF8 from Turkish characters
     Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
+
     Loc:GetString=GetResponse(2,API_Key,'https://api.openai.com/v1/threads/runs',Loc:PostString)
     JSON.FromJSON(Loc:GetString,Loc:CreateRunResponse)
 [SOURCE]
@@ -687,44 +746,6 @@ GetResponse     ROUTINE
     ChatGPTResponse=st.Between('"value": "','",')
     DISPLAY(?ChatGPTResponse)
 
-[SOURCE]
-PROPERTY:BEGIN
-PRIORITY 4000
-PROPERTY:END
-ReformatTextCompletion      ROUTINE
-    st.SetValue(CLIP(MyQuestion))
-    st.JsonEncode()
-
-    !!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
-    !!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
-    !!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
-    !Loc:PostString='{"model": "gpt-3.5-turbo","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
-    Loc:PostString='{"model": "gpt-4o","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
-    st.Trace('Request: '&Loc:PostString)
-
-    ! Generate UTF8 from Turkish characters
-    Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
-
-[SOURCE]
-PROPERTY:BEGIN
-PRIORITY 4000
-PROPERTY:END
-ReformatAnswer       ROUTINE
-    ! Generate UTF8 to Turkish ANSI characters
-    ChatGPTResponse=st.Utf8ToAnsi(Loc:GetString,uz#,st:CP_ISO_8859_9)
-
-    baslangic#=INSTRING('"content": "',ChatGPTResponse,1,1)
-    bitis#=INSTRING('"finish_reason": "',ChatGPTResponse,1,1)
-    IF baslangic#=0 OR bitis#=0 THEN
-        !ChatGPTResponse=''
-        Loc:Status='Couldn''t get legal response from ChatGPT'
-        EXIT
-    END
-    st.Trace('Response: '&ChatGPTResponse)
-
-    st.SetValue(SUB(ChatGPTResponse,baslangic#+12,bitis#-baslangic#-29))
-    st.Replace('\n','<13,10>'); st.JsonDecode()
-    ChatGPTResponse=st.GetValue()
 [END]
 EMBED %WindowManagerMethodCodeSection
 [INSTANCES]
@@ -762,7 +783,23 @@ WHEN  ('Default') ('NetClient')
 WHEN  ('Default') ('')
 
 %ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
-WHEN  ('Default') ('')
+WHEN  ('Default') ('ANSIToUnicode {10}PROCEDURE(long encoding=st:EncodeUtf16,ulong pCodePage=st:CP_US_ASCII),DERIVED', |
+  'Base64Decode {11}PROCEDURE(String p_Text),STRING,DERIVED', 'Close {18}PROCEDURE(),DERIVED', |
+  'CompleteURL {12}PROCEDURE(String p_Url),STRING,PROC,DERIVED', 'ConnectionClosed       PROCEDURE(),DERIVED', |
+  'CreateAuthorizationString PROCEDURE(string p_UserName,string p_Password,long p_AuthorizationMethod,long p_Options=0),STRING,DERIVED', |
+  'Delete {17}PROCEDURE(String p_Url),DERIVED', 'EncodeWebString        PROCEDURE(string p_Text,Long p_Flags=0,Long p_Len=0),STRING,DERIVED', |
+  'ErrorTrap {14}PROCEDURE(string errorStr,string functionName),DERIVED', 'GetBanned {14}PROCEDURE(),String,DERIVED', |
+  'GetInfo {16}PROCEDURE(long p_Options=1,long p_Socket=0,long p_SockId=0),DERIVED', |
+  'GetValueFromWebString  PROCEDURE(string p_VarName,string p_PostString),STRING,DERIVED', |
+  'Init {19}PROCEDURE(uLong Mode=NET:SimpleClient),DERIVED', 'InterpretError {9}PROCEDURE(),STRING,DERIVED', |
+  'Kill {19}PROCEDURE(),DERIVED', 'LongToHex {14}PROCEDURE(Long p_Long),String,DERIVED', |
+  'MakePostString {9}PROCEDURE(),DERIVED', 'MatchSubjectWithURL    PROCEDURE(String p_CertName,String p_Server),long,DERIVED', |
+  'NormalizeURL {11}PROCEDURE(StringTheory pURL),DERIVED', 'ParseAuthenticateHeader PROCEDURE(),LONG,DERIVED', |
+  'PartiallyCloseServer   PROCEDURE(),DERIVED', 'Ping {19}PROCEDURE(string p_IP,long p_TTL),LONG,DERIVED', |
+  'Post {19}PROCEDURE(String p_Url),DERIVED', 'SSLGetIssuerField      PROCEDURE(string p_FieldName),string,DERIVED', |
+  'SavePage {15}PROCEDURE(string p_FileName),DERIVED', 'UnixToClarionDate      PROCEDURE(Long p_DateTime),Long,DERIVED', |
+  '_CallErrorTrap {9}PROCEDURE(string errorStr,string functionName),DERIVED', '_CreateRequestHeader   PROCEDURE(long p_HostPort),STRING,DERIVED', |
+  '_LoggingFirstTime      PROCEDURE(),DERIVED', '')
 
 %UseDefaultABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('')
@@ -2202,29 +2239,33 @@ WHEN  ('Default') ('')
 WHEN  ('Default') ('''strict-origin-when-cross-origin''')
 
 [WINDOW]
-Window  WINDOW('Delta-YZ Asistaný (ChatGPT)'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular), |
+Window  WINDOW('Custom Assistant (ChatGPT)'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular), |
           DOUBLE,CENTER,ICON('chatgpt.ico'),GRAY,IMM,SYSTEM
           BOX,AT(3,4,380,216),USE(?Box1),COLOR(COLOR:Gray),LINEWIDTH(1),ROUND,#ORIG(?Box1), |
             #ORDINAL(1)
           STRING(@s255),AT(8,205,345),USE(Loc:Status),CENTER,TRN,#ORDINAL(2)
           TEXT,AT(9,9,369,37),USE(MyQuestion),VSCROLL,#ORDINAL(3)
-          TEXT,AT(9,85,369,117),USE(ChatGPTResponse),VSCROLL,COLOR(00DCDCDCh),READONLY,#ORIG(MyText), |
+          TEXT,AT(9,91,369,112),USE(ChatGPTResponse),VSCROLL,COLOR(00DCDCDCh),READONLY,#ORIG(MyText), |
             #ORDINAL(4)
           BUTTON('Post'),AT(328,49,50,12),USE(?GetPage),LEFT,ICON('chatgpt.ico'),TIP('Send your ' & |
             'request to ChatGPT'),#ORIG(?Button1),#ORDINAL(5)
-          PROMPT('Key:'),AT(23,50),USE(?API_Key:Prompt),TRN,#ORDINAL(6)
+          PROMPT('Key:'),AT(24,50),USE(?API_Key:Prompt),TRN,#ORDINAL(6)
           ENTRY(@s80),AT(73,50,201,10),USE(API_Key),TIP('Create your own API key using ' & |
-            'following web page: https://platform.openai.com/account/api-keys'),#ORDINAL(7)
+            'following web page: https://platform.openai.com/account/api-keys<0DH,0AH,0DH>' & |
+            '<0AH>like; sk-VyUX.{18}5Y3aw'),#ORDINAL(7)
           BUTTON,AT(363,205,15,10),USE(?BUTTON:Copy),ICON(ICON:Copy),FLAT,TIP('Copy respo' & |
             'nse to clipboard'),TRN,#ORDINAL(8)
-          PROMPT('Temperature:'),AT(24,64),USE(?API_temp:Prompt),TRN,#ORDINAL(9)
-          SPIN(@n3.1),AT(73,64,,10),USE(API_temp),RIGHT(1),RANGE(0,1),STEP(0.1),TIP('* Low temp' & |
+          PROMPT('Temperature:'),AT(24,77),USE(?API_temp:Prompt),TRN,#ORDINAL(9)
+          SPIN(@n3.1),AT(73,77,,10),USE(API_temp),RIGHT(1),RANGE(0,1),STEP(0.1),TIP('* Low temp' & |
             'erature (0 to 0.3): More focused, coherent, and conservative outputs.<0DH,0AH>' & |
             '* Medium temperature (0.3 to 0.7): Balanced creativity and coherence.<0DH,0AH>' & |
             '* High temperature (0.7 to 1): Highly creative and diverse, but potentiall' & |
             'y less coherent.'),#ORDINAL(10)
           STRING('API'),AT(7,49,,24),USE(?STRING1),FONT(,,,FONT:bold,CHARSET:DEFAULT),CENTER, |
             ANGLE(900),COLOR(00D3D3D3h),#ORDINAL(11)
+          PROMPT('Assistant ID:'),AT(24,64),USE(?Assistant:Prompt),#ORDINAL(12)
+          ENTRY(@s50),AT(73,64,146,10),USE(Assistant),TIP('Created ChatGPT assistant co' & |
+            'de like; asst_08.{16}5RZ'),#ORDINAL(13)
         END
 
 [END]

@@ -2,12 +2,13 @@
 NAME 'AI_Ollama.clw'
 [COMMON]
 FROM ABC GENERATED
+MODIFIED '2024/05/29' '11:24:31'
 [PROCEDURE]
 NAME Ollama
 [COMMON]
 DESCRIPTION 'You can talk to the Ollama models you have set up using this screen.'
 FROM ABC Window
-MODIFIED '2024/05/29' '10:15:44'
+MODIFIED '2024/05/29' '11:24:31'
 [DATA]
 [SCREENCONTROLS]
 ! PROMPT('API temp:'),USE(?API_temp:Prompt)
@@ -174,7 +175,9 @@ WHEN  ('WindowToolbar') ('ToolbarClass')
 WHEN  ('Default') ('')
 WHEN  ('WindowToolbar') ('')
 
-%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 0
+%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
+WHEN  ('Default') ('Init {19}PROCEDURE(),BYTE,PROC,DERIVED', 'Kill {19}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED', 'TakeEvent {14}PROCEDURE(),BYTE,PROC,DERIVED')
 
 %ReturnValue FIELD  ()
 %WindowOperationMode DEFAULT  ('Use WINDOW setting')
@@ -257,12 +260,11 @@ WHEN  ('WindowToolbar')TIMES 0
 
 %ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
 
-%ButtonAction DEPEND %Control DEFAULT TIMES 7
+%ButtonAction DEPEND %Control DEFAULT TIMES 6
 WHEN  ('?BUTTON:Copy') ('No Special Action')
 WHEN  ('?Box1') ('No Special Action')
 WHEN  ('?ChatGPTResponse') ('No Special Action')
 WHEN  ('?GetPage') ('No Special Action')
-WHEN  ('?Loc:Model') ('No Special Action')
 WHEN  ('?OllamaServer') ('No Special Action')
 WHEN  ('?STRING1') ('No Special Action')
 
@@ -278,23 +280,21 @@ WHEN  ('?GetPage') ()
 %ButtonThread DEPEND %Control LONG TIMES 1
 WHEN  ('?GetPage') (0)
 
-%ButtonThreadStack DEPEND %Control DEFAULT TIMES 7
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 6
 WHEN  ('?BUTTON:Copy') ('25000')
 WHEN  ('?Box1') ('25000')
 WHEN  ('?ChatGPTResponse') ('25000')
 WHEN  ('?GetPage') ('25000')
-WHEN  ('?Loc:Model') ('25000')
 WHEN  ('?OllamaServer') ('25000')
 WHEN  ('?STRING1') ('25000')
 
 %ButtonParameters DEPEND %Control DEFAULT TIMES 0
 
-%ButtonRequest DEPEND %Control DEFAULT TIMES 7
+%ButtonRequest DEPEND %Control DEFAULT TIMES 6
 WHEN  ('?BUTTON:Copy') ('None')
 WHEN  ('?Box1') ('None')
 WHEN  ('?ChatGPTResponse') ('None')
 WHEN  ('?GetPage') ('None')
-WHEN  ('?Loc:Model') ('None')
 WHEN  ('?OllamaServer') ('None')
 WHEN  ('?STRING1') ('None')
 
@@ -316,7 +316,7 @@ WHEN  ('?BUTTON:Copy') (1)
 WHEN  ('?Box1') (1)
 WHEN  ('?ChatGPTResponse') (1)
 WHEN  ('?GetPage') (1)
-WHEN  ('?Loc:Model') (1)
+WHEN  ('?Model') (1)
 WHEN  ('?OllamaServer') (1)
 WHEN  ('?STRING1') (1)
 
@@ -332,12 +332,11 @@ WHEN  ('?STRING1') (1)
 
 %CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
 
-%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 7
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 6
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
 WHEN  ('?GetPage')TIMES 0
-WHEN  ('?Loc:Model')TIMES 0
 WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
@@ -345,12 +344,11 @@ WHEN  ('?STRING1')TIMES 0
 
 %CheckedControl1 DEPEND %CheckedEnables DEFAULT TIMES 0
 
-%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 7
+%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 6
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
 WHEN  ('?GetPage')TIMES 0
-WHEN  ('?Loc:Model')TIMES 0
 WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
@@ -364,12 +362,11 @@ WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
 
-%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 7
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 6
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
 WHEN  ('?GetPage')TIMES 0
-WHEN  ('?Loc:Model')TIMES 0
 WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
@@ -377,12 +374,11 @@ WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedControl1 DEPEND %UnCheckedEnables DEFAULT TIMES 0
 
-%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 7
+%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 6
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
 WHEN  ('?GetPage')TIMES 0
-WHEN  ('?Loc:Model')TIMES 0
 WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
@@ -501,9 +497,8 @@ WHEN  ('WindowToolbar') ('NO')
 
 %ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
 
-%ExtUITabStyle DEPEND %Control DEFAULT TIMES 4
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 3
 WHEN  ('?BUTTON:Copy') ('Default')
-WHEN  ('?Loc:Model') ('Default')
 WHEN  ('?OllamaServer') ('Default')
 WHEN  ('?STRING1') ('Default')
 
@@ -515,9 +510,8 @@ WHEN  ('?STRING1') ('Default')
 
 %CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
 
-%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 4
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 3
 WHEN  ('?BUTTON:Copy')TIMES 0
-WHEN  ('?Loc:Model')TIMES 0
 WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
@@ -525,9 +519,8 @@ WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
 
-%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 4
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 3
 WHEN  ('?BUTTON:Copy')TIMES 0
-WHEN  ('?Loc:Model')TIMES 0
 WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
@@ -536,79 +529,69 @@ WHEN  ('?STRING1')TIMES 0
 %PreserveVarLoc DEPEND %PreserveVarsLoc DEFAULT TIMES 4
 WHEN  (2) ('MyQuestion')
 WHEN  (3) ('API_temp')
-WHEN  (4) ('Loc:Model')
+WHEN  (4) ('Model')
 WHEN  (5) ('OllamaServer')
 
-%FieldGradientColorType DEPEND %Control DEFAULT TIMES 5
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 4
 WHEN  ('?BUTTON:Copy') ('Off')
 WHEN  ('?Box1') ('Off')
-WHEN  ('?Loc:Model') ('Off')
 WHEN  ('?OllamaServer') ('Off')
 WHEN  ('?STRING1') ('Off')
 
-%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 5
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 4
 WHEN  ('?BUTTON:Copy') ('')
 WHEN  ('?Box1') ('')
-WHEN  ('?Loc:Model') ('')
 WHEN  ('?OllamaServer') ('')
 WHEN  ('?STRING1') ('')
 
-%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 5
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 4
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
-WHEN  ('?Loc:Model') (0)
 WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
-%FieldGradientColorFrom DEPEND %Control LONG TIMES 5
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 4
 WHEN  ('?BUTTON:Copy') (-1)
 WHEN  ('?Box1') (-1)
-WHEN  ('?Loc:Model') (-1)
 WHEN  ('?OllamaServer') (-1)
 WHEN  ('?STRING1') (-1)
 
 %FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
 
-%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 5
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 4
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
-WHEN  ('?Loc:Model') (0)
 WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
-%FieldGradientColorTo DEPEND %Control LONG TIMES 5
+%FieldGradientColorTo DEPEND %Control LONG TIMES 4
 WHEN  ('?BUTTON:Copy') (-1)
 WHEN  ('?Box1') (-1)
-WHEN  ('?Loc:Model') (-1)
 WHEN  ('?OllamaServer') (-1)
 WHEN  ('?STRING1') (-1)
 
 %FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
 
-%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 5
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 4
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
-WHEN  ('?Loc:Model') (0)
 WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
 %ActiveImageEnable DEPEND %Control LONG TIMES 0
 
-%AIObjectName DEPEND %Control DEFAULT TIMES 4
+%AIObjectName DEPEND %Control DEFAULT TIMES 3
 WHEN  ('?BUTTON:Copy') ('AIBtn8')
-WHEN  ('?Loc:Model') ('AIBtn11')
 WHEN  ('?OllamaServer') ('AIBtn13')
 WHEN  ('?STRING1') ('AIBtn11')
 
-%AIEnableMimicControl DEPEND %Control LONG TIMES 4
+%AIEnableMimicControl DEPEND %Control LONG TIMES 3
 WHEN  ('?BUTTON:Copy') (1)
-WHEN  ('?Loc:Model') (1)
 WHEN  ('?OllamaServer') (1)
 WHEN  ('?STRING1') (1)
 
-%AIMimicControl DEPEND %Control DEFAULT TIMES 4
+%AIMimicControl DEPEND %Control DEFAULT TIMES 3
 WHEN  ('?BUTTON:Copy') ('?Box1')
-WHEN  ('?Loc:Model') ('?Box1')
 WHEN  ('?OllamaServer') ('?Box1')
 WHEN  ('?STRING1') ('?Box1')
 
@@ -618,9 +601,8 @@ WHEN  ('?STRING1') ('?Box1')
 
 %AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 4
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 3
 WHEN  ('?BUTTON:Copy') (0)
-WHEN  ('?Loc:Model') (0)
 WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
@@ -628,9 +610,8 @@ WHEN  ('?STRING1') (0)
 
 %AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIDisableImgIsVariable DEPEND %Control LONG TIMES 4
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 3
 WHEN  ('?BUTTON:Copy') (0)
-WHEN  ('?Loc:Model') (0)
 WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
@@ -638,9 +619,8 @@ WHEN  ('?STRING1') (0)
 
 %AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIHotImgIsVariable DEPEND %Control LONG TIMES 4
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 3
 WHEN  ('?BUTTON:Copy') (0)
-WHEN  ('?Loc:Model') (0)
 WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
@@ -648,9 +628,8 @@ WHEN  ('?STRING1') (0)
 
 %AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIPressedImgIsVariable DEPEND %Control LONG TIMES 4
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 3
 WHEN  ('?BUTTON:Copy') (0)
-WHEN  ('?Loc:Model') (0)
 WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
@@ -902,7 +881,8 @@ WHEN  ('Default') ('NetClient')
 WHEN  ('Default') ('')
 
 %ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
-WHEN  ('Default') ('')
+WHEN  ('Default') ('ErrorTrap {14}PROCEDURE(string errorStr,string functionName),DERIVED', |
+  'PageReceived {11}PROCEDURE(),DERIVED', 'Process {16}PROCEDURE(),DERIVED', '')
 
 %UseDefaultABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('')
@@ -2363,9 +2343,11 @@ Window  WINDOW('Ollama Example'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular)
           STRING('API'),AT(7,49,,38),USE(?STRING1),FONT(,,,FONT:bold,CHARSET:DEFAULT),CENTER, |
             ANGLE(900),COLOR(00D3D3D3h),#ORDINAL(9)
           PROMPT('Model:'),AT(27,63),USE(?Loc:Model:Prompt),#ORDINAL(10)
-          ENTRY(@s50),AT(77,63,153,10),USE(Model),#ORDINAL(11)
+          ENTRY(@s50),AT(77,63,153,10),USE(Model),TIP('Ollama AI model name (from https' & |
+            '://ollama.com/library) like; llama2, llama3, phi3, mistral, gemma, ...'),#ORDINAL(11)
           PROMPT('Ollama Server:'),AT(26,50),USE(?Loc:OllamaServer:Prompt),#ORDINAL(12)
-          ENTRY(@s100),AT(77,49,233,10),USE(OllamaServer),#ORDINAL(13)
+          ENTRY(@s100),AT(77,49,233,10),USE(OllamaServer),TIP('Ollama Server address li' & |
+            'ke; http://127.0.0.1:11434'),#ORDINAL(13)
         END
 
 [END]

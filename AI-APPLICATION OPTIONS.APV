@@ -76,10 +76,15 @@ WHEN  ('') ('Use Default')
 %OverrideLazyOpen DEPEND %File DEFAULT TIMES 1
 WHEN  ('') ('Use Default')
 
-%StandardExternalModule DEPEND %Module LONG TIMES 3
+%StandardExternalModule DEPEND %Module LONG TIMES 8
 WHEN  ('') (1)
 WHEN  ('AI.clw') (1)
 WHEN  ('AI001.clw') (1)
+WHEN  ('AI002.clw') (1)
+WHEN  ('AI003.clw') (1)
+WHEN  ('AI004.clw') (1)
+WHEN  ('AI005.clw') (1)
+WHEN  ('AI006.clw') (1)
 
 %WindowManagerType DEFAULT  ('WindowManager')
 %ResetOnGainFocus LONG  (0)
@@ -2122,9 +2127,14 @@ WHEN  (12) ('DeformatUnixTimeStamp      PROCEDURE (String pValue,<<String pPictu
 
 [PERSIST]
 %SaveCreateLocalMap DEFAULT  ('1')
-%GenerationCompleted DEPEND %Module DEFAULT TIMES 2
+%GenerationCompleted DEPEND %Module DEFAULT TIMES 7
 WHEN  ('AI.clw') ('1')
 WHEN  ('AI001.clw') ('1')
+WHEN  ('AI002.clw') ('1')
+WHEN  ('AI003.clw') ('1')
+WHEN  ('AI004.clw') ('1')
+WHEN  ('AI005.clw') ('1')
+WHEN  ('AI006.clw') ('1')
 
 %LastTarget32 DEFAULT  ('1')
 %LastProgramExtension DEFAULT  ('EXE')

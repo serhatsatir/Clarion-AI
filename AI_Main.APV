@@ -2,13 +2,14 @@
 NAME 'AI_Main.clw'
 [COMMON]
 FROM ABC GENERATED
+MODIFIED '2024/05/29' '11:24:49'
 [PROCEDURE]
 NAME Main
 [COMMON]
 DESCRIPTION 'Window'
 FROM ABC Window
 CATEGORY 'Window'
-MODIFIED '2024/05/29' '10:27:05'
+MODIFIED '2024/05/29' '11:24:49'
 [PROMPTS]
 %ButtonAction DEPEND %Control DEFAULT TIMES 4
 WHEN  ('?Button:Assistant') ('Call a Procedure')
@@ -82,12 +83,8 @@ WHEN  ('Default') ('')
 WHEN  ('WindowToolbar') ('')
 
 %ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
-WHEN  ('Default') ('Ask {20}PROCEDURE(),DERIVED', 'ChangeAction {11}PROCEDURE(),BYTE,DERIVED', |
-  'OnCloseEventCancelled  PROCEDURE(),DERIVED', 'PrimeUpdate {12}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'Reset {18}PROCEDURE(BYTE Force=0),DERIVED', 'Run {20}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'SetAlerts {14}PROCEDURE(),DERIVED', 'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'TakeDisableButton      PROCEDURE(SIGNED Control,BYTE MakeDisable),DERIVED', 'TakeEvent {14}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'Update {17}PROCEDURE(),DERIVED')
+WHEN  ('Default') ('Init {19}PROCEDURE(),BYTE,PROC,DERIVED', 'Kill {19}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED')
 
 %ReturnValue FIELD  ()
 %ProcedureOneInstance LONG  (0)
@@ -553,9 +550,7 @@ WHEN  ('Default') ('WindowResizeClass')
 WHEN  ('Default') ('')
 
 %ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
-WHEN  ('Default') ('GetParentControl       PROCEDURE(SIGNED Control),SIGNED,DERIVED', |
-  'Init {19}PROCEDURE(BYTE AppStrategy=AppStrategy:Resize,BYTE SetWindowMinSize=False,BYTE SetWindowMaxSize=False)', |
-  'Resize {17}PROCEDURE(),BYTE,PROC,DERIVED', 'RestoreWindow {10}PROCEDURE(),DERIVED')
+WHEN  ('Default') ('Init {19}PROCEDURE(BYTE AppStrategy=AppStrategy:Resize,BYTE SetWindowMinSize=False,BYTE SetWindowMaxSize=False)')
 
 %WindowMinHeight DEFAULT  ('')
 %RestrictMaxSize LONG  (0)
@@ -656,7 +651,7 @@ QuickWindow WINDOW('Choose AI Model'),AT(,,166,114),FONT('Microsoft Sans Serif',
           CHARSET:DEFAULT),RESIZE,CENTER,GRAY,IMM,HLP('Main'),SYSTEM
           BUTTON('Chat GPT'),AT(36,12,95,18),USE(?Button:ChatGPT),#ORDINAL(1)
           BUTTON('Gemini'),AT(36,83,95,18),USE(?Button:Gemini),#ORDINAL(2)
-          BUTTON('Ollama'),AT(36,61,95,18),USE(?Button:Ollama),#ORDINAL(3)
+          BUTTON('Ollama (Local GPT)'),AT(36,61,95,18),USE(?Button:Ollama),#ORDINAL(3)
           BUTTON('Chat GPT (Assistant)'),AT(36,34,95,18),USE(?Button:Assistant),#ORDINAL(4)
         END
 

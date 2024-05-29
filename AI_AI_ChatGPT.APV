@@ -8,7 +8,7 @@ NAME AI_ChatGPT
 [COMMON]
 DESCRIPTION 'You can talk to ChatGPT-4o from this window'
 FROM ABC Window
-MODIFIED '2024/05/29' '10:16:49'
+MODIFIED '2024/05/29' '12:03:09'
 [DATA]
 [SCREENCONTROLS]
 ! PROMPT('API Key:'),USE(?API_Key:Prompt)
@@ -69,7 +69,13 @@ WHEN  ('WindowToolbar') ('ToolbarClass')
 WHEN  ('Default') ('')
 WHEN  ('WindowToolbar') ('')
 
-%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 0
+%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
+WHEN  ('Default') ('Ask {20}PROCEDURE(),DERIVED', 'ChangeAction {11}PROCEDURE(),BYTE,DERIVED', |
+  'OnCloseEventCancelled  PROCEDURE(),DERIVED', 'PrimeUpdate {12}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'Reset {18}PROCEDURE(BYTE Force=0),DERIVED', 'Run {20}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'SetAlerts {14}PROCEDURE(),DERIVED', 'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'TakeDisableButton      PROCEDURE(SIGNED Control,BYTE MakeDisable),DERIVED', 'TakeEvent {14}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'Update {17}PROCEDURE(),DERIVED')
 
 %ReturnValue FIELD  ()
 %WindowOperationMode DEFAULT  ('Use WINDOW setting')
@@ -512,7 +518,7 @@ PROPERTY:BEGIN
 PRIORITY 5000
 PROPERTY:END
 IF API_Key='' THEN
-    MESSAGE('Create your own API key using following web page: https://platform.openai.com/account/api-keys','ChatGPT API Key',ICON:Exclamation)
+    MESSAGE('Create your own API key using following web page: https://platform.openai.com/account/api-keys','ChatGPT API Key',ICON:Exclamation,,,MSGMODE:CANCOPY)
     CYCLE
 END
 
@@ -640,19 +646,24 @@ PRIORITY 4000
 PROPERTY:END
 ReformatAnswer       ROUTINE
     ! Generate Turkish ANSI characters from UTF8
-    ChatGPTResponse=st.Utf8ToAnsi(Loc:GetString,uz#,st:CP_ISO_8859_9)
-    baslangic#=INSTRING('"content": "',ChatGPTResponse,1,1)
-    bitis#=INSTRING('"finish_reason": "',ChatGPTResponse,1,1)
-    IF baslangic#=0 OR bitis#=0 THEN
-        !ChatGPTResponse=''
+    st._StealValue(st.Utf8ToAnsi(Loc:GetString,uz#,st:CP_ISO_8859_9))
+    if st.setBetween('"content": "', '"finish_reason": "') = st:notFound
         Loc:Status='Couldn''t get legal response from ChatGPT'
         EXIT
-    END
-    st.Trace('Response: '&ChatGPTResponse)
+    end
+!    ChatGPTResponse=st.Utf8ToAnsi(Loc:GetString,uz#,st:CP_ISO_8859_9)
+!    baslangic#=INSTRING('"content": "',ChatGPTResponse,1,1)
+!    bitis#=INSTRING('"finish_reason": "',ChatGPTResponse,1,1)
+!    IF baslangic#=0 OR bitis#=0 THEN
+!        !ChatGPTResponse=''
+!        Loc:Status='Couldn''t get legal response from ChatGPT'
+!        EXIT
+!    END
+!    st.SetValue(SUB(ChatGPTResponse,baslangic#+12,bitis#-baslangic#-29))
 
-    st.SetValue(SUB(ChatGPTResponse,baslangic#+12,bitis#-baslangic#-29))
     st.Replace('\n','<13,10>'); st.JsonDecode()
     ChatGPTResponse=st.GetValue()
+    st.Trace('Response: '&ChatGPTResponse)
 [END]
 EMBED %WindowManagerMethodCodeSection
 [INSTANCES]
@@ -690,7 +701,23 @@ WHEN  ('Default') ('NetClient')
 WHEN  ('Default') ('')
 
 %ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
-WHEN  ('Default') ('')
+WHEN  ('Default') ('ANSIToUnicode {10}PROCEDURE(long encoding=st:EncodeUtf16,ulong pCodePage=st:CP_US_ASCII),DERIVED', |
+  'Base64Decode {11}PROCEDURE(String p_Text),STRING,DERIVED', 'Close {18}PROCEDURE(),DERIVED', |
+  'CompleteURL {12}PROCEDURE(String p_Url),STRING,PROC,DERIVED', 'ConnectionClosed       PROCEDURE(),DERIVED', |
+  'CreateAuthorizationString PROCEDURE(string p_UserName,string p_Password,long p_AuthorizationMethod,long p_Options=0),STRING,DERIVED', |
+  'Delete {17}PROCEDURE(String p_Url),DERIVED', 'EncodeWebString        PROCEDURE(string p_Text,Long p_Flags=0,Long p_Len=0),STRING,DERIVED', |
+  'ErrorTrap {14}PROCEDURE(string errorStr,string functionName),DERIVED', 'GetBanned {14}PROCEDURE(),String,DERIVED', |
+  'GetInfo {16}PROCEDURE(long p_Options=1,long p_Socket=0,long p_SockId=0),DERIVED', |
+  'GetValueFromWebString  PROCEDURE(string p_VarName,string p_PostString),STRING,DERIVED', |
+  'Init {19}PROCEDURE(uLong Mode=NET:SimpleClient),DERIVED', 'InterpretError {9}PROCEDURE(),STRING,DERIVED', |
+  'Kill {19}PROCEDURE(),DERIVED', 'LongToHex {14}PROCEDURE(Long p_Long),String,DERIVED', |
+  'MakePostString {9}PROCEDURE(),DERIVED', 'MatchSubjectWithURL    PROCEDURE(String p_CertName,String p_Server),long,DERIVED', |
+  'NormalizeURL {11}PROCEDURE(StringTheory pURL),DERIVED', 'ParseAuthenticateHeader PROCEDURE(),LONG,DERIVED', |
+  'PartiallyCloseServer   PROCEDURE(),DERIVED', 'Ping {19}PROCEDURE(string p_IP,long p_TTL),LONG,DERIVED', |
+  'Post {19}PROCEDURE(String p_Url),DERIVED', 'SSLGetIssuerField      PROCEDURE(string p_FieldName),string,DERIVED', |
+  'SavePage {15}PROCEDURE(string p_FileName),DERIVED', 'UnixToClarionDate      PROCEDURE(Long p_DateTime),Long,DERIVED', |
+  '_CallErrorTrap {9}PROCEDURE(string errorStr,string functionName),DERIVED', '_CreateRequestHeader   PROCEDURE(long p_HostPort),STRING,DERIVED', |
+  '_LoggingFirstTime      PROCEDURE(),DERIVED', '')
 
 %UseDefaultABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('')
@@ -2142,7 +2169,8 @@ Window  WINDOW('ChatGPT Example'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular
             'request to ChatGPT'),#ORIG(?Button1),#ORDINAL(5)
           PROMPT('Key:'),AT(23,50),USE(?API_Key:Prompt),TRN,#ORDINAL(6)
           ENTRY(@s80),AT(73,50,201,10),USE(API_Key),TIP('Create your own API key using ' & |
-            'following web page: https://platform.openai.com/account/api-keys'),#ORDINAL(7)
+            'following web page: https://platform.openai.com/account/api-keys<0DH,0AH,0DH>' & |
+            '<0AH>like; sk-VyUX.{18}5Y3aw'),#ORDINAL(7)
           BUTTON,AT(363,205,15,10),USE(?BUTTON:Copy),ICON(ICON:Copy),FLAT,TIP('Copy respo' & |
             'nse to clipboard'),TRN,#ORDINAL(8)
           PROMPT('Temperature:'),AT(24,64),USE(?API_temp:Prompt),TRN,#ORDINAL(9)
