@@ -8,7 +8,7 @@ NAME AI_ChatGPT_Assistant
 [COMMON]
 DESCRIPTION 'If you have defined a ChatGPT Assistant, you can talk to that assistant.'
 FROM ABC Window
-MODIFIED '2024/05/29' '12:05:37'
+MODIFIED '2024/05/29' '12:46:58'
 [DATA]
 [SCREENCONTROLS]
 ! PROMPT('API Key:'),USE(?API_Key:Prompt)
@@ -99,13 +99,6 @@ status                     CSTRING(51),NAME('status')
                          END
 !!> GUID('b5cdb773-f740-4597-aada-1ac81ee8d979')
 [SCREENCONTROLS]
-! PROMPT('Loc : Post String:'),USE(?Loc:PostString:Prompt)
-! ENTRY(@s255),USE(Loc:PostString)
-[REPORTCONTROLS]
-! STRING(@s255),USE(Loc:PostString)
-Loc:PostString           STRING(10000)
-!!> GUID('8b6d96c3-a45b-4922-84ae-f638e3976ba5'),PROMPT('Loc : Post String:'),HEADER('Loc : Post String'),PICTURE(@s255),TYPEMODE(INS)
-[SCREENCONTROLS]
 ! PROMPT('My Response:'),USE(?Loc:GetString:Prompt)
 ! TEXT,USE(Loc:GetString)
 [REPORTCONTROLS]
@@ -123,12 +116,8 @@ WHEN  ('Default') ('')
 WHEN  ('WindowToolbar') ('')
 
 %ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
-WHEN  ('Default') ('Ask {20}PROCEDURE(),DERIVED', 'ChangeAction {11}PROCEDURE(),BYTE,DERIVED', |
-  'OnCloseEventCancelled  PROCEDURE(),DERIVED', 'PrimeUpdate {12}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'Reset {18}PROCEDURE(BYTE Force=0),DERIVED', 'Run {20}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'SetAlerts {14}PROCEDURE(),DERIVED', 'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'TakeDisableButton      PROCEDURE(SIGNED Control,BYTE MakeDisable),DERIVED', 'TakeEvent {14}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'Update {17}PROCEDURE(),DERIVED')
+WHEN  ('Default') ('Init {19}PROCEDURE(),BYTE,PROC,DERIVED', 'Kill {19}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED', 'TakeEvent {14}PROCEDURE(),BYTE,PROC,DERIVED')
 
 %ReturnValue FIELD  ()
 %WindowOperationMode DEFAULT  ('Use WINDOW setting')
@@ -607,7 +596,6 @@ ChatGPTResponse=''
 Loc:Status = 'Waiting response'
 DISPLAY()
 
-!DO ReformatTextCompletion
 DO CreateAndRun
 LOOP 50 TIMES
     SLEEP(1000)
@@ -692,36 +680,18 @@ EMBED %ProcedureRoutines
 PROPERTY:BEGIN
 PRIORITY 4000
 PROPERTY:END
-ReformatTextCompletion      ROUTINE
-    st.SetValue(CLIP(MyQuestion))
-    st.JsonEncode()
-
-    !!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
-    !!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
-    !!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
-    !Loc:PostString='{"model": "gpt-3.5-turbo","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
-    Loc:PostString='{"model": "gpt-4o","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
-    st.Trace('Request: '&Loc:PostString)
-
-    ! Generate UTF8 from Turkish characters
-    Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
-
-[SOURCE]
-PROPERTY:BEGIN
-PRIORITY 4000
-PROPERTY:END
 CreateAndRun        ROUTINE
-    st.SetValue(CLIP(MyQuestion))
-    st.JsonEncode()
+    SETCURSOR(CURSOR:Wait); DISPLAY()
+    st.SetValue(MyQuestion,st:Clip); st.JsonEncode()
 
-    Loc:PostString='{"assistant_id": "'&Assistant&",'&|
-    '"thread": {"messages": [{"role": "user", "content": "'&st.GetValue()&'"}]}}'
-    st.Trace('CreateAndRun: '&Loc:PostString)
+    st.Prepend('{{"assistant_id": "'&Assistant&'","thread":{{"messages": [{{"role": "user", "content": "')
+    st.Append('"}]}}')
+    st.Trace('CreateAndRun: '&st.GetValue())
 
     ! Generate UTF8 from Turkish characters
-    Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
+    st._StealValue(st.AnsiToUtf8(st.getValuePtr(),uz#,st:CP_ISO_8859_9))
 
-    Loc:GetString=GetResponse(2,API_Key,'https://api.openai.com/v1/threads/runs',Loc:PostString)
+    Loc:GetString=GetResponse(2,API_Key,'https://api.openai.com/v1/threads/runs',st.GetValue())
     JSON.FromJSON(Loc:GetString,Loc:CreateRunResponse)
 [SOURCE]
 PROPERTY:BEGIN
@@ -745,6 +715,7 @@ GetResponse     ROUTINE
     st.SetValue(CLIP(Loc:GetString)); st.Replace('\n','<13,10>'); st.Replace('<13>','<13,10>'); st.JsonDecode()
     ChatGPTResponse=st.Between('"value": "','",')
     DISPLAY(?ChatGPTResponse)
+    SETCURSOR(); DISPLAY()
 
 [END]
 EMBED %WindowManagerMethodCodeSection
@@ -783,23 +754,8 @@ WHEN  ('Default') ('NetClient')
 WHEN  ('Default') ('')
 
 %ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
-WHEN  ('Default') ('ANSIToUnicode {10}PROCEDURE(long encoding=st:EncodeUtf16,ulong pCodePage=st:CP_US_ASCII),DERIVED', |
-  'Base64Decode {11}PROCEDURE(String p_Text),STRING,DERIVED', 'Close {18}PROCEDURE(),DERIVED', |
-  'CompleteURL {12}PROCEDURE(String p_Url),STRING,PROC,DERIVED', 'ConnectionClosed       PROCEDURE(),DERIVED', |
-  'CreateAuthorizationString PROCEDURE(string p_UserName,string p_Password,long p_AuthorizationMethod,long p_Options=0),STRING,DERIVED', |
-  'Delete {17}PROCEDURE(String p_Url),DERIVED', 'EncodeWebString        PROCEDURE(string p_Text,Long p_Flags=0,Long p_Len=0),STRING,DERIVED', |
-  'ErrorTrap {14}PROCEDURE(string errorStr,string functionName),DERIVED', 'GetBanned {14}PROCEDURE(),String,DERIVED', |
-  'GetInfo {16}PROCEDURE(long p_Options=1,long p_Socket=0,long p_SockId=0),DERIVED', |
-  'GetValueFromWebString  PROCEDURE(string p_VarName,string p_PostString),STRING,DERIVED', |
-  'Init {19}PROCEDURE(uLong Mode=NET:SimpleClient),DERIVED', 'InterpretError {9}PROCEDURE(),STRING,DERIVED', |
-  'Kill {19}PROCEDURE(),DERIVED', 'LongToHex {14}PROCEDURE(Long p_Long),String,DERIVED', |
-  'MakePostString {9}PROCEDURE(),DERIVED', 'MatchSubjectWithURL    PROCEDURE(String p_CertName,String p_Server),long,DERIVED', |
-  'NormalizeURL {11}PROCEDURE(StringTheory pURL),DERIVED', 'ParseAuthenticateHeader PROCEDURE(),LONG,DERIVED', |
-  'PartiallyCloseServer   PROCEDURE(),DERIVED', 'Ping {19}PROCEDURE(string p_IP,long p_TTL),LONG,DERIVED', |
-  'Post {19}PROCEDURE(String p_Url),DERIVED', 'SSLGetIssuerField      PROCEDURE(string p_FieldName),string,DERIVED', |
-  'SavePage {15}PROCEDURE(string p_FileName),DERIVED', 'UnixToClarionDate      PROCEDURE(Long p_DateTime),Long,DERIVED', |
-  '_CallErrorTrap {9}PROCEDURE(string errorStr,string functionName),DERIVED', '_CreateRequestHeader   PROCEDURE(long p_HostPort),STRING,DERIVED', |
-  '_LoggingFirstTime      PROCEDURE(),DERIVED', '')
+WHEN  ('Default') ('ErrorTrap {14}PROCEDURE(string errorStr,string functionName),DERIVED', |
+  'PageReceived {11}PROCEDURE(),DERIVED', 'Process {16}PROCEDURE(),DERIVED', '')
 
 %UseDefaultABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('')
@@ -2238,6 +2194,8 @@ WHEN  ('Default') ('')
 %ReferrerPolicy DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('''strict-origin-when-cross-origin''')
 
+[CALLS]
+GetResponse
 [WINDOW]
 Window  WINDOW('Custom Assistant (ChatGPT)'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular), |
           DOUBLE,CENTER,ICON('chatgpt.ico'),GRAY,IMM,SYSTEM

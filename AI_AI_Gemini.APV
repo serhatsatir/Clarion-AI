@@ -8,7 +8,7 @@ NAME AI_Gemini
 [COMMON]
 DESCRIPTION 'Under construction'
 FROM ABC Window
-MODIFIED '2024/05/29' '11:22:06'
+MODIFIED '2024/05/29' '12:31:19'
 [DATA]
 [SCREENCONTROLS]
 ! PROMPT('API Key:'),USE(?API_Key:Prompt)
@@ -629,8 +629,8 @@ ReformatQuestion       ROUTINE
     !!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
     !!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
     !!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
-    Loc:PostString='{{"contents": [{"parts":[{"text": "'&st.GetValue()&'Write a story about a magic backpack."}]}]}'
-    !!!Loc:PostString='{{"prompt": [{"parts":[{"text": "'&st.GetValue()&'Write a story about a magic backpack."}]}]}'
+    Loc:PostString='{{"contents": [{{"parts":[{{"text": "'&st.GetValue()&'Write a story about a magic backpack."}]}]}'
+    !!!Loc:PostString='{{"prompt": [{{"parts":[{{"text": "'&st.GetValue()&'Write a story about a magic backpack."}]}]}'
     Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
     st.Trace(Loc:PostString)
 [SOURCE]
@@ -2130,14 +2130,14 @@ WHEN  ('Default') ('''strict-origin-when-cross-origin''')
 
 [WINDOW]
 Window  WINDOW('Gemini Example'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular),DOUBLE,CENTER, |
-          ICON('chatgpt.ico'),GRAY,IMM,SYSTEM
+          ICON('gemini.ico'),GRAY,IMM,SYSTEM
           BOX,AT(3,4,380,216),USE(?Box1),COLOR(COLOR:Gray),LINEWIDTH(1),ROUND,#ORIG(?Box1), |
             #ORDINAL(1)
           STRING(@s255),AT(8,205,345),USE(Loc:Status),CENTER,TRN,#ORDINAL(2)
           TEXT,AT(9,9,369,37),USE(MyQuestion),VSCROLL,#ORDINAL(3)
           TEXT,AT(9,85,369,117),USE(ChatGPTResponse),VSCROLL,COLOR(00DCDCDCh),READONLY,#ORIG(MyText), |
             #ORDINAL(4)
-          BUTTON('Post'),AT(328,49,50,12),USE(?GetPage),LEFT,ICON('chatgpt.ico'),TIP('Send your ' & |
+          BUTTON('Post'),AT(328,49,50,12),USE(?GetPage),LEFT,ICON('gemini.ico'),TIP('Send your ' & |
             'request to ChatGPT'),#ORIG(?Button1),#ORDINAL(5)
           PROMPT('Key:'),AT(23,50),USE(?API_Key:Prompt),TRN,#ORDINAL(6)
           ENTRY(@s80),AT(73,50,201,10),USE(API_Key),TIP('Create your own API key using ' & |

@@ -8,7 +8,7 @@ NAME Ollama
 [COMMON]
 DESCRIPTION 'You can talk to the Ollama models you have set up using this screen.'
 FROM ABC Window
-MODIFIED '2024/05/29' '11:24:31'
+MODIFIED '2024/05/29' '13:28:31'
 [DATA]
 [SCREENCONTROLS]
 ! PROMPT('API temp:'),USE(?API_temp:Prompt)
@@ -832,10 +832,10 @@ ReformatQuestion       ROUTINE
     !!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
     !!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
     !!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
-    Loc:PostString='{{"model":"'&Loc:Model&'","prompt":"'&st.GetValue()&'","options": {"seed":12,"temperature":'&API_temp&'}}'
+    Loc:PostString='{{"model":"'&Model&'","prompt":"'&st.GetValue()&'","options": {{"seed":12,"temperature":'&API_temp&'}}'
 
     ! As in the example below, If you send ("stream":false) in the json packet, it sends the answer in one packet.
-    !{"model": "llama3","messages":[{"role":"user","content": "What do you know about Mustafa Kemal Ataturk?"],"stream":false}
+    !{{"model": "llama3","messages":[{{"role":"user","content": "What do you know about Mustafa Kemal Ataturk?"],"stream":false}
 
     ! Translate from Turkish characters
     Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
@@ -2322,15 +2322,15 @@ WHEN  ('Default') ('')
 WHEN  ('Default') ('''strict-origin-when-cross-origin''')
 
 [WINDOW]
-Window  WINDOW('Ollama Example'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular),DOUBLE,CENTER, |
-          ICON('chatgpt.ico'),GRAY,IMM,SYSTEM
+Window  WINDOW('Ollama AI Example'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular),DOUBLE, |
+          CENTER,ICON('ollama.ico'),GRAY,IMM,SYSTEM
           BOX,AT(3,4,380,216),USE(?Box1),COLOR(COLOR:Gray),LINEWIDTH(1),ROUND,#ORIG(?Box1), |
             #ORDINAL(1)
           STRING(@s255),AT(8,205,345),USE(Loc:Status),CENTER,TRN,#ORDINAL(2)
           TEXT,AT(9,9,369,37),USE(MyQuestion),VSCROLL,#ORDINAL(3)
           TEXT,AT(9,90,369,112),USE(ChatGPTResponse),VSCROLL,COLOR(00DCDCDCh),READONLY,#ORIG(MyText), |
             #ORDINAL(4)
-          BUTTON('Post'),AT(328,49,50,12),USE(?GetPage),LEFT,ICON('chatgpt.ico'),TIP('Send your ' & |
+          BUTTON('Post'),AT(328,49,50,12),USE(?GetPage),LEFT,ICON('ollama.ico'),TIP('Send your ' & |
             'request to ChatGPT'),#ORIG(?Button1),#ORDINAL(5)
           BUTTON,AT(363,205,15,10),USE(?BUTTON:Copy),ICON(ICON:Copy),FLAT,TIP('Copy respo' & |
             'nse to clipboard'),TRN,#ORDINAL(6)
@@ -2342,12 +2342,13 @@ Window  WINDOW('Ollama Example'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular)
             'y less coherent.'),#ORDINAL(8)
           STRING('API'),AT(7,49,,38),USE(?STRING1),FONT(,,,FONT:bold,CHARSET:DEFAULT),CENTER, |
             ANGLE(900),COLOR(00D3D3D3h),#ORDINAL(9)
-          PROMPT('Model:'),AT(27,63),USE(?Loc:Model:Prompt),#ORDINAL(10)
+          PROMPT('Model:'),AT(27,63),USE(?Model:Prompt),#ORDINAL(10)
           ENTRY(@s50),AT(77,63,153,10),USE(Model),TIP('Ollama AI model name (from https' & |
             '://ollama.com/library) like; llama2, llama3, phi3, mistral, gemma, ...'),#ORDINAL(11)
           PROMPT('Ollama Server:'),AT(26,50),USE(?Loc:OllamaServer:Prompt),#ORDINAL(12)
           ENTRY(@s100),AT(77,49,233,10),USE(OllamaServer),TIP('Ollama Server address li' & |
             'ke; http://127.0.0.1:11434'),#ORDINAL(13)
+          PROMPT('https://ollama.com/'),AT(311,77),USE(?PROMPT:OllamaHomePage),TRN,#ORDINAL(10000)
         END
 
 [END]

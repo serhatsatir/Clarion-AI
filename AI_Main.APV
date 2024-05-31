@@ -9,7 +9,7 @@ NAME Main
 DESCRIPTION 'Window'
 FROM ABC Window
 CATEGORY 'Window'
-MODIFIED '2024/05/29' '11:24:49'
+MODIFIED '2024/05/31' ' 9:12:56'
 [PROMPTS]
 %ButtonAction DEPEND %Control DEFAULT TIMES 4
 WHEN  ('?Button:Assistant') ('Call a Procedure')
@@ -647,12 +647,18 @@ WHEN  ('Default')TIMES 0
 %ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
 
 [WINDOW]
-QuickWindow WINDOW('Choose AI Model'),AT(,,166,114),FONT('Microsoft Sans Serif',10,,FONT:regular, |
-          CHARSET:DEFAULT),RESIZE,CENTER,GRAY,IMM,HLP('Main'),SYSTEM
-          BUTTON('Chat GPT'),AT(36,12,95,18),USE(?Button:ChatGPT),#ORDINAL(1)
-          BUTTON('Gemini'),AT(36,83,95,18),USE(?Button:Gemini),#ORDINAL(2)
-          BUTTON('Ollama (Local GPT)'),AT(36,61,95,18),USE(?Button:Ollama),#ORDINAL(3)
-          BUTTON('Chat GPT (Assistant)'),AT(36,34,95,18),USE(?Button:Assistant),#ORDINAL(4)
+QuickWindow WINDOW('Choose AI Engine'),AT(,,166,114),FONT('Microsoft Sans Serif',10,,FONT:regular, |
+          CHARSET:DEFAULT),RESIZE,CENTER,ICON('GenericAI.ico'),GRAY,IMM,HLP('Main'),SYSTEM
+          BUTTON('Chat GPT'),AT(36,12,95,18),USE(?Button:ChatGPT),FONT(,,,FONT:bold),LEFT, |
+            ICON('chatgpt.ico'),TIP('Talk using API with OpenAI''s ChatGPT-4o'),#ORDINAL(1)
+          BUTTON('Gemini'),AT(36,83,95,18),USE(?Button:Gemini),FONT(,,,FONT:bold),LEFT,ICON('gemini.ico'), |
+            #ORDINAL(2)
+          BUTTON('Ollama (Local GPT)'),AT(36,61,95,18),USE(?Button:Ollama),FONT(,,,FONT:bold), |
+            LEFT,ICON('ollama.ico'),TIP('Talk using API with Ollama models<0DH,0AH>Olla' & |
+            'ma is free Local GPT application.'),#ORDINAL(3)
+          BUTTON('Chat GPT (Assistant)'),AT(36,34,95,18),USE(?Button:Assistant),FONT(,,,FONT:bold), |
+            LEFT,ICON('chatgpt.ico'),TIP('Talk using API with a special assistant you c' & |
+            'reate with ChatGPT'),#ORDINAL(4)
         END
 
 [END]

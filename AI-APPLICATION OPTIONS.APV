@@ -1038,7 +1038,7 @@ WHEN  (10) ('DeformatDate {15}Procedure (String pValue,<<String pPicture>),Real,
 WHEN  (11) ('DeformatDateText {11}Procedure (Long pNumberofParts, String pPart1, String pPart2, String pPart3, String pSep),Real,Virtual')
 WHEN  (12) ('DeformatUnixTimeStamp      PROCEDURE (String pValue,<<String pPicture>),Real,Virtual')
 
-%dClassVersion DEFAULT  ('81602')
+%dClassVersion DEFAULT  ('81604')
 %dAdditionalINCFiles MULTI LONG  ()
 %dAdditionalINCFile DEPEND %dAdditionalINCFiles DEFAULT TIMES 0
 
@@ -1573,7 +1573,7 @@ WHEN  (10) ('DeformatDate {15}Procedure (String pValue,<<String pPicture>),Real,
 WHEN  (11) ('DeformatDateText {11}Procedure (Long pNumberofParts, String pPart1, String pPart2, String pPart3, String pSep),Real,Virtual')
 WHEN  (12) ('DeformatUnixTimeStamp      PROCEDURE (String pValue,<<String pPicture>),Real,Virtual')
 
-%dClassVersion DEFAULT  ('81602')
+%dClassVersion DEFAULT  ('81604')
 %dAdditionalINCFiles MULTI LONG  ()
 %dAdditionalINCFile DEPEND %dAdditionalINCFiles DEFAULT TIMES 0
 
@@ -2108,7 +2108,7 @@ WHEN  (10) ('DeformatDate {15}Procedure (String pValue,<<String pPicture>),Real,
 WHEN  (11) ('DeformatDateText {11}Procedure (Long pNumberofParts, String pPart1, String pPart2, String pPart3, String pSep),Real,Virtual')
 WHEN  (12) ('DeformatUnixTimeStamp      PROCEDURE (String pValue,<<String pPicture>),Real,Virtual')
 
-%dClassVersion DEFAULT  ('81602')
+%dClassVersion DEFAULT  ('81604')
 %dAdditionalINCFiles MULTI LONG  ()
 %dAdditionalINCFile DEPEND %dAdditionalINCFiles DEFAULT TIMES 0
 
@@ -2148,6 +2148,15 @@ WHEN  ('AI006.clw') ('1')
 #model clarion lib
 #set RELEASE = on
 #pragma link_option(icon=>chatgpt.ico)
+#pragma define(_NT10_=>1) -- GENERATED
+#pragma define(NETTALKLOG=>1) -- GENERATED
+#pragma define(StringTheoryLinkMode=>1) -- GENERATED
+#pragma define(StringTheoryDllMode=>0) -- GENERATED
+#pragma define(MD5=>0) -- GENERATED
+#pragma define(_ABCDllMode_=>0) -- GENERATED
+#pragma define(_ABCLinkMode_=>1) -- GENERATED
+#pragma define(_NetTalkDllMode_=>0) -- GENERATED
+#pragma define(_NetTalkLinkMode_=>1) -- GENERATED
 #compile "AI.clw" -- GENERATED
 #compile "AI001.clw" -- GENERATED
 #compile "AI002.clw" -- GENERATED
@@ -2155,4 +2164,9 @@ WHEN  ('AI006.clw') ('1')
 #compile "AI004.clw" -- GENERATED
 #compile "AI005.clw" -- GENERATED
 #compile "AI006.clw" -- GENERATED
+#compile "AI_BC0.CLW" -- GENERATED
+#compile "AI_BC.CLW" -- GENERATED
+#pragma link("C%V%dos%X%%L%.lib") -- GENERATED
+#pragma link("clanetl.lib") -- GENERATED
+#pragma link("AI.EXE.manifest") -- GENERATED
 #link "AI.EXE"

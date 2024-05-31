@@ -8,7 +8,7 @@ NAME AI_ChatGPT
 [COMMON]
 DESCRIPTION 'You can talk to ChatGPT-4o from this window'
 FROM ABC Window
-MODIFIED '2024/05/29' '12:03:09'
+MODIFIED '2024/05/31' '11:37:17'
 [DATA]
 [SCREENCONTROLS]
 ! PROMPT('API Key:'),USE(?API_Key:Prompt)
@@ -25,6 +25,12 @@ API_Key                  CSTRING(81)
 API_temp                 REAL
 !!> GUID('08cc50d0-ef01-4f13-a61b-4886a40bf607'),VALID(INRANGE(0,1)),INITIAL('0.7'),PROMPT('API temp:'),HEADER('API temp'),PICTURE(@n3.1),TYPEMODE(INS)
 [SCREENCONTROLS]
+! CHECK('Talk'),USE(Talk)
+[REPORTCONTROLS]
+! CHECK('Talk'),USE(Talk)
+Talk                     BYTE
+!!> GUID('16214010-7bb8-4d82-8a06-ff62c135868d'),VALID(BOOLEAN),PROMPT('Talk:'),HEADER('Talk'),PICTURE(@n3),TYPEMODE(INS)
+[SCREENCONTROLS]
 ! PROMPT('My Question:'),USE(?MyQuestion:Prompt)
 ! ENTRY(@s255),USE(MyQuestion)
 [REPORTCONTROLS]
@@ -39,6 +45,20 @@ MyQuestion               CSTRING(5001)
 ChatGPTResponse          CSTRING(300001)
 !!> GUID('3214403f-5743-40e1-a363-984ff7fb154b'),PROMPT('Chat GPTR esponse:'),HEADER('Chat GPTR esponse'),PICTURE(@s255)
 [SCREENCONTROLS]
+! PROMPT('File Name:'),USE(?FileName:Prompt)
+! ENTRY(@s255),USE(FileName)
+[REPORTCONTROLS]
+! STRING(@s255),USE(FileName)
+FileName                 CSTRING(261)
+!!> GUID('84ab7692-a141-4635-8456-d8c2ee4e995c'),PROMPT('File Name:'),HEADER('File Name'),PICTURE(@s255),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Loc : URL:'),USE(?Loc:URL:Prompt)
+! ENTRY(@s100),USE(Loc:URL)
+[REPORTCONTROLS]
+! STRING(@s100),USE(Loc:URL)
+Loc:URL                  CSTRING(101)
+!!> GUID('92a99cfe-430c-45fa-a8f2-8f11f3b56579'),PROMPT('Loc : URL:'),HEADER('Loc : URL'),PICTURE(@s100),TYPEMODE(INS)
+[SCREENCONTROLS]
 ! PROMPT('Loc : Status:'),USE(?Loc:Status:Prompt)
 ! ENTRY(@s255),USE(Loc:Status)
 [REPORTCONTROLS]
@@ -50,7 +70,7 @@ Loc:Status               CSTRING(501)
 ! ENTRY(@s255),USE(Loc:PostString)
 [REPORTCONTROLS]
 ! STRING(@s255),USE(Loc:PostString)
-Loc:PostString           STRING(10000)
+Loc:PostString           STRING(50000)
 !!> GUID('9e41f70e-642d-42fc-836c-0f4639ef9505'),PROMPT('Loc : Post String:'),HEADER('Loc : Post String'),PICTURE(@s255),TYPEMODE(INS)
 [SCREENCONTROLS]
 ! PROMPT('My Response:'),USE(?Loc:GetString:Prompt)
@@ -59,6 +79,57 @@ Loc:PostString           STRING(10000)
 ! TEXT,USE(Loc:GetString)
 Loc:GetString            STRING(500000)
 !!> GUID('0dc179d7-587c-4914-8464-2225223ff933'),PROMPT('My Response:'),HEADER('My Response'),PICTURE(@s255)
+[SCREENCONTROLS]
+! PROMPT('MCIC ommand:'),USE(?MCICommand:Prompt)
+! ENTRY(@s255),USE(MCICommand)
+[REPORTCONTROLS]
+! STRING(@s255),USE(MCICommand)
+MCICommand               CSTRING(256)
+!!> GUID('3d43724c-595e-4d6b-bf34-a7f41e73b9f3'),PROMPT('MCIC ommand:'),HEADER('MCIC ommand'),PICTURE(@s255),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('MCIR eturn:'),USE(?MCIReturn:Prompt)
+! ENTRY(@s255),USE(MCIReturn)
+[REPORTCONTROLS]
+! STRING(@s255),USE(MCIReturn)
+MCIReturn                CSTRING(256)
+!!> GUID('fdca8299-392f-4df9-83e3-b31c0c46f63f'),PROMPT('MCIR eturn:'),HEADER('MCIR eturn'),PICTURE(@s255),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Loc : Voice Q:'),USE(?Loc:VoiceQ:Prompt)
+! ENTRY(@s20),USE(Loc:VoiceQ)
+[REPORTCONTROLS]
+! STRING(@s20),USE(Loc:VoiceQ)
+Loc:VoiceQ               QUEUE,PRE(LVQ)
+!!> GUID('7cdc6f78-1f5a-4265-8fa5-1a37ac46dbc1'),PROMPT('Loc : Voice Q:'),HEADER('Loc : Voice Q'),PICTURE(@s20),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Filename:'),USE(?LVQ:Filename:Prompt)
+! ENTRY(@s255),USE(LVQ:Filename)
+[REPORTCONTROLS]
+! STRING(@s255),USE(LVQ:Filename)
+Filename                   CSTRING(261)
+!!> GUID('2b741e59-5add-4dbb-9e42-16596b78c899'),PROMPT('Filename:'),HEADER('Filename'),PICTURE(@s255),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Sound ID:'),USE(?LVQ:SoundID:Prompt)
+! ENTRY(@s50),USE(LVQ:SoundID),RIGHT(1)
+[REPORTCONTROLS]
+! STRING(@s50),USE(LVQ:SoundID),RIGHT(1)
+SoundID                    CSTRING(51)
+!!> GUID('19a85725-a94a-4690-9b3c-2af60cb6b838'),PROMPT('Sound ID:'),HEADER('Sound ID'),PICTURE(@s50),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Duration:'),USE(?LVQ:Duration:Prompt)
+! ENTRY(@n-14),USE(LVQ:Duration),RIGHT(1)
+[REPORTCONTROLS]
+! STRING(@n-14),USE(LVQ:Duration),RIGHT(1)
+Duration                   LONG
+!!> GUID('dacef97d-4057-4310-9a4e-be77fddf583e'),PROMPT('Duration:'),HEADER('Duration'),PICTURE(@n-14),TYPEMODE(INS),JUSTIFY(RIGHT,1)
+[SCREENCONTROLS]
+! PROMPT('Started:'),USE(?LVQ:Started:Prompt)
+! ENTRY(@t7),USE(LVQ:Started)
+[REPORTCONTROLS]
+! STRING(@t7),USE(LVQ:Started)
+Started                    TIME
+!!> GUID('a1468dec-2773-418d-891c-37d21cf60b48'),PROMPT('Started:'),HEADER('Started'),PICTURE(@t7),TYPEMODE(INS)
+                         END
+!!> GUID('138fa213-a9a1-4b89-acfd-a7e13197b29e')
 [PROMPTS]
 %ClassItem UNIQUE DEFAULT  ('Default', 'WindowToolbar')
 %DefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 2
@@ -70,12 +141,9 @@ WHEN  ('Default') ('')
 WHEN  ('WindowToolbar') ('')
 
 %ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
-WHEN  ('Default') ('Ask {20}PROCEDURE(),DERIVED', 'ChangeAction {11}PROCEDURE(),BYTE,DERIVED', |
-  'OnCloseEventCancelled  PROCEDURE(),DERIVED', 'PrimeUpdate {12}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'Reset {18}PROCEDURE(BYTE Force=0),DERIVED', 'Run {20}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'SetAlerts {14}PROCEDURE(),DERIVED', 'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'TakeDisableButton      PROCEDURE(SIGNED Control,BYTE MakeDisable),DERIVED', 'TakeEvent {14}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'Update {17}PROCEDURE(),DERIVED')
+WHEN  ('Default') ('Init {19}PROCEDURE(),BYTE,PROC,DERIVED', 'Kill {19}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED', 'TakeEvent {14}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'TakeWindowEvent        PROCEDURE(),BYTE,PROC,DERIVED')
 
 %ReturnValue FIELD  ()
 %WindowOperationMode DEFAULT  ('Use WINDOW setting')
@@ -412,11 +480,12 @@ WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
 %ProcedureOneInstance LONG  (0)
-%PreserveVarsLoc MULTI LONG  (2, 1, 3)
-%PreserveVarLoc DEPEND %PreserveVarsLoc DEFAULT TIMES 3
+%PreserveVarsLoc MULTI LONG  (2, 4, 1, 3)
+%PreserveVarLoc DEPEND %PreserveVarsLoc DEFAULT TIMES 4
 WHEN  (1) ('API_Key')
 WHEN  (2) ('MyQuestion')
 WHEN  (3) ('API_temp')
+WHEN  (4) ('Talk')
 
 %FieldGradientColorType DEPEND %Control DEFAULT TIMES 3
 WHEN  ('?BUTTON:Copy') ('Off')
@@ -522,11 +591,8 @@ IF API_Key='' THEN
     CYCLE
 END
 
-SETCURSOR(CURSOR:Wait)
-Loc:GetString=''
-ChatGPTResponse=''
-Loc:Status = 'Waiting response'
-DISPLAY()
+Loc:Status = 'Waiting response...'
+SETCURSOR(CURSOR:Wait); DISPLAY()
 
 ThisWebClient.SetAllHeadersDefault()
 ThisWebClient.CanUseProxy = True
@@ -534,7 +600,7 @@ ThisWebClient.HeaderOnly = False
 ThisWebClient.HTTPVersion = 'HTTP/1.1'
 ! ChatGPT API key
 ThisWebClient.ContentType = 'application/json'
-ThisWebClient.CustomHeader = 'Authorization: Bearer '&API_Key
+ThisWebClient.CustomHeader = 'Authorization:Bearer '&API_Key
 ThisWebClient.AsyncOpenUse = True
 ThisWebClient.AsyncOpenTimeOut = 2000
 ThisWebClient.InActiveTimeout = 9000
@@ -546,7 +612,17 @@ ThisWebClient.SSLCertificateOptions.DontVerifyRemoteCertificateWithCARoot = True
 
 DO ReformatTextCompletion
 
-ThisWebClient.Post('https://api.openai.com/v1/chat/completions',Loc:PostString)
+Loc:GetString=''
+CASE Talk
+OF 0
+OROF 1
+    ChatGPTResponse=''
+    Loc:URL='https://api.openai.com/v1/chat/completions'
+OF 2
+    Loc:URL='https://api.openai.com/v1/audio/speech'
+END
+st.Trace('URL:'&Loc:URL&' Posting: '&Loc:PostString)
+ThisWebClient.Post(Loc:URL,Loc:PostString)
 [END]
 [END]
 [END]
@@ -565,23 +641,27 @@ PROPERTY:END
 ! This is the code that is called when the page has been downloaded.
 ! In this case we display it on the screen by putting it in the ChatGPTResponse
 ! variable.
-ThisWebClient.TextOnly()
-IF SELF.ThisPage.Length() <= 0
-    Loc:GetString = ''
-ELSIF SELF.ThisPage.Length() < size (Loc:GetString)
-    Loc:GetString = SELF.ThisPage.GetValue()
-    Loc:Status='Your request has been completed.'
-    DO ReformatAnswer
-    ThisWebClient.Close()
-ELSE
-    Loc:Status = '* Incoming response ' & SELF.ThisPage.Length() & |
-             ' byte, the part you can see on the screen ' & size (Loc:GetString) & ' byte.'
-    Loc:GetString=SELF.ThisPage.GetValue()
-    DO ReformatAnswer
-    ThisWebClient.Close()
+ThisWebClient.Close()
+st.Trace('Response: ('&ThisWebClient.ThisPage.Length()&' bytes) '&ThisWebClient.ThisPage.GetValue())
+
+
+CASE Talk
+OF 0
+OROF 1
+    DO GetTextMessage
+    DISPLAY(?ChatGPTResponse)
+
+    IF Talk=1 THEN
+        !!! Allowed voice models; alloy, echo, fable, onyx, nova, and shimmer
+        Talk=2
+        POST(EVENT:Accepted,?GetPage)
+    END
+OF 2
+    DO LetsTalk
 END
-SETCURSOR()
-DISPLAY()
+
+Loc:Status='Your request has been completed.'
+SETCURSOR(); DISPLAY()
 [END]
 [END]
 WHEN 'ErrorTrap'
@@ -627,30 +707,60 @@ PROPERTY:BEGIN
 PRIORITY 4000
 PROPERTY:END
 ReformatTextCompletion      ROUTINE
-    st.SetValue(CLIP(MyQuestion))
-    st.JsonEncode()
+    CASE Talk
+    OF 0
+    OROF 1
+        st.SetValue(MyQuestion,st:clip); st.JsonEncode()
 
-    !!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
-    !!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
-    !!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
-    !Loc:PostString='{"model": "gpt-3.5-turbo","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
-    Loc:PostString='{"model": "gpt-4o","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
-    st.Trace('Request: '&Loc:PostString)
+        !!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
+        !!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
+        !!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
+        !Loc:PostString='{"model": "gpt-3.5-turbo","messages": [{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
+        !Loc:PostString='{{"model": "gpt-4o","messages": [{{"role": "user", "content": "'&st.GetValue()&'"}],"temperature": '&API_temp&'}'
+        st.Prepend('{{"model": "gpt-4o","messages": [{{"role": "user", "content": "')
+        st.Append('"}],"temperature": '&API_temp&'}')
+        st.Trace('Request: '&st.GetValue())
+        st._StealValue(st.AnsiToUtf8(st.getValuePtr(),uz#,st:CP_ISO_8859_9))
+    OF 2
+        !Text Response already in memory
+        st.JsonEncode()
+        st.Prepend('{{"model": "tts-1","input": "'); st.Append('","voice": "alloy"}')
+        st.Trace('Request: '&st.GetValue())
+        st._StealValue(st.AnsiToUtf8(st.getValuePtr(),uz#,st:CP_ISO_8859_9))
+    END
 
     ! Generate UTF8 from Turkish characters
-    Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
+    Loc:PostString=st.GetValue()
 
 [SOURCE]
 PROPERTY:BEGIN
 PRIORITY 4000
 PROPERTY:END
-ReformatAnswer       ROUTINE
+GetTextMessage      ROUTINE
+    ThisWebClient.TextOnly()
+    IF ThisWebClient.ThisPage.Length() <= 0
+        Loc:Status='No response from API service.'
+        Loc:GetString = ''
+    ELSIF ThisWebClient.ThisPage.Length() < size (Loc:GetString)
+        Loc:Status='Your request has been completed.'
+        Loc:GetString = ThisWebClient.ThisPage.GetValue()
+    ELSE
+        Loc:Status = '* Incoming response ' & ThisWebClient.ThisPage.Length() & |
+            ' bytes, the part you can see on the screen ' & size (Loc:GetString) & ' bytes.'
+        Loc:GetString=ThisWebClient.ThisPage.GetValue()
+    END
+
     ! Generate Turkish ANSI characters from UTF8
     st._StealValue(st.Utf8ToAnsi(Loc:GetString,uz#,st:CP_ISO_8859_9))
-    if st.setBetween('"content": "', '"finish_reason": "') = st:notFound
-        Loc:Status='Couldn''t get legal response from ChatGPT'
-        EXIT
-    end
+    st.Trace('Response: '&st.GetValue())
+    !if st.setBetween('"content": "', '"logprobs":') = st:notFound
+    if st.setBetween('"content": "', '},') = st:notFound
+        if st.setBetween('"content": "', '"finish_reason":') = st:notFound
+            Loc:Status='Couldn''t get legal response from ChatGPT'
+            EXIT
+        END
+    END
+
 !    ChatGPTResponse=st.Utf8ToAnsi(Loc:GetString,uz#,st:CP_ISO_8859_9)
 !    baslangic#=INSTRING('"content": "',ChatGPTResponse,1,1)
 !    bitis#=INSTRING('"finish_reason": "',ChatGPTResponse,1,1)
@@ -661,9 +771,20 @@ ReformatAnswer       ROUTINE
 !    END
 !    st.SetValue(SUB(ChatGPTResponse,baslangic#+12,bitis#-baslangic#-29))
 
-    st.Replace('\n','<13,10>'); st.JsonDecode()
-    ChatGPTResponse=st.GetValue()
-    st.Trace('Response: '&ChatGPTResponse)
+    st.Replace('\n','<13,10>'); st.Clip(); st.JsonDecode()
+    IF Talk<2 THEN ChatGPTResponse=st.GetValue().
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+LetsTalk            ROUTINE
+    FileName=CLIP(st.Random(16,st:Upper+st:Lower+st:Number)&'.mp3')
+    ThisWebClient.SavePage(FileName)
+    !RENAME(CLIP(FileName),CLIP(FileName)&'.mp3'); FileName=FileName&'.mp3'
+    st.Trace('Downloaded voice clip '&FileName)
+
+    CLEAR(Loc:VoiceQ); LVQ:Filename=FileName; LVQ:SoundID='sound'&CLOCK(); ADD(Loc:VoiceQ)
+    Talk=1
 [END]
 EMBED %WindowManagerMethodCodeSection
 [INSTANCES]
@@ -677,6 +798,46 @@ PRIORITY 6000
 PROPERTY:END
 IF MyQuestion='' THEN MyQuestion='Could you write a lyrical poem about Clarion programming language?'.
 [END]
+[END]
+[END]
+EMBED %WindowEventHandling
+[INSTANCES]
+WHEN 'CloseWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4999
+PROPERTY:END
+SETCURSOR(); DISPLAY()
+[END]
+WHEN 'Timer'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+LOOP voice#=RECORDS(Loc:VoiceQ) TO 1 BY -1
+    GET(Loc:VoiceQ,voice#)
+    IF LVQ:Duration=0   ! Not started yet
+        ! Play downloaded voice
+        !https://forum.clarionlife.net/viewtopic.php?t=3031
+        MCICommand = 'open "' & CLIP(LVQ:Filename) &'" alias '&LVQ:SoundID; MciSendString(MCICommand,MCIReturn,128,0)
+        MCICommand = 'play '&LVQ:SoundID; MciSendString(MCICommand,MCIReturn,128,0)
+
+        ! Learns the duration of the audio file and puts it on sleep mode.
+        MCICommand='status '&LVQ:SoundID&' length'; MCISendString(MCICommand,MCIReturn,128,0)
+        LVQ:Duration=MCIReturn/10; LVQ:Started=CLOCK(); PUT(Loc:VoiceQ)
+    ELSE
+        IF LVQ:Duration<CLOCK()-LVQ:Started THEN
+            MCICommand = 'stop '&LVQ:SoundID; MciSendString(MCICommand,MCIReturn,128,0)
+            MCICommand = 'close '&LVQ:SoundID; MciSendString(MCICommand,MCIReturn,128,0)
+
+            ! and remove file
+            REMOVE(LVQ:Filename)
+            DELETE(Loc:VoiceQ)
+        END
+    END
+END
 [END]
 [END]
 [END]
@@ -701,23 +862,8 @@ WHEN  ('Default') ('NetClient')
 WHEN  ('Default') ('')
 
 %ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
-WHEN  ('Default') ('ANSIToUnicode {10}PROCEDURE(long encoding=st:EncodeUtf16,ulong pCodePage=st:CP_US_ASCII),DERIVED', |
-  'Base64Decode {11}PROCEDURE(String p_Text),STRING,DERIVED', 'Close {18}PROCEDURE(),DERIVED', |
-  'CompleteURL {12}PROCEDURE(String p_Url),STRING,PROC,DERIVED', 'ConnectionClosed       PROCEDURE(),DERIVED', |
-  'CreateAuthorizationString PROCEDURE(string p_UserName,string p_Password,long p_AuthorizationMethod,long p_Options=0),STRING,DERIVED', |
-  'Delete {17}PROCEDURE(String p_Url),DERIVED', 'EncodeWebString        PROCEDURE(string p_Text,Long p_Flags=0,Long p_Len=0),STRING,DERIVED', |
-  'ErrorTrap {14}PROCEDURE(string errorStr,string functionName),DERIVED', 'GetBanned {14}PROCEDURE(),String,DERIVED', |
-  'GetInfo {16}PROCEDURE(long p_Options=1,long p_Socket=0,long p_SockId=0),DERIVED', |
-  'GetValueFromWebString  PROCEDURE(string p_VarName,string p_PostString),STRING,DERIVED', |
-  'Init {19}PROCEDURE(uLong Mode=NET:SimpleClient),DERIVED', 'InterpretError {9}PROCEDURE(),STRING,DERIVED', |
-  'Kill {19}PROCEDURE(),DERIVED', 'LongToHex {14}PROCEDURE(Long p_Long),String,DERIVED', |
-  'MakePostString {9}PROCEDURE(),DERIVED', 'MatchSubjectWithURL    PROCEDURE(String p_CertName,String p_Server),long,DERIVED', |
-  'NormalizeURL {11}PROCEDURE(StringTheory pURL),DERIVED', 'ParseAuthenticateHeader PROCEDURE(),LONG,DERIVED', |
-  'PartiallyCloseServer   PROCEDURE(),DERIVED', 'Ping {19}PROCEDURE(string p_IP,long p_TTL),LONG,DERIVED', |
-  'Post {19}PROCEDURE(String p_Url),DERIVED', 'SSLGetIssuerField      PROCEDURE(string p_FieldName),string,DERIVED', |
-  'SavePage {15}PROCEDURE(string p_FileName),DERIVED', 'UnixToClarionDate      PROCEDURE(Long p_DateTime),Long,DERIVED', |
-  '_CallErrorTrap {9}PROCEDURE(string errorStr,string functionName),DERIVED', '_CreateRequestHeader   PROCEDURE(long p_HostPort),STRING,DERIVED', |
-  '_LoggingFirstTime      PROCEDURE(),DERIVED', '')
+WHEN  ('Default') ('ErrorTrap {14}PROCEDURE(string errorStr,string functionName),DERIVED', |
+  'PageReceived {11}PROCEDURE(),DERIVED', 'Process {16}PROCEDURE(),DERIVED', '')
 
 %UseDefaultABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('')
@@ -858,8 +1004,7 @@ WHEN  ('Default') ('80')
 
 %WebSecure DEPEND %ClassItem DEFAULT TIMES 0
 
-%Certificate DEPEND %ClassItem DEFAULT TIMES 1
-WHEN  ('Default') ('''certificates\settings''')
+%Certificate DEPEND %ClassItem DEFAULT TIMES 0
 
 %WebHandlerProc DEPEND %ClassItem PROCEDURE TIMES 1
 WHEN  ('Default') ()
@@ -893,8 +1038,7 @@ WHEN  ('Default') ('''scripts''')
 %WebFormStyle DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('Net:Web:Tab')
 
-%DefaultBrowseClass DEPEND %ClassItem DEFAULT TIMES 1
-WHEN  ('Default') ('BrowseTable')
+%DefaultBrowseClass DEPEND %ClassItem DEFAULT TIMES 0
 
 %StylesDir DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('''styles''')
@@ -906,13 +1050,11 @@ WHEN  ('Default') ('''styles''')
 %StyleBrowser DEPEND %styles DEFAULT TIMES 1
 WHEN  ('Default')TIMES 0
 
-%AlwaysRedirect DEPEND %ClassItem LONG TIMES 1
-WHEN  ('Default') (0)
+%AlwaysRedirect DEPEND %ClassItem LONG TIMES 0
 
 %ServerIP DEPEND %ClassItem DEFAULT TIMES 0
 
-%WebNoAccessPage DEPEND %ClassItem DEFAULT TIMES 1
-WHEN  ('Default') ('''NoAccess.htm''')
+%WebNoAccessPage DEPEND %ClassItem DEFAULT TIMES 0
 
 %GenericPagetitle DEPEND %ClassItem DEFAULT TIMES 0
 
@@ -1014,17 +1156,13 @@ WHEN  ('Default') ('''''')
 %DefaultBrowseOtherButtonWithOutText DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('''''')
 
-%netBrowseHighlightColor DEPEND %ClassItem LONG TIMES 1
-WHEN  ('Default') (-1)
+%netBrowseHighlightColor DEPEND %ClassItem LONG TIMES 0
 
-%netBrowseOverColor DEPEND %ClassItem LONG TIMES 1
-WHEN  ('Default') (-1)
+%netBrowseOverColor DEPEND %ClassItem LONG TIMES 0
 
-%netBrowseOneColor DEPEND %ClassItem LONG TIMES 1
-WHEN  ('Default') (-1)
+%netBrowseOneColor DEPEND %ClassItem LONG TIMES 0
 
-%netBrowseTwoColor DEPEND %ClassItem LONG TIMES 1
-WHEN  ('Default') (-1)
+%netBrowseTwoColor DEPEND %ClassItem LONG TIMES 0
 
 %resetFormDefaults DEPEND %ClassItem LONG TIMES 0
 
@@ -1528,8 +1666,7 @@ WHEN  (38) ('')
 WHEN  (39) ('')
 WHEN  (40) ('')
 
-%AlwaysPort DEPEND %ClassItem DEFAULT TIMES 1
-WHEN  ('Default') ('')
+%AlwaysPort DEPEND %ClassItem DEFAULT TIMES 0
 
 %ServerCombine DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('1')
@@ -1647,48 +1784,7 @@ WHEN  (38) ('cancelfile_btn')
 WHEN  (39) ('removefile_btn')
 WHEN  (40) ('export_btn')
 
-%ButtonEquate DEPEND %Buttons DEFAULT TIMES 1
-WHEN  ('Default')TIMES 40
-WHEN  (1) ('NET:WEB:UploadButton')
-WHEN  (2) ('NET:WEB:LookupButton')
-WHEN  (3) ('NET:WEB:SaveButton')
-WHEN  (4) ('NET:WEB:CancelButton')
-WHEN  (5) ('NET:WEB:DeletefButton')
-WHEN  (6) ('NET:WEB:CloseButton')
-WHEN  (7) ('NET:WEB:InsertButton')
-WHEN  (8) ('NET:WEB:ChangeButton')
-WHEN  (9) ('NET:WEB:ViewButton')
-WHEN  (10) ('NET:WEB:DeletebButton')
-WHEN  (11) ('NET:WEB:SelectButton')
-WHEN  (12) ('NET:WEB:BrowseCancelButton')
-WHEN  (13) ('NET:WEB:BrowseCloseButton')
-WHEN  (14) ('NET:WEB:SmallInsertButton')
-WHEN  (15) ('NET:WEB:SmallChangeButton')
-WHEN  (16) ('NET:WEB:SmallViewButton')
-WHEN  (17) ('NET:WEB:SmallDeleteButton')
-WHEN  (18) ('NET:WEB:SmallSelectButton')
-WHEN  (19) ('NET:WEB:LocateButton')
-WHEN  (20) ('NET:WEB:FirstButton')
-WHEN  (21) ('NET:WEB:PreviousButton')
-WHEN  (22) ('NET:WEB:NextButton')
-WHEN  (23) ('NET:WEB:LastButton')
-WHEN  (24) ('NET:WEB:PrintButton')
-WHEN  (25) ('NET:WEB:StartButton')
-WHEN  (26) ('NET:WEB:DateLookupButton')
-WHEN  (27) ('NET:WEB:WizPreviousButton')
-WHEN  (28) ('NET:WEB:WizNextButton')
-WHEN  (29) ('NET:WEB:SmallOtherButton')
-WHEN  (30) ('NET:WEB:SmallPrintButton')
-WHEN  (31) ('NET:WEB:CopyButton')
-WHEN  (32) ('NET:WEB:SmallCopyButton')
-WHEN  (33) ('NET:WEB:ClearButton')
-WHEN  (34) ('NET:WEB:LogoutButton')
-WHEN  (35) ('NET:WEB:AddFileButton')
-WHEN  (36) ('NET:WEB:ClearFileButton')
-WHEN  (37) ('NET:WEB:StartFileButton')
-WHEN  (38) ('NET:WEB:CancelFileButton')
-WHEN  (39) ('NET:WEB:RemoveFileButton')
-WHEN  (40) ('NET:WEB:ExportButton')
+%ButtonEquate DEPEND %Buttons DEFAULT TIMES 0
 
 %UseContentBody DEPEND %ClassItem LONG TIMES 1
 WHEN  ('Default') (1)
@@ -2041,8 +2137,7 @@ WHEN  ('Default') ('''nt-heading''')
 %ThemeInAll DEPEND %ThemeFiles LONG TIMES 1
 WHEN  ('Default')TIMES 0
 
-%Keys DEPEND %ClassItem DEFAULT TIMES 1
-WHEN  ('Default') ('')
+%Keys DEPEND %ClassItem DEFAULT TIMES 0
 
 %HostName DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('')
@@ -2158,29 +2253,30 @@ WHEN  ('Default') ('''strict-origin-when-cross-origin''')
 
 [WINDOW]
 Window  WINDOW('ChatGPT Example'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular),DOUBLE,CENTER, |
-          ICON('chatgpt.ico'),GRAY,IMM,SYSTEM
+          ICON('chatgpt.ico'),GRAY,IMM,SYSTEM,TIMER(100)
           BOX,AT(3,4,380,216),USE(?Box1),COLOR(COLOR:Gray),LINEWIDTH(1),ROUND,#ORIG(?Box1), |
             #ORDINAL(1)
           STRING(@s255),AT(8,205,345),USE(Loc:Status),CENTER,TRN,#ORDINAL(2)
           TEXT,AT(9,9,369,37),USE(MyQuestion),VSCROLL,#ORDINAL(3)
           TEXT,AT(9,85,369,117),USE(ChatGPTResponse),VSCROLL,COLOR(00DCDCDCh),READONLY,#ORIG(MyText), |
             #ORDINAL(4)
+          CHECK('Talk'),AT(345,72),USE(Talk),TRN,#ORDINAL(5)
           BUTTON('Post'),AT(328,49,50,12),USE(?GetPage),LEFT,ICON('chatgpt.ico'),TIP('Send your ' & |
-            'request to ChatGPT'),#ORIG(?Button1),#ORDINAL(5)
-          PROMPT('Key:'),AT(23,50),USE(?API_Key:Prompt),TRN,#ORDINAL(6)
-          ENTRY(@s80),AT(73,50,201,10),USE(API_Key),TIP('Create your own API key using ' & |
+            'request to ChatGPT'),#ORIG(?Button1),#ORDINAL(6)
+          PROMPT('Key:'),AT(23,50),USE(?API_Key:Prompt),TRN,#ORDINAL(7)
+          ENTRY(@s80),AT(73,50,227,10),USE(API_Key),TIP('Create your own API key using ' & |
             'following web page: https://platform.openai.com/account/api-keys<0DH,0AH,0DH>' & |
-            '<0AH>like; sk-VyUX.{18}5Y3aw'),#ORDINAL(7)
+            '<0AH>like; sk-VyUX.{18}5Y3aw'),#ORDINAL(8)
           BUTTON,AT(363,205,15,10),USE(?BUTTON:Copy),ICON(ICON:Copy),FLAT,TIP('Copy respo' & |
-            'nse to clipboard'),TRN,#ORDINAL(8)
-          PROMPT('Temperature:'),AT(24,64),USE(?API_temp:Prompt),TRN,#ORDINAL(9)
+            'nse to clipboard'),TRN,#ORDINAL(9)
+          PROMPT('Temperature:'),AT(24,64),USE(?API_temp:Prompt),TRN,#ORDINAL(10)
           SPIN(@n3.1),AT(73,64,,10),USE(API_temp),RIGHT(1),RANGE(0,1),STEP(0.1),TIP('* Low temp' & |
             'erature (0 to 0.3): More focused, coherent, and conservative outputs.<0DH,0AH>' & |
             '* Medium temperature (0.3 to 0.7): Balanced creativity and coherence.<0DH,0AH>' & |
             '* High temperature (0.7 to 1): Highly creative and diverse, but potentiall' & |
-            'y less coherent.'),#ORDINAL(10)
+            'y less coherent.'),#ORDINAL(11)
           STRING('API'),AT(7,49,,24),USE(?STRING1),FONT(,,,FONT:bold,CHARSET:DEFAULT),CENTER, |
-            ANGLE(900),COLOR(00D3D3D3h),#ORDINAL(11)
+            ANGLE(900),COLOR(00D3D3D3h),#ORDINAL(12)
         END
 
 [END]
