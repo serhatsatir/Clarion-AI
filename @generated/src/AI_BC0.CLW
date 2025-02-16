@@ -1,0 +1,23 @@
+  MEMBER('AI.clw')
+
+
+  MAP
+AI_BC0:DctInit    PROCEDURE()
+AI_BC0:DctKill    PROCEDURE()
+AI_BC0:FilesInit  PROCEDURE()
+  END
+
+
+
+
+AI_BC0:DctInit PROCEDURE()
+  CODE
+
+
+AI_BC0:FilesInit PROCEDURE()
+  CODE
+
+
+AI_BC0:DctKill PROCEDURE()
+  CODE
+

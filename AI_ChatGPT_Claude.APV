@@ -1,0 +1,60 @@
+[MODULE]
+NAME 'AI_ChatGPT_Claude.clw'
+[COMMON]
+FROM ABC GENERATED
+MODIFIED '2024/06/29' ' 7:35:24'
+[PROCEDURE]
+NAME ChatGPT_Claude
+[COMMON]
+FROM ABC Source
+MODIFIED '2025/02/16' ' 7:40:03'
+[DATA]
+[SCREENCONTROLS]
+! PROMPT('API Key:'),USE(?API_Key:Prompt)
+! ENTRY(@s80),USE(API_Key)
+[REPORTCONTROLS]
+! STRING(@s80),USE(API_Key)
+API_Key                  CSTRING(81)
+!!> GUID('45751f02-75e2-43f4-88d1-852407382c61'),PROMPT('API Key:'),HEADER('API Key'),PICTURE(@s80),TYPEMODE(INS)
+[PROMPTS]
+%GenerateOpenClose LONG  (0)
+%GenerateSaveRestore LONG  (0)
+[EMBED]
+EMBED %DataSection
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 1300
+PROPERTY:END
+url             STRING(512)
+method          STRING(10)
+header          STRING(100)
+postData        STRING(10240)
+response        STRING(50000)
+result          LONG
+[END]
+EMBED %ProcessedCode
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+    !!! UNDER CONSTRUCTION
+    url = 'https://api.openai.com/v1/chat/completions'  ! Gerçek API endpoint'i buraya gelecek
+    header = 'Authorization|Bearer '&API_Key
+    method = 'POST'
+    !postData = '{"key": "value"}'  ! API'ye gönderilecek veri
+    postData = '{{"model": "gpt-4o","messages": [{{"role": "user", "content": "Could you write a lyrical poem about Clarion programming language?"}],"temperature": 0.3}'
+    result = MakeApiRequest(url, method, header, postData, response)
+
+    IF result = 0
+      MESSAGE('API Yanýtý: ' & response)
+    ELSE
+      MESSAGE('API isteði baþarýsýz oldu. Hata kodu: ' & result&'|'&response)
+    END
+
+[END]
+[END]
+[CALLS]
+MakeApiRequest
+[END]

@@ -2,60 +2,71 @@
 NAME 'AI_Main.clw'
 [COMMON]
 FROM ABC GENERATED
-MODIFIED '2024/05/29' '11:24:49'
+MODIFIED '2024/06/22' ' 9:21:55'
 [PROCEDURE]
 NAME Main
 [COMMON]
 DESCRIPTION 'Window'
 FROM ABC Window
 CATEGORY 'Window'
-MODIFIED '2024/05/31' ' 9:12:56'
+MODIFIED '2025/02/07' '17:11:50'
 [PROMPTS]
-%ButtonAction DEPEND %Control DEFAULT TIMES 4
+%ButtonAction DEPEND %Control DEFAULT TIMES 6
+WHEN  ('') ('No Special Action')
 WHEN  ('?Button:Assistant') ('Call a Procedure')
 WHEN  ('?Button:ChatGPT') ('Call a Procedure')
+WHEN  ('?Button:ChatGPT:2') ('Call a Procedure')
 WHEN  ('?Button:Gemini') ('Call a Procedure')
 WHEN  ('?Button:Ollama') ('Call a Procedure')
 
-%ButtonRunName DEPEND %Control DEFAULT TIMES 4
+%ButtonRunName DEPEND %Control DEFAULT TIMES 5
 WHEN  ('?Button:Assistant') ('')
 WHEN  ('?Button:ChatGPT') ('')
+WHEN  ('?Button:ChatGPT:2') ('')
 WHEN  ('?Button:Gemini') ('')
 WHEN  ('?Button:Ollama') ('')
 
-%ButtonRunParameters DEPEND %Control DEFAULT TIMES 4
+%ButtonRunParameters DEPEND %Control DEFAULT TIMES 5
 WHEN  ('?Button:Assistant') ('')
 WHEN  ('?Button:ChatGPT') ('')
+WHEN  ('?Button:ChatGPT:2') ('')
 WHEN  ('?Button:Gemini') ('')
 WHEN  ('?Button:Ollama') ('')
 
-%ButtonProcedure DEPEND %Control PROCEDURE TIMES 4
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 5
 WHEN  ('?Button:Assistant') (AI_ChatGPT_Assistant)
 WHEN  ('?Button:ChatGPT') (AI_ChatGPT)
+WHEN  ('?Button:ChatGPT:2') (AI_DeepSeek)
 WHEN  ('?Button:Gemini') (AI_Gemini)
 WHEN  ('?Button:Ollama') (Ollama)
 
-%ButtonThread DEPEND %Control LONG TIMES 4
+%ButtonThread DEPEND %Control LONG TIMES 5
 WHEN  ('?Button:Assistant') (0)
 WHEN  ('?Button:ChatGPT') (0)
+WHEN  ('?Button:ChatGPT:2') (0)
 WHEN  ('?Button:Gemini') (0)
 WHEN  ('?Button:Ollama') (0)
 
-%ButtonThreadStack DEPEND %Control DEFAULT TIMES 4
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 6
+WHEN  ('') ('25000')
 WHEN  ('?Button:Assistant') ('25000')
 WHEN  ('?Button:ChatGPT') ('25000')
+WHEN  ('?Button:ChatGPT:2') ('25000')
 WHEN  ('?Button:Gemini') ('25000')
 WHEN  ('?Button:Ollama') ('25000')
 
-%ButtonParameters DEPEND %Control DEFAULT TIMES 4
+%ButtonParameters DEPEND %Control DEFAULT TIMES 5
 WHEN  ('?Button:Assistant') ('')
 WHEN  ('?Button:ChatGPT') ('')
+WHEN  ('?Button:ChatGPT:2') ('')
 WHEN  ('?Button:Gemini') ('')
 WHEN  ('?Button:Ollama') ('')
 
-%ButtonRequest DEPEND %Control DEFAULT TIMES 4
+%ButtonRequest DEPEND %Control DEFAULT TIMES 6
+WHEN  ('') ('None')
 WHEN  ('?Button:Assistant') ('None')
 WHEN  ('?Button:ChatGPT') ('None')
+WHEN  ('?Button:ChatGPT:2') ('None')
 WHEN  ('?Button:Gemini') ('None')
 WHEN  ('?Button:Ollama') ('None')
 
@@ -272,79 +283,99 @@ WHEN  ('WindowToolbar')TIMES 0
 
 %ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
 
-%ExtUITabStyle DEPEND %Control DEFAULT TIMES 4
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 6
+WHEN  ('') ('Default')
 WHEN  ('?Button:Assistant') ('Default')
 WHEN  ('?Button:ChatGPT') ('Default')
+WHEN  ('?Button:ChatGPT:2') ('Default')
 WHEN  ('?Button:Gemini') ('Default')
 WHEN  ('?Button:Ollama') ('Default')
 
-%FieldGradientColorType DEPEND %Control DEFAULT TIMES 4
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 6
+WHEN  ('') ('Off')
 WHEN  ('?Button:Assistant') ('Off')
 WHEN  ('?Button:ChatGPT') ('Off')
+WHEN  ('?Button:ChatGPT:2') ('Off')
 WHEN  ('?Button:Gemini') ('Off')
 WHEN  ('?Button:Ollama') ('Off')
 
-%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 4
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 6
+WHEN  ('') ('')
 WHEN  ('?Button:Assistant') ('')
 WHEN  ('?Button:ChatGPT') ('')
+WHEN  ('?Button:ChatGPT:2') ('')
 WHEN  ('?Button:Gemini') ('')
 WHEN  ('?Button:Ollama') ('')
 
-%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 4
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 6
+WHEN  ('') (0)
 WHEN  ('?Button:Assistant') (0)
 WHEN  ('?Button:ChatGPT') (0)
+WHEN  ('?Button:ChatGPT:2') (0)
 WHEN  ('?Button:Gemini') (0)
 WHEN  ('?Button:Ollama') (0)
 
-%FieldGradientColorFrom DEPEND %Control LONG TIMES 4
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 6
+WHEN  ('') (-1)
 WHEN  ('?Button:Assistant') (-1)
 WHEN  ('?Button:ChatGPT') (-1)
+WHEN  ('?Button:ChatGPT:2') (-1)
 WHEN  ('?Button:Gemini') (-1)
 WHEN  ('?Button:Ollama') (-1)
 
 %FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
 
-%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 4
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 6
+WHEN  ('') (0)
 WHEN  ('?Button:Assistant') (0)
 WHEN  ('?Button:ChatGPT') (0)
+WHEN  ('?Button:ChatGPT:2') (0)
 WHEN  ('?Button:Gemini') (0)
 WHEN  ('?Button:Ollama') (0)
 
-%FieldGradientColorTo DEPEND %Control LONG TIMES 4
+%FieldGradientColorTo DEPEND %Control LONG TIMES 6
+WHEN  ('') (-1)
 WHEN  ('?Button:Assistant') (-1)
 WHEN  ('?Button:ChatGPT') (-1)
+WHEN  ('?Button:ChatGPT:2') (-1)
 WHEN  ('?Button:Gemini') (-1)
 WHEN  ('?Button:Ollama') (-1)
 
 %FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
 
-%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 4
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 6
+WHEN  ('') (0)
 WHEN  ('?Button:Assistant') (0)
 WHEN  ('?Button:ChatGPT') (0)
+WHEN  ('?Button:ChatGPT:2') (0)
 WHEN  ('?Button:Gemini') (0)
 WHEN  ('?Button:Ollama') (0)
 
-%ButtonReturnValueAssignment DEPEND %Control FIELD TIMES 4
+%ButtonReturnValueAssignment DEPEND %Control FIELD TIMES 5
 WHEN  ('?Button:Assistant') ()
 WHEN  ('?Button:ChatGPT') ()
+WHEN  ('?Button:ChatGPT:2') ()
 WHEN  ('?Button:Gemini') ()
 WHEN  ('?Button:Ollama') ()
 
-%ButtonReturnValueReferenceAssign DEPEND %Control LONG TIMES 4
+%ButtonReturnValueReferenceAssign DEPEND %Control LONG TIMES 5
 WHEN  ('?Button:Assistant') (0)
 WHEN  ('?Button:ChatGPT') (0)
+WHEN  ('?Button:ChatGPT:2') (0)
 WHEN  ('?Button:Gemini') (0)
 WHEN  ('?Button:Ollama') (0)
 
-%ButtonThreadParameters DEPEND %Control DEFAULT TIMES 4
+%ButtonThreadParameters DEPEND %Control DEFAULT TIMES 5
 WHEN  ('?Button:Assistant') ('')
 WHEN  ('?Button:ChatGPT') ('')
+WHEN  ('?Button:ChatGPT:2') ('')
 WHEN  ('?Button:Gemini') ('')
 WHEN  ('?Button:Ollama') ('')
 
-%ButtonThreadReturnValueAssignment DEPEND %Control FIELD TIMES 4
+%ButtonThreadReturnValueAssignment DEPEND %Control FIELD TIMES 5
 WHEN  ('?Button:Assistant') ()
 WHEN  ('?Button:ChatGPT') ()
+WHEN  ('?Button:ChatGPT:2') ()
 WHEN  ('?Button:Gemini') ()
 WHEN  ('?Button:Ollama') ()
 
@@ -352,9 +383,11 @@ WHEN  ('?Button:Ollama') ()
 
 %PostLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
 
-%PostLookupDuringValidate DEPEND %Control LONG TIMES 4
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 6
+WHEN  ('') (1)
 WHEN  ('?Button:Assistant') (1)
 WHEN  ('?Button:ChatGPT') (1)
+WHEN  ('?Button:ChatGPT:2') (1)
 WHEN  ('?Button:Gemini') (1)
 WHEN  ('?Button:Ollama') (1)
 
@@ -374,9 +407,11 @@ WHEN  ('?Button:Ollama') (1)
 
 %CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
 
-%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 4
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 6
+WHEN  ('')TIMES 0
 WHEN  ('?Button:Assistant')TIMES 0
 WHEN  ('?Button:ChatGPT')TIMES 0
+WHEN  ('?Button:ChatGPT:2')TIMES 0
 WHEN  ('?Button:Gemini')TIMES 0
 WHEN  ('?Button:Ollama')TIMES 0
 
@@ -384,9 +419,11 @@ WHEN  ('?Button:Ollama')TIMES 0
 
 %CheckedControl1 DEPEND %CheckedEnables DEFAULT TIMES 0
 
-%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 4
+%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 6
+WHEN  ('')TIMES 0
 WHEN  ('?Button:Assistant')TIMES 0
 WHEN  ('?Button:ChatGPT')TIMES 0
+WHEN  ('?Button:ChatGPT:2')TIMES 0
 WHEN  ('?Button:Gemini')TIMES 0
 WHEN  ('?Button:Ollama')TIMES 0
 
@@ -400,9 +437,11 @@ WHEN  ('?Button:Ollama')TIMES 0
 
 %UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
 
-%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 4
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 6
+WHEN  ('')TIMES 0
 WHEN  ('?Button:Assistant')TIMES 0
 WHEN  ('?Button:ChatGPT')TIMES 0
+WHEN  ('?Button:ChatGPT:2')TIMES 0
 WHEN  ('?Button:Gemini')TIMES 0
 WHEN  ('?Button:Ollama')TIMES 0
 
@@ -410,9 +449,11 @@ WHEN  ('?Button:Ollama')TIMES 0
 
 %UnCheckedControl1 DEPEND %UnCheckedEnables DEFAULT TIMES 0
 
-%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 4
+%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 6
+WHEN  ('')TIMES 0
 WHEN  ('?Button:Assistant')TIMES 0
 WHEN  ('?Button:ChatGPT')TIMES 0
+WHEN  ('?Button:ChatGPT:2')TIMES 0
 WHEN  ('?Button:Gemini')TIMES 0
 WHEN  ('?Button:Ollama')TIMES 0
 
@@ -420,9 +461,11 @@ WHEN  ('?Button:Ollama')TIMES 0
 
 %CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
 
-%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 4
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 6
+WHEN  ('')TIMES 0
 WHEN  ('?Button:Assistant')TIMES 0
 WHEN  ('?Button:ChatGPT')TIMES 0
+WHEN  ('?Button:ChatGPT:2')TIMES 0
 WHEN  ('?Button:Gemini')TIMES 0
 WHEN  ('?Button:Ollama')TIMES 0
 
@@ -430,29 +473,37 @@ WHEN  ('?Button:Ollama')TIMES 0
 
 %UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
 
-%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 4
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 6
+WHEN  ('')TIMES 0
 WHEN  ('?Button:Assistant')TIMES 0
 WHEN  ('?Button:ChatGPT')TIMES 0
+WHEN  ('?Button:ChatGPT:2')TIMES 0
 WHEN  ('?Button:Gemini')TIMES 0
 WHEN  ('?Button:Ollama')TIMES 0
 
 %ActiveImageEnable DEPEND %Control LONG TIMES 0
 
-%AIObjectName DEPEND %Control DEFAULT TIMES 4
+%AIObjectName DEPEND %Control DEFAULT TIMES 6
+WHEN  ('') ('AIBtn0')
 WHEN  ('?Button:Assistant') ('AIBtn4')
 WHEN  ('?Button:ChatGPT') ('AIBtn1')
+WHEN  ('?Button:ChatGPT:2') ('AIBtn5')
 WHEN  ('?Button:Gemini') ('AIBtn2')
 WHEN  ('?Button:Ollama') ('AIBtn3')
 
-%AIEnableMimicControl DEPEND %Control LONG TIMES 4
+%AIEnableMimicControl DEPEND %Control LONG TIMES 6
+WHEN  ('') (1)
 WHEN  ('?Button:Assistant') (1)
 WHEN  ('?Button:ChatGPT') (1)
+WHEN  ('?Button:ChatGPT:2') (1)
 WHEN  ('?Button:Gemini') (1)
 WHEN  ('?Button:Ollama') (1)
 
-%AIMimicControl DEPEND %Control DEFAULT TIMES 4
+%AIMimicControl DEPEND %Control DEFAULT TIMES 6
+WHEN  ('') ('?Button:ChatGPT')
 WHEN  ('?Button:Assistant') ('?Button:ChatGPT')
 WHEN  ('?Button:ChatGPT') ('?BUTTON1')
+WHEN  ('?Button:ChatGPT:2') ('?Button:ChatGPT')
 WHEN  ('?Button:Gemini') ('?BUTTON1')
 WHEN  ('?Button:Ollama') ('?BUTTON1')
 
@@ -462,9 +513,11 @@ WHEN  ('?Button:Ollama') ('?BUTTON1')
 
 %AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 4
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 6
+WHEN  ('') (0)
 WHEN  ('?Button:Assistant') (0)
 WHEN  ('?Button:ChatGPT') (0)
+WHEN  ('?Button:ChatGPT:2') (0)
 WHEN  ('?Button:Gemini') (0)
 WHEN  ('?Button:Ollama') (0)
 
@@ -472,9 +525,11 @@ WHEN  ('?Button:Ollama') (0)
 
 %AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIDisableImgIsVariable DEPEND %Control LONG TIMES 4
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 6
+WHEN  ('') (0)
 WHEN  ('?Button:Assistant') (0)
 WHEN  ('?Button:ChatGPT') (0)
+WHEN  ('?Button:ChatGPT:2') (0)
 WHEN  ('?Button:Gemini') (0)
 WHEN  ('?Button:Ollama') (0)
 
@@ -482,9 +537,11 @@ WHEN  ('?Button:Ollama') (0)
 
 %AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIHotImgIsVariable DEPEND %Control LONG TIMES 4
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 6
+WHEN  ('') (0)
 WHEN  ('?Button:Assistant') (0)
 WHEN  ('?Button:ChatGPT') (0)
+WHEN  ('?Button:ChatGPT:2') (0)
 WHEN  ('?Button:Gemini') (0)
 WHEN  ('?Button:Ollama') (0)
 
@@ -492,9 +549,11 @@ WHEN  ('?Button:Ollama') (0)
 
 %AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIPressedImgIsVariable DEPEND %Control LONG TIMES 4
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 6
+WHEN  ('') (0)
 WHEN  ('?Button:Assistant') (0)
 WHEN  ('?Button:ChatGPT') (0)
+WHEN  ('?Button:ChatGPT:2') (0)
 WHEN  ('?Button:Gemini') (0)
 WHEN  ('?Button:Ollama') (0)
 
@@ -647,7 +706,7 @@ WHEN  ('Default')TIMES 0
 %ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
 
 [WINDOW]
-QuickWindow WINDOW('Choose AI Engine'),AT(,,166,114),FONT('Microsoft Sans Serif',10,,FONT:regular, |
+QuickWindow WINDOW('Choose AI Engine'),AT(,,166,132),FONT('Microsoft Sans Serif',10,,FONT:regular, |
           CHARSET:DEFAULT),RESIZE,CENTER,ICON('GenericAI.ico'),GRAY,IMM,HLP('Main'),SYSTEM
           BUTTON('Chat GPT'),AT(36,12,95,18),USE(?Button:ChatGPT),FONT(,,,FONT:bold),LEFT, |
             ICON('chatgpt.ico'),TIP('Talk using API with OpenAI''s ChatGPT-4o'),#ORDINAL(1)
@@ -659,6 +718,8 @@ QuickWindow WINDOW('Choose AI Engine'),AT(,,166,114),FONT('Microsoft Sans Serif'
           BUTTON('Chat GPT (Assistant)'),AT(36,34,95,18),USE(?Button:Assistant),FONT(,,,FONT:bold), |
             LEFT,ICON('chatgpt.ico'),TIP('Talk using API with a special assistant you c' & |
             'reate with ChatGPT'),#ORDINAL(4)
+          BUTTON('DeepSeek'),AT(36,110,95,18),USE(?Button:ChatGPT:2),FONT(,,,FONT:bold),LEFT, |
+            ICON('chatgpt.ico'),TIP('Talk using API with OpenAI''s ChatGPT-4o'),#ORDINAL(10000)
         END
 
 [END]

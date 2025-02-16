@@ -1,7 +1,7 @@
 [PROGRAM]
 [COMMON]
 FROM ABC ABC
-MODIFIED '2024/05/31' '10:40:29'
+MODIFIED '2024/06/29' ' 7:54:39'
 [EMBED]
 EMBED %ProgramSetup
 [DEFINITION]
@@ -18,6 +18,8 @@ PROPERTY:BEGIN
 PRIORITY 4000
 PROPERTY:END
 INCLUDE('JSON.INC'),ONCE
+INCLUDE('SystemString.INC'),ONCE
+INCLUDE('windows.inc')  ! Windows API fonksiyonlarýný içeren dosya
 [END]
 EMBED %GlobalMap
 [DEFINITION]
@@ -32,9 +34,24 @@ END
 Module('Windows API')
     MciGetErrorString(ULONG,*CSTRING,USHORT),SHORT,PASCAL,RAW,PROC,NAME('MciGetErrorStringA')
     MciSendString(*CSTRING,*CSTRING,USHORT,USHORT),ULONG,PASCAL,RAW,PROC,NAME('MciSendStringA')
+
+    !MultiByteToWideChar(LONG, LONG, *CSTRING, LONG, *USHORT, LONG),LONG,PASCAL,RAW,NAME('MultiByteToWideChar')
+    !MultiByteToWideChar(long CodePage, long dwFlags, long lpMultiByteStr,long cbMultiByte,long lpWideCharStr, long cchWideCharStr),long,pascal
+    MultiByteToWideChar(LONG, LONG, LONG, LONG, LONG, LONG),LONG,PASCAL,RAW,NAME('MultiByteToWideChar')
+    !WideCharToMultiByte(LONG, LONG, *USHORT, LONG, *CSTRING, LONG, *CSTRING, *CSTRING),LONG,PASCAL,RAW,NAME('WideCharToMultiByte')
+    WideCharToMultiByte(LONG, LONG, LONG, LONG, LONG, LONG, LONG, LONG),LONG,PASCAL,RAW,NAME('WideCharToMultiByte')
 End
 
 INCLUDE('CWUTIL.INC'),ONCE
+[END]
+EMBED %BeforeGlobalDataUser
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 9999
+PROPERTY:END
+ INCLUDE('equates.clw'),ONCE
+ INCLUDE('ClaRunExt.INC'),ONCE
 [END]
 [END]
 [END]

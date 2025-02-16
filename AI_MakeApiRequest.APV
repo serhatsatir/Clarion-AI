@@ -1,0 +1,67 @@
+[MODULE]
+NAME 'AI_MakeApiRequest.clw'
+[COMMON]
+FROM ABC GENERATED
+MODIFIED '2024/06/29' ' 7:35:24'
+[PROCEDURE]
+NAME MakeApiRequest
+PROTOTYPE '(STRING Par:url, STRING Par:method, STRING Par:Header, STRING Par:postData, *STRING Par:response),LONG'
+PARAMETERS '(STRING Par:url, STRING Par:method, STRING Par:Header, STRING Par:postData, *STRING Par:response)'
+[COMMON]
+FROM ABC Source
+MODIFIED '2024/06/29' ' 8:16:48'
+[PROMPTS]
+%GenerateOpenClose LONG  (0)
+%GenerateSaveRestore LONG  (0)
+[EMBED]
+EMBED %ProcessedCode
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+    contentType = 'application/json'
+    requestParameters = ''
+    basicUserName = ''
+    basicPassword = ''
+    headers = Par:Header
+    httpWebAddress=Par:url
+    postData=Par:postData
+
+    CASE UPPER(Par:method)
+    OF 'GET'
+      httpVerbMethod = HttpVerb:GET
+    OF 'POST'
+      httpVerbMethod = HttpVerb:POST
+    OF 'PUT'
+      httpVerbMethod = HttpVerb:PUT
+    OF 'DELETE'
+      httpVerbMethod = HttpVerb:DELETE
+    ELSE
+      httpVerbMethod = HttpVerb:GET  ! Default to GET
+    END
+    result = ClaTlk.HttpWebRequest(httpWebAddress, httpVerbMethod, postData, requestParameters, contentType, basicUserName, basicPassword, headers, responseOut)
+    Par:response=responseOut
+
+    RETURN result
+[END]
+EMBED %DataSection
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+ClaTlk              ClaRunExtClass
+httpVerbMethod      BYTE
+httpWebAddress      CSTRING(512)    ! <param name="httpWebAddress"> the address to send the webRequest</param>
+contentType         CSTRING(100)
+requestParameters   CSTRING(512)    ! <param name="requestParameters"> parameters passed to the the webRequest appended to the http address after the ?</param>
+basicUserName       CSTRING(100)
+basicPassword       CSTRING(100)
+headers             CSTRING(256)
+postData            CSTRING(1024)   ! <param name="postData"> data passed to the webRequest when using the POST verb</param>
+responseOut         CSTRING(64000)  ! <param name="responseOut"> the buffer to be filled with the response, the buffer needs to be big enough to contain the response value</param>
+result              LONG
+[END]
+[END]
+[END]

@@ -8,7 +8,7 @@ NAME AI_ChatGPT
 [COMMON]
 DESCRIPTION 'You can talk to ChatGPT-4o from this window'
 FROM ABC Window
-MODIFIED '2024/05/31' '11:37:17'
+MODIFIED '2025/02/16' ' 7:39:15'
 [DATA]
 [SCREENCONTROLS]
 ! PROMPT('API Key:'),USE(?API_Key:Prompt)
@@ -771,7 +771,7 @@ GetTextMessage      ROUTINE
 !    END
 !    st.SetValue(SUB(ChatGPTResponse,baslangic#+12,bitis#-baslangic#-29))
 
-    st.Replace('\n','<13,10>'); st.Clip(); st.JsonDecode()
+    st.Replace('\n','<13,10>'); st.Replace('<13>','<13,10>'); st.JsonDecode()
     IF Talk<2 THEN ChatGPTResponse=st.GetValue().
 [SOURCE]
 PROPERTY:BEGIN

@@ -1,170 +1,129 @@
 [MODULE]
-NAME 'AI_Ollama.clw'
+NAME 'AI_AI_DeepSeek.clw'
 [COMMON]
 FROM ABC GENERATED
-MODIFIED '2024/06/22' ' 9:21:55'
+MODIFIED '2025/02/10' '16:52:10'
 [PROCEDURE]
-NAME Ollama
+NAME AI_DeepSeek
 [COMMON]
-DESCRIPTION 'You can talk to the Ollama models you have set up using this screen.'
+DESCRIPTION 'You can chat with DeepSeek from this window'
 FROM ABC Window
-MODIFIED '2024/05/29' '13:28:31'
+MODIFIED '2025/02/07' '17:27:56'
 [DATA]
+[SCREENCONTROLS]
+! PROMPT('API Key:'),USE(?API_Key:Prompt)
+! ENTRY(@s80),USE(API_Key)
+[REPORTCONTROLS]
+! STRING(@s80),USE(API_Key)
+API_Key                  CSTRING(81)
+!!> GUID('4e37dd23-dc78-43ca-a605-69a66c0c78d0'),PROMPT('API Key:'),HEADER('API Key'),PICTURE(@s80),TYPEMODE(INS)
 [SCREENCONTROLS]
 ! PROMPT('API temp:'),USE(?API_temp:Prompt)
 ! SPIN(@n3.1),USE(API_temp),RANGE(0,1),STEP(0.1)
 [REPORTCONTROLS]
 ! STRING(@n3.1),USE(API_temp),DECIMAL(14)
 API_temp                 REAL
-!!> GUID('12278603-5c06-4ba7-8da1-f23b97bad9f2'),VALID(INRANGE(0,1)),INITIAL('0.7'),PROMPT('API temp:'),HEADER('API temp'),PICTURE(@n3.1),TYPEMODE(INS)
-[SCREENCONTROLS]
-! PROMPT('Ollama Server:'),USE(?OllamaServer:Prompt)
-! ENTRY(@s100),USE(OllamaServer)
-[REPORTCONTROLS]
-! STRING(@s100),USE(OllamaServer)
-OllamaServer             CSTRING(101)
-!!> GUID('aa5b7fc4-8d09-45f7-85c4-8254231152c5'),PROMPT('Ollama Server:'),HEADER('Ollama Server'),PICTURE(@s100),TYPEMODE(INS)
-[SCREENCONTROLS]
-! PROMPT('str:'),USE(?str:Prompt)
-! ENTRY(@s20),USE(str)
-[REPORTCONTROLS]
-! STRING(@s20),USE(str)
-str                      CLASS(StringTheory)
-!!> GUID('a03c72bf-e173-480e-89e4-4236380067ba'),PROMPT('str:'),HEADER('str'),PICTURE(@s20),TYPEMODE(INS)
-                         END
-!!> GUID('9cd2b3d9-7319-42f9-8138-f6ebe0f49fcb')
+!!> GUID('5565e684-6653-49e6-be40-e2654a547822'),VALID(INRANGE(0,1)),INITIAL('0.7'),PROMPT('API temp:'),HEADER('API temp'),PICTURE(@n3.1),TYPEMODE(INS)
 [SCREENCONTROLS]
 ! PROMPT('My Question:'),USE(?MyQuestion:Prompt)
 ! ENTRY(@s255),USE(MyQuestion)
 [REPORTCONTROLS]
 ! STRING(@s255),USE(MyQuestion)
 MyQuestion               CSTRING(5001)
-!!> GUID('bae07609-2bbf-4ddd-b324-59af36dc7481'),PROMPT('My Question:'),HEADER('My Question'),PICTURE(@s255),TYPEMODE(INS)
+!!> GUID('5799c2ae-338d-455a-a538-8b5ca7ecfd55'),PROMPT('My Question:'),HEADER('My Question'),PICTURE(@s255),TYPEMODE(INS)
 [SCREENCONTROLS]
 ! PROMPT('Chat GPTR esponse:'),USE(?ChatGPTResponse:Prompt)
 ! TEXT,USE(ChatGPTResponse)
 [REPORTCONTROLS]
 ! TEXT,USE(ChatGPTResponse)
 ChatGPTResponse          CSTRING(300001)
-!!> GUID('c85d27cc-80e7-4802-aaa6-e34a6aaa292e'),PROMPT('Chat GPTR esponse:'),HEADER('Chat GPTR esponse'),PICTURE(@s255)
+!!> GUID('bad563d1-d45d-4604-a54a-3b962f5d5b9a'),PROMPT('Chat GPTR esponse:'),HEADER('Chat GPTR esponse'),PICTURE(@s255)
+[SCREENCONTROLS]
+! PROMPT('File Name:'),USE(?FileName:Prompt)
+! ENTRY(@s255),USE(FileName)
+[REPORTCONTROLS]
+! STRING(@s255),USE(FileName)
+FileName                 CSTRING(261)
+!!> GUID('003e5916-5807-47eb-9366-15b4d09cab4d'),PROMPT('File Name:'),HEADER('File Name'),PICTURE(@s255),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Loc : URL:'),USE(?Loc:URL:Prompt)
+! ENTRY(@s100),USE(Loc:URL)
+[REPORTCONTROLS]
+! STRING(@s100),USE(Loc:URL)
+Loc:URL                  CSTRING(101)
+!!> GUID('2b00c980-6354-40c1-a93e-aaec0292d120'),PROMPT('Loc : URL:'),HEADER('Loc : URL'),PICTURE(@s100),TYPEMODE(INS)
 [SCREENCONTROLS]
 ! PROMPT('Loc : Status:'),USE(?Loc:Status:Prompt)
 ! ENTRY(@s255),USE(Loc:Status)
 [REPORTCONTROLS]
 ! STRING(@s255),USE(Loc:Status)
 Loc:Status               CSTRING(501)
-!!> GUID('6feb608d-8071-4e19-a7d3-a673a5bbb012'),PROMPT('Loc : Status:'),HEADER('Loc : Status'),PICTURE(@s255),TYPEMODE(INS)
-[SCREENCONTROLS]
-! PROMPT('JSON:'),USE(?JSON:Prompt)
-! ENTRY(@s20),USE(JSON)
-[REPORTCONTROLS]
-! STRING(@s20),USE(JSON)
-JSON                     JSONDataClass
-!!> GUID('c14c6ee2-2790-4fdb-9bf9-792e9b8222aa'),PROMPT('JSON:'),HEADER('JSON'),PICTURE(@s20),TYPEMODE(INS)
-[SCREENCONTROLS]
-! PROMPT('Loc : Line:'),USE(?Line:Prompt)
-! ENTRY(@s255),USE(Line)
-[REPORTCONTROLS]
-! STRING(@s255),USE(Line)
-Loc:Line                 STRING(1000)
-!!> GUID('f0ad2131-4789-44cd-a708-15a2aa2cbad2'),PROMPT('Loc : Line:'),HEADER('Loc : Line'),PICTURE(@s255),TYPEMODE(INS)
-[SCREENCONTROLS]
-! PROMPT('Model:'),USE(?Model:Prompt)
-! ENTRY(@s50),USE(Model)
-[REPORTCONTROLS]
-! STRING(@s50),USE(Model)
-Model                    CSTRING(51)
-!!> GUID('3ecb8b4b-64b6-4ce0-914c-b677973ab01b'),PROMPT('Model:'),HEADER('Model'),PICTURE(@s50),TYPEMODE(INS)
-[SCREENCONTROLS]
-! PROMPT('Loc : Generate:'),USE(?Loc:Generate:Prompt)
-! ENTRY(@s20),USE(Loc:Generate)
-[REPORTCONTROLS]
-! STRING(@s20),USE(Loc:Generate)
-Loc:Generate             GROUP,PRE()
-!!> GUID('53b697d7-8818-4e59-b96b-ce88824d8b82'),PROMPT('Loc : Generate:'),HEADER('Loc : Generate'),PICTURE(@s20),TYPEMODE(INS)
-[SCREENCONTROLS]
-! PROMPT('response:'),USE(?response:Prompt)
-! ENTRY(@s100),USE(response)
-[REPORTCONTROLS]
-! STRING(@s100),USE(response)
-response                   CSTRING(101),NAME('response')
-!!> GUID('eb5a7229-6c4a-490e-99cb-975f4b31c415'),PROMPT('response:'),HEADER('response'),PICTURE(@s100),TYPEMODE(INS)
-[SCREENCONTROLS]
-! PROMPT('done:'),USE(?done:Prompt)
-! ENTRY(@n3),USE(done)
-[REPORTCONTROLS]
-! STRING(@n3),USE(done)
-done                       BYTE,NAME('done')
-!!> GUID('cffe35b9-1686-444c-8f74-09d63cd85123'),PROMPT('done:'),HEADER('done'),PICTURE(@n3),TYPEMODE(INS)
-                         END
-!!> GUID('49a79d76-cc7f-4db4-aae0-77a0708a9030')
-[SCREENCONTROLS]
-! PROMPT('Loc : Pack:'),USE(?Pack:Prompt)
-! ENTRY(@s20),USE(Pack)
-[REPORTCONTROLS]
-! STRING(@s20),USE(Pack)
-Loc:Pack                 GROUP,PRE()
-!!> GUID('21b56b05-259f-4086-9213-5ff1f8e83bf3'),PROMPT('Loc : Pack:'),HEADER('Loc : Pack'),PICTURE(@s20),TYPEMODE(INS)
-[SCREENCONTROLS]
-! PROMPT('role:'),USE(?role:Prompt)
-! ENTRY(@s50),USE(role)
-[REPORTCONTROLS]
-! STRING(@s50),USE(role)
-role                       CSTRING(51),NAME('role')
-!!> GUID('0904782a-dd41-48b8-bd4c-20a268537da2'),PROMPT('role:'),HEADER('role'),PICTURE(@s50),TYPEMODE(INS)
-[SCREENCONTROLS]
-! PROMPT('content:'),USE(?content:Prompt)
-! ENTRY(@s100),USE(content)
-[REPORTCONTROLS]
-! STRING(@s100),USE(content)
-content                    CSTRING(101),NAME('content')
-!!> GUID('1d5ef449-8ce4-41f0-9b70-c546565fa534'),PROMPT('content:'),HEADER('content'),PICTURE(@s100),TYPEMODE(INS)
-                         END
-!!> GUID('5a13732b-84a9-4cce-83df-c77a3312270f')
+!!> GUID('cc0f5e37-5c70-4e48-951f-8cf838637d4a'),PROMPT('Loc : Status:'),HEADER('Loc : Status'),PICTURE(@s255),TYPEMODE(INS)
 [SCREENCONTROLS]
 ! PROMPT('Loc : Post String:'),USE(?Loc:PostString:Prompt)
 ! ENTRY(@s255),USE(Loc:PostString)
 [REPORTCONTROLS]
 ! STRING(@s255),USE(Loc:PostString)
-Loc:PostString           STRING(10000)
-!!> GUID('168b952a-0a19-4e36-94e3-310e4f723cf0'),PROMPT('Loc : Post String:'),HEADER('Loc : Post String'),PICTURE(@s255),TYPEMODE(INS)
+Loc:PostString           STRING(50000)
+!!> GUID('acc07953-a5ec-40be-8ef3-be24c4c75b3b'),PROMPT('Loc : Post String:'),HEADER('Loc : Post String'),PICTURE(@s255),TYPEMODE(INS)
 [SCREENCONTROLS]
 ! PROMPT('My Response:'),USE(?Loc:GetString:Prompt)
 ! TEXT,USE(Loc:GetString)
 [REPORTCONTROLS]
 ! TEXT,USE(Loc:GetString)
 Loc:GetString            STRING(500000)
-!!> GUID('49fd94dd-1405-4890-bb10-6f7f641318ac'),PROMPT('My Response:'),HEADER('My Response'),PICTURE(@s255)
+!!> GUID('1e5f1d27-c7db-41dd-8728-d020c7b837a4'),PROMPT('My Response:'),HEADER('My Response'),PICTURE(@s255)
 [SCREENCONTROLS]
-! PROMPT('Loc : AIQ:'),USE(?AIQ:Prompt)
-! ENTRY(@s20),USE(AIQ)
+! PROMPT('MCIC ommand:'),USE(?MCICommand:Prompt)
+! ENTRY(@s255),USE(MCICommand)
 [REPORTCONTROLS]
-! STRING(@s20),USE(AIQ)
-Loc:AIQ                  QUEUE,PRE(AIQ)
-!!> GUID('c0765dca-8517-49c1-81ce-c8e8bd31b4c5'),PROMPT('Loc : AIQ:'),HEADER('Loc : AIQ'),PICTURE(@s20),TYPEMODE(INS)
+! STRING(@s255),USE(MCICommand)
+MCICommand               CSTRING(256)
+!!> GUID('9bb8764f-ab3d-40a0-8c04-57efba9ea5e4'),PROMPT('MCIC ommand:'),HEADER('MCIC ommand'),PICTURE(@s255),TYPEMODE(INS)
 [SCREENCONTROLS]
-! PROMPT('line:'),USE(?AIQ:line:Prompt)
-! ENTRY(@n-14),USE(AIQ:line),RIGHT(1)
+! PROMPT('MCIR eturn:'),USE(?MCIReturn:Prompt)
+! ENTRY(@s255),USE(MCIReturn)
 [REPORTCONTROLS]
-! STRING(@n-14),USE(AIQ:line),RIGHT(1)
-line                       LONG
-!!> GUID('e0ff07b4-3343-4643-8c90-653c5bb6e253'),PROMPT('line:'),HEADER('line'),PICTURE(@n-14),TYPEMODE(INS),JUSTIFY(RIGHT,1)
+! STRING(@s255),USE(MCIReturn)
+MCIReturn                CSTRING(256)
+!!> GUID('bced781d-1f69-47c7-b23b-b631166ee983'),PROMPT('MCIR eturn:'),HEADER('MCIR eturn'),PICTURE(@s255),TYPEMODE(INS)
 [SCREENCONTROLS]
-! PROMPT('role:'),USE(?AIQ:role:Prompt)
-! ENTRY(@s50),USE(AIQ:role)
+! PROMPT('Loc : Voice Q:'),USE(?Loc:VoiceQ:Prompt)
+! ENTRY(@s20),USE(Loc:VoiceQ)
 [REPORTCONTROLS]
-! STRING(@s50),USE(AIQ:role)
-role                       CSTRING(51)
-!!> GUID('20ca1f6d-1b62-483e-a28c-bf09af23fe2b'),PROMPT('role:'),HEADER('role'),PICTURE(@s50),TYPEMODE(INS)
+! STRING(@s20),USE(Loc:VoiceQ)
+Loc:VoiceQ               QUEUE,PRE(LVQ)
+!!> GUID('4529a48e-d642-43a4-bf39-d4953554414a'),PROMPT('Loc : Voice Q:'),HEADER('Loc : Voice Q'),PICTURE(@s20),TYPEMODE(INS)
 [SCREENCONTROLS]
-! PROMPT('content:'),USE(?AIQ:content:Prompt)
-! ENTRY(@s100),USE(AIQ:content)
+! PROMPT('Filename:'),USE(?LVQ:Filename:Prompt)
+! ENTRY(@s255),USE(LVQ:Filename)
 [REPORTCONTROLS]
-! STRING(@s100),USE(AIQ:content)
-content                    CSTRING(101)
-!!> GUID('a416d99f-b660-4ffe-ac4d-2bdf937f3cb6'),PROMPT('content:'),HEADER('content'),PICTURE(@s100),TYPEMODE(INS)
+! STRING(@s255),USE(LVQ:Filename)
+Filename                   CSTRING(261)
+!!> GUID('3ca6f0ff-8e52-4c32-9560-6388004dd2d4'),PROMPT('Filename:'),HEADER('Filename'),PICTURE(@s255),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Sound ID:'),USE(?LVQ:SoundID:Prompt)
+! ENTRY(@s50),USE(LVQ:SoundID),RIGHT(1)
+[REPORTCONTROLS]
+! STRING(@s50),USE(LVQ:SoundID),RIGHT(1)
+SoundID                    CSTRING(51)
+!!> GUID('e0c8c0ff-42cf-4a0e-9528-d8404da938b1'),PROMPT('Sound ID:'),HEADER('Sound ID'),PICTURE(@s50),TYPEMODE(INS)
+[SCREENCONTROLS]
+! PROMPT('Duration:'),USE(?LVQ:Duration:Prompt)
+! ENTRY(@n-14),USE(LVQ:Duration),RIGHT(1)
+[REPORTCONTROLS]
+! STRING(@n-14),USE(LVQ:Duration),RIGHT(1)
+Duration                   LONG
+!!> GUID('2ca18d79-eb3a-4038-bf0e-edadd75b977e'),PROMPT('Duration:'),HEADER('Duration'),PICTURE(@n-14),TYPEMODE(INS),JUSTIFY(RIGHT,1)
+[SCREENCONTROLS]
+! PROMPT('Started:'),USE(?LVQ:Started:Prompt)
+! ENTRY(@t7),USE(LVQ:Started)
+[REPORTCONTROLS]
+! STRING(@t7),USE(LVQ:Started)
+Started                    TIME
+!!> GUID('f394d3e6-b768-43af-8d45-c8e1ee83fa70'),PROMPT('Started:'),HEADER('Started'),PICTURE(@t7),TYPEMODE(INS)
                          END
-!!> GUID('f49e7a5f-c643-4c51-b3d7-58c7d1e76060')
+!!> GUID('a6c5f9e8-10da-4fc3-9fdd-73cfed74ee69')
 [PROMPTS]
 %ClassItem UNIQUE DEFAULT  ('Default', 'WindowToolbar')
 %DefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 2
@@ -177,7 +136,8 @@ WHEN  ('WindowToolbar') ('')
 
 %ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 1
 WHEN  ('Default') ('Init {19}PROCEDURE(),BYTE,PROC,DERIVED', 'Kill {19}PROCEDURE(),BYTE,PROC,DERIVED', |
-  'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED', 'TakeEvent {14}PROCEDURE(),BYTE,PROC,DERIVED')
+  'TakeAccepted {11}PROCEDURE(),BYTE,PROC,DERIVED', 'TakeEvent {14}PROCEDURE(),BYTE,PROC,DERIVED', |
+  'TakeWindowEvent        PROCEDURE(),BYTE,PROC,DERIVED')
 
 %ReturnValue FIELD  ()
 %WindowOperationMode DEFAULT  ('Use WINDOW setting')
@@ -260,13 +220,12 @@ WHEN  ('WindowToolbar')TIMES 0
 
 %ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
 
-%ButtonAction DEPEND %Control DEFAULT TIMES 7
+%ButtonAction DEPEND %Control DEFAULT TIMES 6
 WHEN  ('') ('No Special Action')
 WHEN  ('?BUTTON:Copy') ('No Special Action')
 WHEN  ('?Box1') ('No Special Action')
 WHEN  ('?ChatGPTResponse') ('No Special Action')
 WHEN  ('?GetPage') ('No Special Action')
-WHEN  ('?OllamaServer') ('No Special Action')
 WHEN  ('?STRING1') ('No Special Action')
 
 %ButtonRunName DEPEND %Control DEFAULT TIMES 1
@@ -281,24 +240,22 @@ WHEN  ('?GetPage') ()
 %ButtonThread DEPEND %Control LONG TIMES 1
 WHEN  ('?GetPage') (0)
 
-%ButtonThreadStack DEPEND %Control DEFAULT TIMES 7
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 6
 WHEN  ('') ('25000')
 WHEN  ('?BUTTON:Copy') ('25000')
 WHEN  ('?Box1') ('25000')
 WHEN  ('?ChatGPTResponse') ('25000')
 WHEN  ('?GetPage') ('25000')
-WHEN  ('?OllamaServer') ('25000')
 WHEN  ('?STRING1') ('25000')
 
 %ButtonParameters DEPEND %Control DEFAULT TIMES 0
 
-%ButtonRequest DEPEND %Control DEFAULT TIMES 7
+%ButtonRequest DEPEND %Control DEFAULT TIMES 6
 WHEN  ('') ('None')
 WHEN  ('?BUTTON:Copy') ('None')
 WHEN  ('?Box1') ('None')
 WHEN  ('?ChatGPTResponse') ('None')
 WHEN  ('?GetPage') ('None')
-WHEN  ('?OllamaServer') ('None')
 WHEN  ('?STRING1') ('None')
 
 %PreLookupKey DEPEND %Control KEY TIMES 0
@@ -313,15 +270,14 @@ WHEN  ('?STRING1') ('None')
 
 %PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
 
-%PostLookupDuringValidate DEPEND %Control LONG TIMES 9
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 8
 WHEN  ('') (1)
+WHEN  ('?API_Key') (1)
 WHEN  ('?API_temp') (1)
 WHEN  ('?BUTTON:Copy') (1)
 WHEN  ('?Box1') (1)
 WHEN  ('?ChatGPTResponse') (1)
 WHEN  ('?GetPage') (1)
-WHEN  ('?Model') (1)
-WHEN  ('?OllamaServer') (1)
 WHEN  ('?STRING1') (1)
 
 %ForceWindowRefresh DEPEND %Control LONG TIMES 0
@@ -336,26 +292,24 @@ WHEN  ('?STRING1') (1)
 
 %CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
 
-%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 7
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 6
 WHEN  ('')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
 WHEN  ('?GetPage')TIMES 0
-WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
 %CheckedEnables DEPEND %Control MULTI LONG TIMES 0
 
 %CheckedControl1 DEPEND %CheckedEnables DEFAULT TIMES 0
 
-%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 7
+%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 6
 WHEN  ('')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
 WHEN  ('?GetPage')TIMES 0
-WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
 %UncheckedAssigns DEPEND %Control MULTI LONG TIMES 0
@@ -368,26 +322,24 @@ WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
 
-%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 7
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 6
 WHEN  ('')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
 WHEN  ('?GetPage')TIMES 0
-WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedEnables DEPEND %Control MULTI LONG TIMES 0
 
 %UnCheckedControl1 DEPEND %UnCheckedEnables DEFAULT TIMES 0
 
-%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 7
+%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 6
 WHEN  ('')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
 WHEN  ('?ChatGPTResponse')TIMES 0
 WHEN  ('?GetPage')TIMES 0
-WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
 %ButtonReturnValueAssignment DEPEND %Control FIELD TIMES 0
@@ -505,10 +457,9 @@ WHEN  ('WindowToolbar') ('NO')
 
 %ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
 
-%ExtUITabStyle DEPEND %Control DEFAULT TIMES 4
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 3
 WHEN  ('') ('Default')
 WHEN  ('?BUTTON:Copy') ('Default')
-WHEN  ('?OllamaServer') ('Default')
 WHEN  ('?STRING1') ('Default')
 
 %PreLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
@@ -519,101 +470,89 @@ WHEN  ('?STRING1') ('Default')
 
 %CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
 
-%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 4
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 3
 WHEN  ('')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
-WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedDisables DEPEND %Control MULTI LONG TIMES 0
 
 %UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
 
-%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 4
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 3
 WHEN  ('')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
-WHEN  ('?OllamaServer')TIMES 0
 WHEN  ('?STRING1')TIMES 0
 
 %ProcedureOneInstance LONG  (0)
-%PreserveVarsLoc MULTI LONG  (5, 4, 3, 2)
+%PreserveVarsLoc MULTI LONG  (2, 4, 1, 3)
 %PreserveVarLoc DEPEND %PreserveVarsLoc DEFAULT TIMES 4
+WHEN  (1) ('API_Key')
 WHEN  (2) ('MyQuestion')
 WHEN  (3) ('API_temp')
-WHEN  (4) ('Model')
-WHEN  (5) ('OllamaServer')
+WHEN  (4) ('Talk')
 
-%FieldGradientColorType DEPEND %Control DEFAULT TIMES 5
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 4
 WHEN  ('') ('Off')
 WHEN  ('?BUTTON:Copy') ('Off')
 WHEN  ('?Box1') ('Off')
-WHEN  ('?OllamaServer') ('Off')
 WHEN  ('?STRING1') ('Off')
 
-%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 5
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 4
 WHEN  ('') ('')
 WHEN  ('?BUTTON:Copy') ('')
 WHEN  ('?Box1') ('')
-WHEN  ('?OllamaServer') ('')
 WHEN  ('?STRING1') ('')
 
-%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 5
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 4
 WHEN  ('') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
-WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
-%FieldGradientColorFrom DEPEND %Control LONG TIMES 5
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 4
 WHEN  ('') (-1)
 WHEN  ('?BUTTON:Copy') (-1)
 WHEN  ('?Box1') (-1)
-WHEN  ('?OllamaServer') (-1)
 WHEN  ('?STRING1') (-1)
 
 %FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
 
-%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 5
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 4
 WHEN  ('') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
-WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
-%FieldGradientColorTo DEPEND %Control LONG TIMES 5
+%FieldGradientColorTo DEPEND %Control LONG TIMES 4
 WHEN  ('') (-1)
 WHEN  ('?BUTTON:Copy') (-1)
 WHEN  ('?Box1') (-1)
-WHEN  ('?OllamaServer') (-1)
 WHEN  ('?STRING1') (-1)
 
 %FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
 
-%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 5
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 4
 WHEN  ('') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
-WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
 %ActiveImageEnable DEPEND %Control LONG TIMES 0
 
-%AIObjectName DEPEND %Control DEFAULT TIMES 4
+%AIObjectName DEPEND %Control DEFAULT TIMES 3
 WHEN  ('') ('AIBtn0')
 WHEN  ('?BUTTON:Copy') ('AIBtn8')
-WHEN  ('?OllamaServer') ('AIBtn13')
 WHEN  ('?STRING1') ('AIBtn11')
 
-%AIEnableMimicControl DEPEND %Control LONG TIMES 4
+%AIEnableMimicControl DEPEND %Control LONG TIMES 3
 WHEN  ('') (1)
 WHEN  ('?BUTTON:Copy') (1)
-WHEN  ('?OllamaServer') (1)
 WHEN  ('?STRING1') (1)
 
-%AIMimicControl DEPEND %Control DEFAULT TIMES 4
+%AIMimicControl DEPEND %Control DEFAULT TIMES 3
 WHEN  ('') ('?Box1')
 WHEN  ('?BUTTON:Copy') ('?Box1')
-WHEN  ('?OllamaServer') ('?Box1')
 WHEN  ('?STRING1') ('?Box1')
 
 %AIImgRound DEPEND %Control LONG TIMES 0
@@ -622,40 +561,36 @@ WHEN  ('?STRING1') ('?Box1')
 
 %AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 4
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 3
 WHEN  ('') (0)
 WHEN  ('?BUTTON:Copy') (0)
-WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
 %AIDisableImg DEPEND %Control DEFAULT TIMES 0
 
 %AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIDisableImgIsVariable DEPEND %Control LONG TIMES 4
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 3
 WHEN  ('') (0)
 WHEN  ('?BUTTON:Copy') (0)
-WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
 %AIHotImg DEPEND %Control DEFAULT TIMES 0
 
 %AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIHotImgIsVariable DEPEND %Control LONG TIMES 4
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 3
 WHEN  ('') (0)
 WHEN  ('?BUTTON:Copy') (0)
-WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
 %AIPressedImg DEPEND %Control DEFAULT TIMES 0
 
 %AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIPressedImgIsVariable DEPEND %Control LONG TIMES 4
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 3
 WHEN  ('') (0)
 WHEN  ('?BUTTON:Copy') (0)
-WHEN  ('?OllamaServer') (0)
 WHEN  ('?STRING1') (0)
 
 %ITHasDllTemplate DEFAULT  ('')
@@ -670,17 +605,13 @@ WHEN 'Accepted'
 PROPERTY:BEGIN
 PRIORITY 5000
 PROPERTY:END
-IF Model='' THEN
-    MESSAGE('You need to select the model file you want to talk with...','Ollama AI',ICON:Exclamation)
-    SELECT(?Model)
+IF API_Key='' THEN
+    MESSAGE('Create your own API key using following web page: https://platform.openai.com/account/api-keys','ChatGPT API Key',ICON:Exclamation,,,MSGMODE:CANCOPY)
     CYCLE
 END
 
-SETCURSOR(CURSOR:Wait)
-Loc:GetString=''
-ChatGPTResponse=''
-Loc:Status = 'Waiting response'
-DISPLAY()
+Loc:Status = 'Waiting response...'
+SETCURSOR(CURSOR:Wait); DISPLAY()
 
 ThisWebClient.SetAllHeadersDefault()
 ThisWebClient.CanUseProxy = True
@@ -688,8 +619,9 @@ ThisWebClient.HeaderOnly = False
 ThisWebClient.HTTPVersion = 'HTTP/1.1'
 ! ChatGPT API key
 ThisWebClient.ContentType = 'application/json'
+ThisWebClient.CustomHeader = 'Authorization:Bearer '&API_Key
 ThisWebClient.AsyncOpenUse = True
-ThisWebClient.AsyncOpenTimeOut = 0
+ThisWebClient.AsyncOpenTimeOut = 2000
 ThisWebClient.InActiveTimeout = 9000
 
 ThisWebClient.SSLCertificateOptions.CertificateFile = ''
@@ -697,11 +629,13 @@ ThisWebClient.SSLCertificateOptions.PrivateKeyFile = ''
 ThisWebClient.SSLCertificateOptions.DontVerifyRemoteCertificateCommonName = True
 ThisWebClient.SSLCertificateOptions.DontVerifyRemoteCertificateWithCARoot = True
 
-DO ReformatQuestion
+DO ReformatTextCompletion
 
-!!! /api/generate or /api/chat. Both are working.
-ThisWebClient.Post(OllamaServer&'/api/generate',Loc:PostString)
-!ThisWebClient.Post(OllamaServer&'/api/chat',Loc:PostString)
+Loc:GetString=''
+ChatGPTResponse=''
+Loc:URL='https://api.deepseek.com/v1/chat/completions'
+st.Trace('URL:'&Loc:URL&' Posting: '&Loc:PostString)
+ThisWebClient.Post(Loc:URL,Loc:PostString)
 [END]
 [END]
 [END]
@@ -720,21 +654,13 @@ PROPERTY:END
 ! This is the code that is called when the page has been downloaded.
 ! In this case we display it on the screen by putting it in the ChatGPTResponse
 ! variable.
-ThisWebClient.TextOnly()
-IF SELF.ThisPage.Length() <= 0
-    Loc:GetString = ''
-ELSIF SELF.ThisPage.Length() < size (Loc:GetString)
-    Loc:GetString = SELF.ThisPage.GetValue()
-    Loc:Status='Your question has been answered.'
-    DO GetAnswer
-    ThisWebClient.Close()
-ELSE
-    Loc:Status = '* Incoming reply ' & SELF.ThisPage.Length() & |
-             ' bytes, the part you can see on the screen' & size (Loc:GetString) & ' bytes.'
-    Loc:GetString=SELF.ThisPage.GetValue()
-    DO GetAnswer
-    ThisWebClient.Close()
-END
+ThisWebClient.Close()
+st.Trace('Response: ('&ThisWebClient.ThisPage.Length()&' bytes) '&ThisWebClient.ThisPage.GetValue())
+
+DO GetTextMessage
+DISPLAY(?ChatGPTResponse)
+
+Loc:Status='Your request has been completed.'
 SETCURSOR(); DISPLAY()
 [END]
 [END]
@@ -769,7 +695,6 @@ IF SELF.packet.packetType = NET:SimplePartialDataPacket
         Loc:Status = 'Waiting response ' & SELF.ThisPage.Length() & ' / ' & (SELF.PageContentLen + SELF.HeaderLen)
         DISPLAY(?Loc:Status)
     END
-    DO GetAnswer
 END
 [END]
 [END]
@@ -779,94 +704,51 @@ EMBED %ProcedureRoutines
 [DEFINITION]
 [SOURCE]
 PROPERTY:BEGIN
-PRIORITY 3600
-PROPERTY:END
-GetAnswer   ROUTINE
-    ThisWebClient.TextOnly()
-    st.Trace('Line='&RIGHT(ThisWebClient.ThisPage.GetValue(),500))
-    st.Free(TRUE)
-    st.SetValue(ThisWebClient.ThisPage.GetValue()); st.Split('<10>')
-    LOOP i#=1 TO st.Records()
-        !IF st.Records()<20 THEN st.Trace('Satýr-'&i#&' *'&st.GetLine(i#)).
-
-        !Generate API response
-        Loc:Line=st.GetLine(i#)
-        Loc:Line=str.Utf8ToAnsi(Loc:Line,len#,st:CP_ISO_8859_9)
-        JSON.FromJSON(Loc:Line,Loc:Generate)
-        IF response<>'' THEN
-            role='Generate'
-            content=response
-            DO AddResponse
-        ELSE
-            !Chat API response
-            str.SetValue(CLIP(Loc:Line))
-            Loc:Line=str.Between('{{','}',5,,TRUE,FALSE)
-            JSON.FromJSON(Loc:Line,Loc:Pack)
-            IF Loc:Pack.content<>'' THEN
-                DO AddResponse
-            END
-            IF done=1 THEN
-                Loc:Status='Your question has been answered.'
-                ThisWebClient.Close()
-                SETCURSOR(); DISPLAY()
-            END
-        END
-    END
-    DO WriteAnswer
-    !st.Trace('Satýr Sayýsý:'&st.Records()&' Okunan:'&RECORDS(Loc:AIQ)&' Gelen:'&ThisWebClient.ThisPage.GetValue())
-[SOURCE]
-PROPERTY:BEGIN
-PRIORITY 3600
-PROPERTY:END
-AddResponse         ROUTINE
-    AIQ:line=i#
-    GET(Loc:AIQ,AIQ:line)
-    IF ERRORCODE() THEN
-        !IF AIQ:line<100 THEN st.Trace('Incoming ('&LEN(Loc:Pack.content)&') '&Loc:Pack.content).
-        str.SetValue(Loc:Pack.content); st.Replace('\n','<10,13>'); str.JsonDecode(); Loc:Line=str.GetValue()
-
-        len#=LEN(Loc:Pack.content)
-        IF SUB(Loc:Pack.content, LEN(CLIP(Loc:Pack.content)), 1)=' ' THEN len#+=1.
-
-        !IF AIQ:line<100 THEN st.Trace('Added: ('&len#&') '&Loc:Line).
-        AIQ:role = Loc:Pack.role
-        AIQ:content = SUB(Loc:Line,1,len#)
-        ADD(Loc:AIQ,AIQ:line)
-    END
-[SOURCE]
-PROPERTY:BEGIN
-PRIORITY 3600
-PROPERTY:END
-WriteAnswer       ROUTINE
-    ChatGPTResponse=''
-    LOOP i#=1 TO RECORDS(Loc:AIQ)
-        GET(Loc:AIQ,i#)
-        IF AIQ:content<>'' THEN
-            ChatGPTResponse=ChatGPTResponse&AIQ:content
-        END
-    END
-    DISPLAY(?ChatGPTResponse)
-[SOURCE]
-PROPERTY:BEGIN
 PRIORITY 4000
 PROPERTY:END
-ReformatQuestion       ROUTINE
-    st.SetValue(CLIP(MyQuestion))
-    st.JsonEncode()
+ReformatTextCompletion      ROUTINE
+    st.SetValue(MyQuestion,st:clip); st.JsonEncode()
 
     !!!Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
     !!!Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
     !!!High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
-    Loc:PostString='{{"model":"'&Model&'","prompt":"'&st.GetValue()&'","options": {{"seed":12,"temperature":'&API_temp&'}}'
+    st.Prepend('{{"model": "deepseek-chat","messages": [{{"role": "user", "content": "')
+    st.Append('"}],"temperature": '&API_temp&'}')
+    st.Trace('Request: '&st.GetValue())
+    st._StealValue(st.AnsiToUtf8(st.getValuePtr(),uz#,st:CP_ISO_8859_9))
 
-    ! As in the example below, If you send ("stream":false) in the json packet, it sends the answer in one packet.
-    !{{"model": "llama3","messages":[{{"role":"user","content": "What do you know about Mustafa Kemal Ataturk?"],"stream":false}
+    ! Generate UTF8 from Turkish characters
+    Loc:PostString=st.GetValue()
 
-    ! Translate from Turkish characters
-    Loc:PostString=st.AnsiToUtf8(Loc:PostString,uz#,st:CP_ISO_8859_9)
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+GetTextMessage      ROUTINE
+    ThisWebClient.TextOnly()
+    IF ThisWebClient.ThisPage.Length() <= 0
+        Loc:Status='No response from API service.'
+        Loc:GetString = ''
+    ELSIF ThisWebClient.ThisPage.Length() < size (Loc:GetString)
+        Loc:Status='Your request has been completed.'
+        Loc:GetString = ThisWebClient.ThisPage.GetValue()
+    ELSE
+        Loc:Status = '* Incoming response ' & ThisWebClient.ThisPage.Length() & |
+            ' bytes, the part you can see on the screen ' & size (Loc:GetString) & ' bytes.'
+        Loc:GetString=ThisWebClient.ThisPage.GetValue()
+    END
 
-    FREE(Loc:AIQ)
+    ! Generate Turkish ANSI characters from UTF8
+    st._StealValue(st.Utf8ToAnsi(Loc:GetString,uz#,st:CP_ISO_8859_9))
+    st.Trace('Response: '&st.GetValue())
+    if st.setBetween('"content": "', '},') = st:notFound
+        if st.setBetween('"content": "', '"finish_reason":') = st:notFound
+            Loc:Status='Couldn''t get legal response from DeepSeek'
+            EXIT
+        END
+    END
 
+    st.Replace('\n','<13,10>'); st.Replace('<13>','<13,10>'); st.JsonDecode()
 [END]
 EMBED %WindowManagerMethodCodeSection
 [INSTANCES]
@@ -879,9 +761,47 @@ PROPERTY:BEGIN
 PRIORITY 6000
 PROPERTY:END
 IF MyQuestion='' THEN MyQuestion='Could you write a lyrical poem about Clarion programming language?'.
-IF OllamaServer='' THEN OllamaServer='http://127.0.0.1:11434'.
-IF Model='' THEN Model='llama3'.
 [END]
+[END]
+[END]
+EMBED %WindowEventHandling
+[INSTANCES]
+WHEN 'CloseWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4999
+PROPERTY:END
+SETCURSOR(); DISPLAY()
+[END]
+WHEN 'Timer'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+LOOP voice#=RECORDS(Loc:VoiceQ) TO 1 BY -1
+    GET(Loc:VoiceQ,voice#)
+    IF LVQ:Duration=0   ! Not started yet
+        ! Play downloaded voice
+        !https://forum.clarionlife.net/viewtopic.php?t=3031
+        MCICommand = 'open "' & CLIP(LVQ:Filename) &'" alias '&LVQ:SoundID; MciSendString(MCICommand,MCIReturn,128,0)
+        MCICommand = 'play '&LVQ:SoundID; MciSendString(MCICommand,MCIReturn,128,0)
+
+        ! Learns the duration of the audio file and puts it on sleep mode.
+        MCICommand='status '&LVQ:SoundID&' length'; MCISendString(MCICommand,MCIReturn,128,0)
+        LVQ:Duration=MCIReturn/10; LVQ:Started=CLOCK(); PUT(Loc:VoiceQ)
+    ELSE
+        IF LVQ:Duration<CLOCK()-LVQ:Started THEN
+            MCICommand = 'stop '&LVQ:SoundID; MciSendString(MCICommand,MCIReturn,128,0)
+            MCICommand = 'close '&LVQ:SoundID; MciSendString(MCICommand,MCIReturn,128,0)
+
+            ! and remove file
+            REMOVE(LVQ:Filename)
+            DELETE(Loc:VoiceQ)
+        END
+    END
+END
 [END]
 [END]
 [END]
@@ -1048,8 +968,7 @@ WHEN  ('Default') ('80')
 
 %WebSecure DEPEND %ClassItem DEFAULT TIMES 0
 
-%Certificate DEPEND %ClassItem DEFAULT TIMES 1
-WHEN  ('Default') ('''certificates\settings''')
+%Certificate DEPEND %ClassItem DEFAULT TIMES 0
 
 %WebHandlerProc DEPEND %ClassItem PROCEDURE TIMES 1
 WHEN  ('Default') ()
@@ -1083,8 +1002,7 @@ WHEN  ('Default') ('''scripts''')
 %WebFormStyle DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('Net:Web:Tab')
 
-%DefaultBrowseClass DEPEND %ClassItem DEFAULT TIMES 1
-WHEN  ('Default') ('BrowseTable')
+%DefaultBrowseClass DEPEND %ClassItem DEFAULT TIMES 0
 
 %StylesDir DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('''styles''')
@@ -1096,13 +1014,11 @@ WHEN  ('Default') ('''styles''')
 %StyleBrowser DEPEND %styles DEFAULT TIMES 1
 WHEN  ('Default')TIMES 0
 
-%AlwaysRedirect DEPEND %ClassItem LONG TIMES 1
-WHEN  ('Default') (0)
+%AlwaysRedirect DEPEND %ClassItem LONG TIMES 0
 
 %ServerIP DEPEND %ClassItem DEFAULT TIMES 0
 
-%WebNoAccessPage DEPEND %ClassItem DEFAULT TIMES 1
-WHEN  ('Default') ('''NoAccess.htm''')
+%WebNoAccessPage DEPEND %ClassItem DEFAULT TIMES 0
 
 %GenericPagetitle DEPEND %ClassItem DEFAULT TIMES 0
 
@@ -1204,17 +1120,13 @@ WHEN  ('Default') ('''''')
 %DefaultBrowseOtherButtonWithOutText DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('''''')
 
-%netBrowseHighlightColor DEPEND %ClassItem LONG TIMES 1
-WHEN  ('Default') (-1)
+%netBrowseHighlightColor DEPEND %ClassItem LONG TIMES 0
 
-%netBrowseOverColor DEPEND %ClassItem LONG TIMES 1
-WHEN  ('Default') (-1)
+%netBrowseOverColor DEPEND %ClassItem LONG TIMES 0
 
-%netBrowseOneColor DEPEND %ClassItem LONG TIMES 1
-WHEN  ('Default') (-1)
+%netBrowseOneColor DEPEND %ClassItem LONG TIMES 0
 
-%netBrowseTwoColor DEPEND %ClassItem LONG TIMES 1
-WHEN  ('Default') (-1)
+%netBrowseTwoColor DEPEND %ClassItem LONG TIMES 0
 
 %resetFormDefaults DEPEND %ClassItem LONG TIMES 0
 
@@ -1718,8 +1630,7 @@ WHEN  (38) ('')
 WHEN  (39) ('')
 WHEN  (40) ('')
 
-%AlwaysPort DEPEND %ClassItem DEFAULT TIMES 1
-WHEN  ('Default') ('')
+%AlwaysPort DEPEND %ClassItem DEFAULT TIMES 0
 
 %ServerCombine DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('1')
@@ -1837,48 +1748,7 @@ WHEN  (38) ('cancelfile_btn')
 WHEN  (39) ('removefile_btn')
 WHEN  (40) ('export_btn')
 
-%ButtonEquate DEPEND %Buttons DEFAULT TIMES 1
-WHEN  ('Default')TIMES 40
-WHEN  (1) ('NET:WEB:UploadButton')
-WHEN  (2) ('NET:WEB:LookupButton')
-WHEN  (3) ('NET:WEB:SaveButton')
-WHEN  (4) ('NET:WEB:CancelButton')
-WHEN  (5) ('NET:WEB:DeletefButton')
-WHEN  (6) ('NET:WEB:CloseButton')
-WHEN  (7) ('NET:WEB:InsertButton')
-WHEN  (8) ('NET:WEB:ChangeButton')
-WHEN  (9) ('NET:WEB:ViewButton')
-WHEN  (10) ('NET:WEB:DeletebButton')
-WHEN  (11) ('NET:WEB:SelectButton')
-WHEN  (12) ('NET:WEB:BrowseCancelButton')
-WHEN  (13) ('NET:WEB:BrowseCloseButton')
-WHEN  (14) ('NET:WEB:SmallInsertButton')
-WHEN  (15) ('NET:WEB:SmallChangeButton')
-WHEN  (16) ('NET:WEB:SmallViewButton')
-WHEN  (17) ('NET:WEB:SmallDeleteButton')
-WHEN  (18) ('NET:WEB:SmallSelectButton')
-WHEN  (19) ('NET:WEB:LocateButton')
-WHEN  (20) ('NET:WEB:FirstButton')
-WHEN  (21) ('NET:WEB:PreviousButton')
-WHEN  (22) ('NET:WEB:NextButton')
-WHEN  (23) ('NET:WEB:LastButton')
-WHEN  (24) ('NET:WEB:PrintButton')
-WHEN  (25) ('NET:WEB:StartButton')
-WHEN  (26) ('NET:WEB:DateLookupButton')
-WHEN  (27) ('NET:WEB:WizPreviousButton')
-WHEN  (28) ('NET:WEB:WizNextButton')
-WHEN  (29) ('NET:WEB:SmallOtherButton')
-WHEN  (30) ('NET:WEB:SmallPrintButton')
-WHEN  (31) ('NET:WEB:CopyButton')
-WHEN  (32) ('NET:WEB:SmallCopyButton')
-WHEN  (33) ('NET:WEB:ClearButton')
-WHEN  (34) ('NET:WEB:LogoutButton')
-WHEN  (35) ('NET:WEB:AddFileButton')
-WHEN  (36) ('NET:WEB:ClearFileButton')
-WHEN  (37) ('NET:WEB:StartFileButton')
-WHEN  (38) ('NET:WEB:CancelFileButton')
-WHEN  (39) ('NET:WEB:RemoveFileButton')
-WHEN  (40) ('NET:WEB:ExportButton')
+%ButtonEquate DEPEND %Buttons DEFAULT TIMES 0
 
 %UseContentBody DEPEND %ClassItem LONG TIMES 1
 WHEN  ('Default') (1)
@@ -2231,8 +2101,7 @@ WHEN  ('Default') ('''nt-heading''')
 %ThemeInAll DEPEND %ThemeFiles LONG TIMES 1
 WHEN  ('Default')TIMES 0
 
-%Keys DEPEND %ClassItem DEFAULT TIMES 1
-WHEN  ('Default') ('')
+%Keys DEPEND %ClassItem DEFAULT TIMES 0
 
 %HostName DEPEND %ClassItem DEFAULT TIMES 1
 WHEN  ('Default') ('')
@@ -2347,33 +2216,31 @@ WHEN  ('Default') ('')
 WHEN  ('Default') ('''strict-origin-when-cross-origin''')
 
 [WINDOW]
-Window  WINDOW('Ollama AI Example'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular),DOUBLE, |
-          CENTER,ICON('ollama.ico'),GRAY,IMM,SYSTEM
+Window  WINDOW('ChatGPT Example'),AT(,,386,224),FONT('Segoe UI',10,,FONT:regular),DOUBLE,CENTER, |
+          ICON('chatgpt.ico'),GRAY,IMM,SYSTEM,TIMER(100)
           BOX,AT(3,4,380,216),USE(?Box1),COLOR(COLOR:Gray),LINEWIDTH(1),ROUND,#ORIG(?Box1), |
             #ORDINAL(1)
           STRING(@s255),AT(8,205,345),USE(Loc:Status),CENTER,TRN,#ORDINAL(2)
           TEXT,AT(9,9,369,37),USE(MyQuestion),VSCROLL,#ORDINAL(3)
-          TEXT,AT(9,90,369,112),USE(ChatGPTResponse),VSCROLL,COLOR(00DCDCDCh),READONLY,#ORIG(MyText), |
+          TEXT,AT(9,85,369,117),USE(ChatGPTResponse),VSCROLL,COLOR(00DCDCDCh),READONLY,#ORIG(MyText), |
             #ORDINAL(4)
-          BUTTON('Post'),AT(328,49,50,12),USE(?GetPage),LEFT,ICON('ollama.ico'),TIP('Send your ' & |
-            'request to ChatGPT'),#ORIG(?Button1),#ORDINAL(5)
+          BUTTON('Post'),AT(328,49,50,12),USE(?GetPage),LEFT,ICON('chatgpt.ico'),TIP('Send your ' & |
+            'request to ChatGPT'),#ORIG(?Button1),#ORDINAL(6)
+          PROMPT('Key:'),AT(23,50),USE(?API_Key:Prompt),TRN,#ORDINAL(7)
+          ENTRY(@s80),AT(73,50,227,10),USE(API_Key),TIP('Create your own API key using ' & |
+            'following web page: https://platform.openai.com/account/api-keys<0DH,0AH,0DH>' & |
+            '<0AH>like; sk-VyUX.{18}5Y3aw'),#ORDINAL(8)
           BUTTON,AT(363,205,15,10),USE(?BUTTON:Copy),ICON(ICON:Copy),FLAT,TIP('Copy respo' & |
-            'nse to clipboard'),TRN,#ORDINAL(6)
-          PROMPT('Temperature:'),AT(27,77),USE(?API_temp:Prompt),TRN,#ORDINAL(7)
-          SPIN(@n3.1),AT(77,77,,10),USE(API_temp),RIGHT(1),RANGE(0,1),STEP(0.1),TIP('* Low temp' & |
-            'erature (0 to 0.3): More focused, coherent, and conservative outputs.<0DH,0AH>' & |
-            '* Medium temperature (0.3 to 0.7): Balanced creativity and coherence.<0DH,0AH>' & |
-            '* High temperature (0.7 to 1): Highly creative and diverse, but potentiall' & |
-            'y less coherent.'),#ORDINAL(8)
-          STRING('API'),AT(7,49,,38),USE(?STRING1),FONT(,,,FONT:bold,CHARSET:DEFAULT),CENTER, |
-            ANGLE(900),COLOR(00D3D3D3h),#ORDINAL(9)
-          PROMPT('Model:'),AT(27,63),USE(?Model:Prompt),#ORDINAL(10)
-          ENTRY(@s50),AT(77,63,153,10),USE(Model),TIP('Ollama AI model name (from https' & |
-            '://ollama.com/library) like; llama2, llama3, phi3, mistral, gemma, ...'),#ORDINAL(11)
-          PROMPT('Ollama Server:'),AT(26,50),USE(?Loc:OllamaServer:Prompt),#ORDINAL(12)
-          ENTRY(@s100),AT(77,49,233,10),USE(OllamaServer),TIP('Ollama Server address li' & |
-            'ke; http://127.0.0.1:11434'),#ORDINAL(13)
-          PROMPT('https://ollama.com/'),AT(311,77),USE(?PROMPT:OllamaHomePage),TRN,#ORDINAL(10000)
+            'nse to clipboard'),TRN,#ORDINAL(9)
+          PROMPT('Temperature:'),AT(24,64),USE(?API_temp:Prompt),TRN,#ORDINAL(10)
+          SPIN(@n3.1),AT(73,64,,10),USE(API_temp),RIGHT(1),RANGE(0,1.5),STEP(0.1),TIP('Coding / M' & |
+            'ath?0.0<0DH,0AH>Data Cleaning / Data Analysis<09H>1.0<0DH,0AH>General Conv' & |
+            'ersation<09H>1.3<0DH,0AH>Translation<09H>1.3<0DH,0AH>Creative Writing / Po' & |
+            'etry<09H>1.5'),#ORDINAL(11)
+          STRING('API'),AT(7,49,,24),USE(?STRING1),FONT(,,,FONT:bold,CHARSET:DEFAULT),CENTER, |
+            ANGLE(900),COLOR(00D3D3D3h),#ORDINAL(12)
+          PROMPT('It works differently from OpenAI / ChatGPT. Please check the tooltip.'), |
+            AT(106,65),USE(?PROMPT1),FONT(,8,COLOR:Maroon,,CHARSET:DEFAULT),#ORDINAL(10000)
         END
 
 [END]

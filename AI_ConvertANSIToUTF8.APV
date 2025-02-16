@@ -1,0 +1,57 @@
+[MODULE]
+NAME 'AI_ConvertANSIToUTF8.clw'
+[COMMON]
+FROM ABC GENERATED
+MODIFIED '2024/06/29' ' 7:35:24'
+[PROCEDURE]
+NAME ConvertANSIToUTF8
+PROTOTYPE '(*STRING AnsiString), STRING'
+PARAMETERS '(*STRING AnsiString)'
+GLOBAL
+[COMMON]
+FROM ABC Source
+MODIFIED '2024/06/23' ' 8:08:39'
+[PROMPTS]
+%GenerateOpenClose LONG  (0)
+%GenerateSaveRestore LONG  (0)
+[EMBED]
+EMBED %ProcessedCode
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+    ! ANSI string uzunluðunu al
+    AnsiLength = LEN(CLIP(AnsiString))
+    Utf8Length = AnsiLength*2
+
+    !! Gerekli UTF-8 uzunluðunu hesapla
+    !Utf8Length = MultiByteToWideChar(CodePageAnsi, 0, AnsiString, AnsiLength, '', 0)
+    !Utf8Length = WideCharToMultiByte(CP_UTF8, 0, ADDRESS(TempUtf8), Utf8Length, '', 0, '', '')
+
+    ! Geçici UTF-8 buffer'ý oluþtur
+    TempUtf8 &= NEW CSTRING(Utf8Length + 1)
+
+    ! ANSI string'i geniþ karakterli string'e dönüþtür
+    MultiByteToWideChar(CodePageAnsi, 0, AnsiString, AnsiLength, ADDRESS(TempUtf8), Utf8Length)
+
+    ! Geniþ karakterli string'i UTF-8 string'e dönüþtür
+    WideCharToMultiByte(CP_UTF8, 0, ADDRESS(TempUtf8), Utf8Length, TempUtf8, Utf8Length, '', '')
+
+    ! Sonucu döndür
+    RETURN CLIP(TempUtf8)
+[END]
+EMBED %DataSection
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+CodePageAnsi        EQUATE(125)
+CP_UTF8             EQUATE(65001)
+AnsiLength          LONG
+Utf8Length          LONG
+TempUtf8            &CSTRING
+[END]
+[END]
+[END]

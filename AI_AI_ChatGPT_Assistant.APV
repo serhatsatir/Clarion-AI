@@ -2,7 +2,7 @@
 NAME 'AI_AI_ChatGPT_Assistant.clw'
 [COMMON]
 FROM ABC GENERATED
-MODIFIED '2024/05/29' '11:20:45'
+MODIFIED '2024/06/22' ' 9:21:55'
 [PROCEDURE]
 NAME AI_ChatGPT_Assistant
 [COMMON]
@@ -200,7 +200,8 @@ WHEN  ('WindowToolbar')TIMES 0
 
 %ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
 
-%ButtonAction DEPEND %Control DEFAULT TIMES 6
+%ButtonAction DEPEND %Control DEFAULT TIMES 7
+WHEN  ('') ('No Special Action')
 WHEN  ('?Assistant') ('No Special Action')
 WHEN  ('?BUTTON:Copy') ('No Special Action')
 WHEN  ('?Box1') ('No Special Action')
@@ -220,7 +221,8 @@ WHEN  ('?GetPage') ()
 %ButtonThread DEPEND %Control LONG TIMES 1
 WHEN  ('?GetPage') (0)
 
-%ButtonThreadStack DEPEND %Control DEFAULT TIMES 6
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 7
+WHEN  ('') ('25000')
 WHEN  ('?Assistant') ('25000')
 WHEN  ('?BUTTON:Copy') ('25000')
 WHEN  ('?Box1') ('25000')
@@ -230,7 +232,8 @@ WHEN  ('?STRING1') ('25000')
 
 %ButtonParameters DEPEND %Control DEFAULT TIMES 0
 
-%ButtonRequest DEPEND %Control DEFAULT TIMES 6
+%ButtonRequest DEPEND %Control DEFAULT TIMES 7
+WHEN  ('') ('None')
 WHEN  ('?Assistant') ('None')
 WHEN  ('?BUTTON:Copy') ('None')
 WHEN  ('?Box1') ('None')
@@ -250,7 +253,8 @@ WHEN  ('?STRING1') ('None')
 
 %PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
 
-%PostLookupDuringValidate DEPEND %Control LONG TIMES 8
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 9
+WHEN  ('') (1)
 WHEN  ('?API_Key') (1)
 WHEN  ('?API_temp') (1)
 WHEN  ('?Assistant') (1)
@@ -272,7 +276,8 @@ WHEN  ('?STRING1') (1)
 
 %CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
 
-%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 6
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 7
+WHEN  ('')TIMES 0
 WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
@@ -284,7 +289,8 @@ WHEN  ('?STRING1')TIMES 0
 
 %CheckedControl1 DEPEND %CheckedEnables DEFAULT TIMES 0
 
-%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 6
+%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 7
+WHEN  ('')TIMES 0
 WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
@@ -302,7 +308,8 @@ WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
 
-%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 6
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 7
+WHEN  ('')TIMES 0
 WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
@@ -314,7 +321,8 @@ WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedControl1 DEPEND %UnCheckedEnables DEFAULT TIMES 0
 
-%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 6
+%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 7
+WHEN  ('')TIMES 0
 WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?Box1')TIMES 0
@@ -437,7 +445,8 @@ WHEN  ('WindowToolbar') ('NO')
 
 %ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
 
-%ExtUITabStyle DEPEND %Control DEFAULT TIMES 3
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 4
+WHEN  ('') ('Default')
 WHEN  ('?Assistant') ('Default')
 WHEN  ('?BUTTON:Copy') ('Default')
 WHEN  ('?STRING1') ('Default')
@@ -450,7 +459,8 @@ WHEN  ('?STRING1') ('Default')
 
 %CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
 
-%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 3
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 4
+WHEN  ('')TIMES 0
 WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?STRING1')TIMES 0
@@ -459,7 +469,8 @@ WHEN  ('?STRING1')TIMES 0
 
 %UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
 
-%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 3
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 4
+WHEN  ('')TIMES 0
 WHEN  ('?Assistant')TIMES 0
 WHEN  ('?BUTTON:Copy')TIMES 0
 WHEN  ('?STRING1')TIMES 0
@@ -472,25 +483,29 @@ WHEN  (2) ('MyQuestion')
 WHEN  (3) ('API_temp')
 WHEN  (4) ('Assistant')
 
-%FieldGradientColorType DEPEND %Control DEFAULT TIMES 4
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 5
+WHEN  ('') ('Off')
 WHEN  ('?Assistant') ('Off')
 WHEN  ('?BUTTON:Copy') ('Off')
 WHEN  ('?Box1') ('Off')
 WHEN  ('?STRING1') ('Off')
 
-%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 4
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 5
+WHEN  ('') ('')
 WHEN  ('?Assistant') ('')
 WHEN  ('?BUTTON:Copy') ('')
 WHEN  ('?Box1') ('')
 WHEN  ('?STRING1') ('')
 
-%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 4
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 5
+WHEN  ('') (0)
 WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
 WHEN  ('?STRING1') (0)
 
-%FieldGradientColorFrom DEPEND %Control LONG TIMES 4
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 5
+WHEN  ('') (-1)
 WHEN  ('?Assistant') (-1)
 WHEN  ('?BUTTON:Copy') (-1)
 WHEN  ('?Box1') (-1)
@@ -498,13 +513,15 @@ WHEN  ('?STRING1') (-1)
 
 %FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
 
-%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 4
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 5
+WHEN  ('') (0)
 WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
 WHEN  ('?STRING1') (0)
 
-%FieldGradientColorTo DEPEND %Control LONG TIMES 4
+%FieldGradientColorTo DEPEND %Control LONG TIMES 5
+WHEN  ('') (-1)
 WHEN  ('?Assistant') (-1)
 WHEN  ('?BUTTON:Copy') (-1)
 WHEN  ('?Box1') (-1)
@@ -512,7 +529,8 @@ WHEN  ('?STRING1') (-1)
 
 %FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
 
-%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 4
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 5
+WHEN  ('') (0)
 WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?Box1') (0)
@@ -520,17 +538,20 @@ WHEN  ('?STRING1') (0)
 
 %ActiveImageEnable DEPEND %Control LONG TIMES 0
 
-%AIObjectName DEPEND %Control DEFAULT TIMES 3
+%AIObjectName DEPEND %Control DEFAULT TIMES 4
+WHEN  ('') ('AIBtn0')
 WHEN  ('?Assistant') ('AIBtn13')
 WHEN  ('?BUTTON:Copy') ('AIBtn8')
 WHEN  ('?STRING1') ('AIBtn11')
 
-%AIEnableMimicControl DEPEND %Control LONG TIMES 3
+%AIEnableMimicControl DEPEND %Control LONG TIMES 4
+WHEN  ('') (1)
 WHEN  ('?Assistant') (1)
 WHEN  ('?BUTTON:Copy') (1)
 WHEN  ('?STRING1') (1)
 
-%AIMimicControl DEPEND %Control DEFAULT TIMES 3
+%AIMimicControl DEPEND %Control DEFAULT TIMES 4
+WHEN  ('') ('?Box1')
 WHEN  ('?Assistant') ('?Box1')
 WHEN  ('?BUTTON:Copy') ('?Box1')
 WHEN  ('?STRING1') ('?Box1')
@@ -541,7 +562,8 @@ WHEN  ('?STRING1') ('?Box1')
 
 %AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 3
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 4
+WHEN  ('') (0)
 WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?STRING1') (0)
@@ -550,7 +572,8 @@ WHEN  ('?STRING1') (0)
 
 %AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIDisableImgIsVariable DEPEND %Control LONG TIMES 3
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 4
+WHEN  ('') (0)
 WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?STRING1') (0)
@@ -559,7 +582,8 @@ WHEN  ('?STRING1') (0)
 
 %AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIHotImgIsVariable DEPEND %Control LONG TIMES 3
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 4
+WHEN  ('') (0)
 WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?STRING1') (0)
@@ -568,7 +592,8 @@ WHEN  ('?STRING1') (0)
 
 %AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
 
-%AIPressedImgIsVariable DEPEND %Control LONG TIMES 3
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 4
+WHEN  ('') (0)
 WHEN  ('?Assistant') (0)
 WHEN  ('?BUTTON:Copy') (0)
 WHEN  ('?STRING1') (0)
